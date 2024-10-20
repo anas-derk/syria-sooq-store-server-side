@@ -40,9 +40,6 @@ const adminSchema = new mongoose.Schema({
                     type: String,
                     required: true,
                     enum: [
-                        "Add New Brand",
-                        "Update Brand Info",
-                        "Delete Brand",
                         "Update Order Info",
                         "Delete Order",
                         "Update Order Info",
@@ -56,7 +53,7 @@ const adminSchema = new mongoose.Schema({
                         "Delete Product",
                         "Show And Hide Sections",
                         "Change Bussiness Email Password",
-                        "Add New Admin"
+                        "Add New Admin",
                     ],
                 },
                 value: {
@@ -672,27 +669,6 @@ const orderSchema = new mongoose.Schema({
 
 const orderModel = mongoose.model("order", orderSchema);
 
-// Create Brand Schema
-
-const brandSchema = new mongoose.Schema({
-    imagePath: {
-        type: String,
-        required: true,
-    },
-    title: {
-        type: String,
-        required: true,
-    },
-    storeId: {
-        type: String,
-        required: true,
-    }
-});
-
-// Create Brand Model From Brand Schema
-
-const brandModel = mongoose.model("brand", brandSchema);
-
 // Create Appeared Sections Schema
 
 const appearedSectionsSchema = new mongoose.Schema({
@@ -844,30 +820,6 @@ const productsRatingShema = new mongoose.Schema({
 // Create Products Rating Model From Products Rating Schema
 
 const productsRatingModel = mongoose.model("products_rating", productsRatingShema);
-
-// Create Ads Schema
-
-const adsSchema = new mongoose.Schema({
-    storeId: {
-        type: String,
-        required: true,
-    },
-    type: {
-        type: String,
-        required: true,
-        enum: ["text", "image"],
-    },
-    content: String,
-    imagePath: String,
-    dateOfPost: {
-        type: Date,
-        default: Date.now(),
-    },
-});
-
-// Create Ads Model From Ads Schema
-
-const adsModel = mongoose.model("ad", adsSchema);
 
 // Create Coupon Schema
 

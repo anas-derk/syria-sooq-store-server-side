@@ -91,26 +91,14 @@ const adminModel = mongoose.model("admin", adminSchema);
 const { hash } = require("bcryptjs");
 
 const userInfo = {
-    firstName: "Soliman",
-    lastName: "Asfour",
+    firstName: "Ahmad",
+    lastName: "Hussein",
     email: process.env.MAIN_ADMIN_EMAIL,
     password: process.env.MAIN_ADMIN_PASSWORD,
     isWebsiteOwner: true,
     isMerchant: true,
     storeId: "660b68f8877eb32dd398015c",
     permissions: [
-        {
-            name: "Add New Brand",
-            value: true,
-        },
-        {
-            name: "Update Brand Info",
-            value: true,
-        },
-        {
-            name: "Delete Brand",
-            value: true,
-        },
         {
             name: "Update Order Info",
             value: true,
