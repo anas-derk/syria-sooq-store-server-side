@@ -770,10 +770,7 @@ module.exports = {
     categoryModel,
     orderModel,
     globalPasswordModel,
-    subscriptionModel,
-    referalModel,
     favoriteProductModel,
     productsWalletModel,
     productsRatingModel,
-    couponModel
 }
