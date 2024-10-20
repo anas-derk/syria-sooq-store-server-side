@@ -168,7 +168,7 @@ async function create_admin_user_account() {
         const new_admin_user = new adminModel(userInfo);
         await new_admin_user.save();
         await mongoose.disconnect();
-        return "Ok !!, Create Admin Account Process Has Been Successfuly !!";
+        return "Ok !!, Create Initial Admin Account Process Has Been Successfuly !!";
     } catch(err) {
         await mongoose.disconnect();
         throw Error(err);

@@ -60,14 +60,14 @@ const storeSchema = mongoose.Schema({
 const storeModel = mongoose.model("store", storeSchema);
 
 const storeInfo = {
-    name: "Ubuyblues",
+    name: "Syria Sooq",
     imagePath: "assets/images/stores/UbuyBlues_Logo_merged_Purple.jpg",
-    ownerFirstName: "Soliman",
-    ownerLastName: "Asfour",
+    ownerFirstName: "Ahmad",
+    ownerLastName: "Hussein",
     ownerEmail: process.env.MAIN_ADMIN_EMAIL,
     isApproved: true,
     productsType: "Multiple",
-    productsDescription: "Welcome To Ubuyblues Store",
+    productsDescription: "Welcome To Syria Sooq Store",
     status: "approving",
     isMainStore: true,
     approveDate: Date.now(),
@@ -79,7 +79,7 @@ async function createStore() {
         const newStore = new storeModel(storeInfo);
         await newStore.save();
         await mongoose.disconnect();
-        return "Ok !!, Create Store Process Has Been Successfuly !!";
+        return "Ok !!, Create Initial Store Process Has Been Successfuly !!";
     } catch(err) {
         await mongoose.disconnect();
         throw Error(err);
