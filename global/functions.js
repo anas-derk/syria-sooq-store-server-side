@@ -16,10 +16,6 @@ const sharp = require("sharp");
 
 const arTranslations = require("./translations/ar.json");
 
-const trTranslations = require("./translations/tr.json");
-
-const deTranslations = require("./translations/de.json");
-
 function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
 }
@@ -33,7 +29,7 @@ function isValidName(name) {
 }
 
 function isValidLanguage(language) {
-    return ["ar", "en", "de", "tr"].includes(language);
+    return ["ar", "en"].includes(language);
 }
 
 function calcOrderAmount(products) {
@@ -451,8 +447,6 @@ function getSuitableTranslations(msg, language, variables = {}) {
     if (language) {
         switch(language) {
             case "ar": return processingTranslation(variables, arTranslations[msg] ? arTranslations[msg] : msg);
-            case "tr": return processingTranslation(variables, trTranslations[msg] ? trTranslations[msg] : msg);
-            case "de": return processingTranslation(variables, deTranslations[msg] ? deTranslations[msg] : msg);
             default: return processingTranslation(variables, msg);
         }
     }

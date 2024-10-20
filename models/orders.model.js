@@ -2,8 +2,6 @@
 
 const { orderModel, userModel, adminModel, productsWalletModel, productModel, mongoose } = require("../models/all.models");
 
-const { getCouponDetails } = require("./coupons.model");
-
 const { getSuitableTranslations } = require("../global/functions");
 
 const isProductLocalOrInternational = (productCountries, shippingCountry) => {

@@ -93,16 +93,6 @@ app.listen(PORT, async () => {
 
     app.use("/orders", require("./routes/orders.router"));
 
-    app.use("/brands", require("./routes/brands.router"));
-
-    app.use("/appeared-sections", require("./routes/appeared_sections.router"));
-
-    app.use("/global-passwords", require("./routes/global_passwords.router"));
-
-    app.use("/subscriptions", require("./routes/subscriptions.router"));
-
-    app.use("/referals", require("./routes/referals.router"));
-
     app.use("/stores", require("./routes/stores.router"));
 
     app.use("/favorite-products", require("./routes/favorite_products.router"));
@@ -110,10 +100,6 @@ app.listen(PORT, async () => {
     app.use("/wallet", require("./routes/products_wallet.router"));
 
     app.use("/ratings", require("./routes/ratings.router"));
-
-    app.use("/ads", require("./routes/ads.router"));
-
-    app.use("/coupons", require("./routes/coupons.router"));
 
     /* End Handle The Routes */
 });
