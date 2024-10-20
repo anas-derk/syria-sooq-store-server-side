@@ -669,20 +669,6 @@ const orderSchema = new mongoose.Schema({
 
 const orderModel = mongoose.model("order", orderSchema);
 
-// Create Appeared Sections Schema
-
-const appearedSectionsSchema = new mongoose.Schema({
-    sectionName: String,
-    isAppeared: {
-        type: Boolean,
-        default: false,
-    },
-});
-
-// Create Appeared Sections Model From Appeared Sections Schema
-
-const appearedSectionsModel = mongoose.model("appeared_sections", appearedSectionsSchema);
-
 // Create Global Password Schema
 
 const globalPasswordSchema = new mongoose.Schema({
@@ -855,14 +841,11 @@ module.exports = {
     accountVerificationCodesModel,
     categoryModel,
     orderModel,
-    brandModel,
-    appearedSectionsModel,
     globalPasswordModel,
     subscriptionModel,
     referalModel,
     favoriteProductModel,
     productsWalletModel,
     productsRatingModel,
-    adsModel,
     couponModel
 }
