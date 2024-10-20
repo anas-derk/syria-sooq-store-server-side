@@ -46,6 +46,16 @@ const storeSchema = mongoose.Schema({
         ],
     },
     isMainStore: Boolean,
+    language: {
+        type: String,
+        enum: [
+            "ar",
+            "en",
+            "de",
+            "tr"
+        ],
+        default: "en"
+    },
     creatingOrderDate: {
         type: Date,
         default: Date.now(),
