@@ -38,7 +38,7 @@ async function create_global_password() {
             const new_global_password = new globalPasswordModel(bussinessInfo);
             await new_global_password.save();
             await mongoose.disconnect();
-            return "Ok !!, Create Global Password Has Been Successfuly !!";
+            return "Ok !!, Create Initial Global Password Has Been Successfuly !!";
         }
     } catch(err) {
         await mongoose.disconnect();
