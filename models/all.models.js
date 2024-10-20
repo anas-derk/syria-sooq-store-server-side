@@ -680,53 +680,6 @@ const globalPasswordSchema = new mongoose.Schema({
 
 const globalPasswordModel = mongoose.model("global_password", globalPasswordSchema);
 
-// Create Subscription Schema
-
-const subscriptionShema = new mongoose.Schema({
-    email: String,
-    subscriptionDate: {
-        type: Date,
-        default: Date.now(),
-    }
-});
-
-// Create Subscription Model From Subscription Schema
-
-const subscriptionModel = mongoose.model("subscription", subscriptionShema);
-
-// Create Referal Schema
-
-const referalShema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-    },
-    content: {
-        type: String,
-        required: true,
-    },
-    productId: {
-        type: String,
-        required: true,
-    },
-    referalDate: {
-        type: Date,
-        default: Date.now(),
-    },
-    isAppeared: {
-        type: Boolean,
-        default: true,
-    }
-});
-
-// Create Referal Model From Referal Schema
-
-const referalModel = mongoose.model("referal", referalShema);
-
 // Create Favorite Product Schema
 
 const favoriteProductShema = new mongoose.Schema({
@@ -806,31 +759,6 @@ const productsRatingShema = new mongoose.Schema({
 // Create Products Rating Model From Products Rating Schema
 
 const productsRatingModel = mongoose.model("products_rating", productsRatingShema);
-
-// Create Coupon Schema
-
-const couponSchema = new mongoose.Schema({
-    code: {
-        type: String,
-        required: true,
-    },
-    discountPercentage: {
-        type: Number,
-        default: false,
-    },
-    storeId: {
-        type: String,
-        required: true,
-    },
-    creatingDate: {
-        type: Date,
-        default: Date.now(),
-    },
-});
-
-// Create Coupon Model From Coupon Schema
-
-const couponModel = mongoose.model("coupon", couponSchema);
 
 module.exports = {
     mongoose,
