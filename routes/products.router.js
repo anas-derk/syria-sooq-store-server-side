@@ -99,11 +99,17 @@ productsRouter.post("/add-new-images-to-product-gallery/:productId",
 
 productsRouter.post("/products-by-ids",
     (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Products By Ids", fieldValue: req.body.productsIds, dataType: "array", isRequiredValue: true }
+        ],
+        res, next);
+    },
+    (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes(
             req.body.productsIds.map((productId, index) => (
                 { fieldName: `Id In Product ${index + 1}`, fieldValue: productId, dataType: "ObjectId", isRequiredValue: true }
-            ))
-        ,res, next);
+            )),
+        res, next);
     },
     productsController.getProductsByIds
 );
