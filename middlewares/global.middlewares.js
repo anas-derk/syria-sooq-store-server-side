@@ -122,8 +122,8 @@ function validateCheckoutStatus(checkoutStatus, res, nextFunc, errorMsg = "Sorry
     nextFunc();
 }
 
-function validateSortMethod(sortBy, res, nextFunc, errorMsg = "Sorry, Please Send Valid Sort Method ( 'postOfDate' Or 'price' ) !!") {
-    if (!["postOfDate", "price"].includes(sortBy)) {
+function validateSortMethod(sortBy, res, nextFunc, errorMsg = "Sorry, Please Send Valid Sort Method ( 'postOfDate' Or 'price' or 'numberOfOrders' ) !!") {
+    if (!["postOfDate", "price", "numberOfOrders"].includes(sortBy)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
         return;
     }
