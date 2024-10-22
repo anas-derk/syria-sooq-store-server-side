@@ -156,12 +156,26 @@ productsRouter.get("/all-products-inside-the-page",
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
-            { fieldName: "Sort By", fieldValue: sortBy, dataType: "string", isRequiredValue: false },
-            { fieldName: "Sort Type", fieldValue: sortType, dataType: "string", isRequiredValue: false },
+            { fieldName: "Sort By", fieldValue: sortBy, dataType: "string", isRequiredValue: sortType ? true : false },
+            { fieldName: "Sort Type", fieldValue: sortType, dataType: "string", isRequiredValue: sortBy ? true : false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
+    (req, res, next) => {
+        const { sortBy } = req.query;
+        if (sortBy) {
+            validateSortMethod(sortBy, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { sortType } = req.query;
+        if (sortType) {
+            validateSortType(sortType, res, next);
+        }
+        next();
+    },
     productsController.getAllProductsInsideThePage
 );
 
@@ -171,12 +185,26 @@ productsRouter.get("/all-flash-products-inside-the-page",
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
-            { fieldName: "Sort By", fieldValue: sortBy, dataType: "string", isRequiredValue: false },
-            { fieldName: "Sort Type", fieldValue: sortType, dataType: "string", isRequiredValue: false },
+            { fieldName: "Sort By", fieldValue: sortBy, dataType: "string", isRequiredValue: sortType ? true : false },
+            { fieldName: "Sort Type", fieldValue: sortType, dataType: "string", isRequiredValue: sortBy ? true : false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
+    (req, res, next) => {
+        const { sortBy } = req.query;
+        if (sortBy) {
+            validateSortMethod(sortBy, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { sortType } = req.query;
+        if (sortType) {
+            validateSortType(sortType, res, next);
+        }
+        next();
+    },
     productsController.getAllFlashProductsInsideThePage
 );
 
