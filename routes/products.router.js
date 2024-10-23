@@ -172,6 +172,7 @@ productsRouter.get("/all-products-inside-the-page",
         const { sortBy } = req.query;
         if (sortBy) {
             validateSortMethod(sortBy, res, next);
+            return;
         }
         next();
     },
@@ -179,6 +180,7 @@ productsRouter.get("/all-products-inside-the-page",
         const { sortType } = req.query;
         if (sortType) {
             validateSortType(sortType, res, next);
+            return;
         }
         next();
     },
@@ -201,6 +203,7 @@ productsRouter.get("/all-flash-products-inside-the-page",
         const { sortBy } = req.query;
         if (sortBy) {
             validateSortMethod(sortBy, res, next);
+            return;
         }
         next();
     },
@@ -208,6 +211,7 @@ productsRouter.get("/all-flash-products-inside-the-page",
         const { sortType } = req.query;
         if (sortType) {
             validateSortType(sortType, res, next);
+            return;
         }
         next();
     },
