@@ -12,34 +12,17 @@ function getFiltersObject(filters) {
     return filtersObject;
 }
 
-async function postNewTextAd(req, res) {
-    try{
-        const result = await adsOPerationsManagmentFunctions.addNewAd(req.data._id, { content: req.body.content, type: "text" }, req.query.language);
-        if (result.error) {
-            if (result.msg !== "Sorry, Can't Add New Text Ad Because Arrive To Max Limits For Text Ads Count ( Limits: 10 ) !!") {
-                return res.status(401).json(result);
-            }
-        }
-        res.json(result);
-    }
-    catch(err) {
-        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
-    }
-}
-
-async function postNewImageAd(req, res) {
+async function postNewAd(req, res) {
     try{
         const outputImageFilePath = `assets/images/ads/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
-        const bodyData = Object.assign({}, req.body);
         const adInfo = {
-            ...bodyData,
+            ...{ content } = Object.assign({}, req.body),
             imagePath: outputImageFilePath,
-            type: "image"
         };
         const result = await adsOPerationsManagmentFunctions.addNewAd(req.data._id, adInfo, req.query.language);
         if (result.error) {
-            if (result.msg !== "Sorry, Can't Add New Text Ad Because Arrive To Max Limits For Text Ads Count ( Limits: 10 ) !!") {
+            if (result.msg !== "Sorry, Can't Add New Ad Because Arrive To Max Limits For Ads Count ( Limits: 10 ) !!") {
                 return res.status(401).json(result);
             }
         }
@@ -91,7 +74,7 @@ async function putAdImage(req, res) {
         }
         else {
             unlinkSync(outputImageFilePath);
-            if (result.msg !== "Sorry, Type Of Ad Is Not Image !!" || result.msg !== "Sorry, This Ad Is Not Exist !!") {
+            if (result.msg !== "Sorry, This Ad Is Not Exist !!") {
                 return res.status(401).json(result);
             }
         }
@@ -106,7 +89,7 @@ async function putTextAdContent(req, res) {
     try{
         const result = await adsOPerationsManagmentFunctions.updateTextAdContent(req.data._id, req.params.adId, req.body.content, req.query.language);
         if (result.error) {
-            if (result.msg !== "Sorry, Type Of Ad Is Not Text !!" || result.msg !== "Sorry, This Ad Is Not Exist !!") {
+            if (result.msg !== "Sorry, This Ad Is Not Exist !!") {
                 return res.status(401).json(result);
             }
         }
@@ -118,8 +101,7 @@ async function putTextAdContent(req, res) {
 }
 
 module.exports = {
-    postNewTextAd,
-    postNewImageAd,
+    postNewAd,
     getAllAds,
     deleteAd,
     putAdImage,

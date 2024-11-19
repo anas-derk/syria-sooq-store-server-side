@@ -8,18 +8,7 @@ const { validateJWT, validateIsExistErrorInFiles } = require("../middlewares/glo
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
-adsRouter.post("/add-new-text-ad",
-    validateJWT,
-    (req, res, next) => {
-        const { content } = req.body;
-        validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Content", fieldValue: content, dataType: "string", isRequiredValue: true },
-        ], res, next);
-    },
-    adsController.postNewTextAd
-);
-
-adsRouter.post("/add-new-image-ad",
+adsRouter.post("/add-new-ad",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
@@ -40,7 +29,13 @@ adsRouter.post("/add-new-image-ad",
         }
     }).single("adImage"),
     validateIsExistErrorInFiles,
-    adsController.postNewImageAd,
+    (req, res, next) => {
+        const { content } = req.body;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Content", fieldValue: content, dataType: "string", isRequiredValue: true },
+        ], res, next);
+    },
+    adsController.postNewAd
 );
 
 adsRouter.get("/all-ads", adsController.getAllAds);
@@ -55,7 +50,7 @@ adsRouter.delete("/:adId",
     adsController.deleteAd
 );
 
-adsRouter.put("/update-ad-image/:adId",
+adsRouter.put("/change-ad-image/:adId",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),

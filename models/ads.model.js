@@ -9,10 +9,9 @@ async function addNewAd(authorizationId, adsInfo, language) {
         const admin = await adminModel.findById(authorizationId);
         if (admin){
             if (!admin.isBlocked) {
-                const textAdsCount = await adsModel.countDocuments({ type: adsInfo.type });
-                if (textAdsCount >= 10) {
+                if (await adsModel.countDocuments({}) >= 10) {
                     return {
-                        msg: getSuitableTranslations("Sorry, Can't Add New Text Ad Because Arrive To Max Limits For Text Ads Count ( Limits: 10 ) !!", language),
+                        msg: getSuitableTranslations("Sorry, Can't Add New Ad Because Arrive To Max Limits For Ads Count ( Limits: 10 ) !!", language),
                         error: true,
                         data: {},
                     }
@@ -72,9 +71,9 @@ async function deleteAd(authorizationId, adId, language) {
                         return {
                             msg: getSuitableTranslations("Deleting Ad Process Has Been Successfuly !!", language),
                             error: false,
-                            data: adInfo.type === "image" ? {
-                                deletedAdImagePath: adInfo.imagePath,
-                            } : {},
+                            data: {
+                                deletedAdImagePath: adInfo.imagePath
+                            },
                         }
                     }
                     return {
@@ -117,23 +116,16 @@ async function updateAdImage(authorizationId, adId, newAdImagePath, language) {
                 const adInfo = await adsModel.findById(adId);
                 if (adInfo) {
                     if (adInfo.storeId === admin.storeId) {
-                        if (adInfo.type === "image") {
-                            await adsModel.updateOne({ _id: adId }, {
-                                imagePath: newAdImagePath,
-                            });
-                            return {
-                                msg: getSuitableTranslations("Change Ad Image Process Has Been Successfully !!", language),
-                                error: false,
-                                data: {
-                                    oldAdImagePath: adInfo.imagePath,
-                                    newAdImagePath
-                                },
-                            }
-                        }
+                        await adsModel.updateOne({ _id: adId }, {
+                            imagePath: newAdImagePath,
+                        });
                         return {
-                            msg: getSuitableTranslations("Sorry, Type Of Ad Is Not Image !!", language),
-                            error: true,
-                            data: {},
+                            msg: getSuitableTranslations("Change Ad Image Process Has Been Successfully !!", language),
+                            error: false,
+                            data: {
+                                oldAdImagePath: adInfo.imagePath,
+                                newAdImagePath
+                            },
                         }
                     }
                     return {
@@ -177,17 +169,10 @@ async function updateTextAdContent(authorizationId, adId, newTextAdContent, lang
                 const adInfo = await adsModel.findById(adId);
                 if (adInfo) {
                     if (adInfo.storeId === admin.storeId) {
-                        if (adInfo.type === "text") {
-                            await adsModel.updateOne( { _id: adId } , { content: newTextAdContent });
-                            return {
-                                msg: getSuitableTranslations("Updating Text Ad Content Process Has Been Successfuly !!", language),
-                                error: false,
-                                data: {},
-                            }
-                        }
+                        await adsModel.updateOne( { _id: adId } , { content: newTextAdContent });
                         return {
-                            msg: getSuitableTranslations("Sorry, Type Of Ad Is Not Text !!", language),
-                            error: true,
+                            msg: getSuitableTranslations("Updating Text Ad Content Process Has Been Successfuly !!", language),
+                            error: false,
                             data: {},
                         }
                     }
