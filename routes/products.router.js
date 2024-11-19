@@ -33,7 +33,7 @@ productsRouter.post("/add-new-product",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, price, description, categories, discount, quantity, countries } = Object.assign({}, req.body);
+        const { name, price, description, categories, discount, quantity } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataType: "string", isRequiredValue: true },
             { fieldName: "Price", fieldValue: Number(price), dataType: "number", isRequiredValue: true },
@@ -41,7 +41,6 @@ productsRouter.post("/add-new-product",
             { fieldName: "Categories", fieldValue: categories, dataType: "array", isRequiredValue: true },
             { fieldName: "Discount", fieldValue: Number(discount), dataType: "number", isRequiredValue: discount < 0 },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataType: "number", isRequiredValue: true },
-            { fieldName: "Countries", fieldValue: countries, dataType: "array", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
@@ -57,14 +56,6 @@ productsRouter.post("/add-new-product",
             , res, next);
     },
     (req, res, next) => validateNumbersIsNotFloat([(Object.assign({}, req.body)).quantity], res, next, [], "Sorry, Please Send Valid Product Quantity !!"),
-    (req, res, next) => {
-        const { countries } = Object.assign({}, req.body);
-        let errorMsgs = [];
-        for (let i = 0; i < countries.length; i++) {
-            errorMsgs.push(`Sorry, Please Send Valid Country At Index: ${i + 1} !!`);
-        }
-        validateCountries(countries, res, next, errorMsgs);
-    },
     (req, res, next) => {
         const { price, discount } = Object.assign({}, req.body);
         validateIsPriceGreaterThanDiscount(price, discount, res, next);
