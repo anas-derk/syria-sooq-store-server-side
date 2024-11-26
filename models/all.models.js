@@ -72,7 +72,7 @@ const adminSchema = new mongoose.Schema({
     blockingReason: String,
     creatingDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     blockingDate: Date,
     dateOfCancelBlocking: Date,
@@ -134,7 +134,7 @@ const storeSchema = new mongoose.Schema({
     },
     creatingOrderDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     approveDate: Date,
     blockingDate: Date,
@@ -201,7 +201,7 @@ const productSchema = new mongoose.Schema({
     },
     postOfDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     imagePath: {
         type: String,
@@ -339,7 +339,7 @@ const userSchema = new mongoose.Schema({
     },
     dateOfCreation: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
 });
 
@@ -613,7 +613,7 @@ const orderSchema = new mongoose.Schema({
     }],
     addedDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     orderNumber: Number,
     requestNotes: {
@@ -698,7 +698,7 @@ const referalShema = new mongoose.Schema({
     },
     referalDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     isAppeared: {
         type: Boolean,
@@ -807,7 +807,7 @@ const adsSchema = new mongoose.Schema({
     },
     dateOfPost: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
 });
 
