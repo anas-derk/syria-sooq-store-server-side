@@ -214,10 +214,10 @@ async function getFlashProductsCount(filters, language) {
 async function getAllProductsInsideThePage(pageNumber, pageSize, filters, sortDetailsObject, language) {
     try {
         return {
-            msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }).populate("categories"),
+            msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
             error: false,
             data: {
-                products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize),
+                products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
                 currentDate: new Date()
             },
         }
