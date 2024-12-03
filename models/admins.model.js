@@ -159,18 +159,6 @@ async function addNewAdmin(merchantId, adminInfo, language) {
                             storeId: admin.storeId,
                             permissions: [
                                 {
-                                    name: "Add New Brand",
-                                    value: true,
-                                },
-                                {
-                                    name: "Update Brand Info",
-                                    value: true,
-                                },
-                                {
-                                    name: "Delete Brand",
-                                    value: true,
-                                },
-                                {
                                     name: "Update Order Info",
                                     value: true,
                                 },
@@ -213,14 +201,6 @@ async function addNewAdmin(merchantId, adminInfo, language) {
                                 {
                                     name: "Delete Product",
                                     value: true,
-                                },
-                                {
-                                    name: "Show And Hide Sections",
-                                    value: false,
-                                },
-                                {
-                                    name: "Change Bussiness Email Password",
-                                    value: false,
                                 },
                                 {
                                     name: "Add New Admin",
