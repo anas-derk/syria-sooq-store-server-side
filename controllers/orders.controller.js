@@ -73,7 +73,7 @@ async function getOrderDetails(req, res) {
 
 async function postNewOrder(req, res) {
     try{
-        const result = await ordersManagmentFunctions.createNewOrder(req.body, req.query.language);
+        const result = await ordersManagmentFunctions.createNewOrder(req.data._id, req.body, req.query.language);
         if (!result.error) {
             if (req.body.checkoutStatus === "Checkout Successfull") {
                 await sendReceiveOrderEmail(result.data.billingAddress.email, result.data, result.data.language);
@@ -89,6 +89,7 @@ async function postNewOrder(req, res) {
         res.json(result);
     }
     catch(err) {
+        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }

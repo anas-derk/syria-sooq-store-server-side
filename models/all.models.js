@@ -447,20 +447,10 @@ const orderSchema = new mongoose.Schema({
             "Checkout Successfull"
         ],
     },
-    creator: {
-        type: String,
-        required: true,
-        enum: [
-            "user",
-            "guest"
-        ],
-    },
     paymentGateway: {
         type: String,
         required: true,
         enum: [
-            "tap",
-            "tabby",
             "binance"
         ],
     },
@@ -510,10 +500,6 @@ const orderSchema = new mongoose.Schema({
             type: String,
             default: "none",
         },
-        country: {
-            type: String,
-            default: "none",
-        },
         streetAddress: {
             type: String,
             default: "none",
@@ -549,10 +535,6 @@ const orderSchema = new mongoose.Schema({
             default: "none",
         },
         companyName: {
-            type: String,
-            default: "none",
-        },
-        country: {
             type: String,
             default: "none",
         },
@@ -637,28 +619,6 @@ const orderSchema = new mongoose.Schema({
             type: Number,
             default: 0,
         }
-    },
-    shippingMethod: {
-        forLocalProducts: {
-            type: String,
-            enum: ["normal", "ubuyblues"],
-            required: true
-        },
-        forInternationalProducts: {
-            type: String,
-            enum: ["normal", "fast"],
-            required: true
-        }
-    },
-    language: {
-        type: String,
-        enum: [
-            "ar",
-            "en",
-            "de",
-            "tr"
-        ],
-        default: "en"
     },
 });
 

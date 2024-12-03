@@ -2,7 +2,7 @@ const ordersRouter = require("express").Router();
 
 const ordersController = require("../controllers/orders.controller");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateCountry, validateName, validateEmail, validateIsNotExistDublicateProductId, validateCheckoutStatus, validateShippingMethod, validateOrderDestination, validateOrderCreator, validatePaymentGateway, validateOrderStatus, validateLanguage } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateName, validateEmail, validateIsNotExistDublicateProductId, validateCheckoutStatus, validateShippingMethod, validateOrderDestination, validatePaymentGateway, validateOrderStatus, validateLanguage } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -74,19 +74,15 @@ ordersRouter.get("/order-details/:orderId",
 );
 
 ordersRouter.post("/create-new-order",
+    validateJWT,
     (req, res, next) => {
-        const { creator, language, checkoutStatus, billingAddress, shippingAddress, requestNotes, products, shippingMethod, couponCode } = req.body;
-        const { country } = req.query;
+        const { checkoutStatus, billingAddress, shippingAddress, requestNotes, products, couponCode, paymentGateway } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Country", fieldValue: country, dataType: "string", isRequiredValue: true },
-            { fieldName: "Order Creator", fieldValue: creator, dataType: "string", isRequiredValue: true },
             { fieldName: "Coupon Code", fieldValue: couponCode, dataType: "string", isRequiredValue: false },
-            { fieldName: "Language", fieldValue: language, dataType: "string", isRequiredValue: true },
             { fieldName: "Checkout Status", fieldValue: checkoutStatus, dataType: "string", isRequiredValue: false },
             { fieldName: "First Name In Billing Address", fieldValue: billingAddress?.firstName, dataType: "string", isRequiredValue: true },
             { fieldName: "Last Name In Billing Address", fieldValue: billingAddress?.lastName, dataType: "string", isRequiredValue: true },
             { fieldName: "Company Name In Billing Address", fieldValue: billingAddress?.companyName, dataType: "string", isRequiredValue: false },
-            { fieldName: "Country In Billing Address", fieldValue: billingAddress?.country, dataType: "string", isRequiredValue: true },
             { fieldName: "Street Address In Billing Address", fieldValue: billingAddress?.streetAddress, dataType: "string", isRequiredValue: true },
             { fieldName: "Apartment Number In Billing Address", fieldValue: billingAddress?.apartmentNumber, dataType: "number", isRequiredValue: false },
             { fieldName: "City In Billing Address", fieldValue: billingAddress?.city, dataType: "string", isRequiredValue: true },
@@ -96,7 +92,6 @@ ordersRouter.post("/create-new-order",
             { fieldName: "First Name In Shipping Address", fieldValue: shippingAddress?.firstName, dataType: "string", isRequiredValue: true },
             { fieldName: "Last Name In Shipping Address", fieldValue: shippingAddress?.lastName, dataType: "string", isRequiredValue: true },
             { fieldName: "Company Name In Shipping Address", fieldValue: shippingAddress?.companyName, dataType: "string", isRequiredValue: false },
-            { fieldName: "Country In Shipping Address", fieldValue: shippingAddress?.country, dataType: "string", isRequiredValue: true },
             { fieldName: "Street Address In Shipping Address", fieldValue: shippingAddress?.streetAddress, dataType: "string", isRequiredValue: true },
             { fieldName: "Apartment Number In Shipping Address", fieldValue: shippingAddress?.apartmentNumber, dataType: "number", isRequiredValue: false },
             { fieldName: "City In Shipping Address", fieldValue: shippingAddress?.city, dataType: "string", isRequiredValue: true },
@@ -105,9 +100,6 @@ ordersRouter.post("/create-new-order",
             { fieldName: "Email In Shipping Address", fieldValue: shippingAddress?.email, dataType: "string", isRequiredValue: true },
             { fieldName: "Request Notes", fieldValue: requestNotes, dataType: "string", isRequiredValue: false },
             { fieldName: "Order Products", fieldValue: products, dataType: "array", isRequiredValue: true },
-            { fieldName: "Shipping Method", fieldValue: shippingMethod, dataType: "object", isRequiredValue: true },
-            { fieldName: "Shipping Method For Local Products", fieldValue: shippingMethod?.forLocalProducts, dataType: "string", isRequiredValue: true },
-            { fieldName: "Shipping Method For Internationl Products", fieldValue: shippingMethod?.forInternationalProducts, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
@@ -119,18 +111,6 @@ ordersRouter.post("/create-new-order",
             ]))
         , res, next);
     },
-    (req, res, next) => validateName(req.query.country, res, next, "Sorry, Please Send Valid Country Name !!"),
-    (req, res, next) => validateCountry(req.query.country, res, next),
-    (req, res, next) => validateOrderCreator(req.body.creator, res, next),
-    (req, res, next) => validateLanguage(req.body.language, res, next),
-    (req, res, next) => {
-        const { creator } = req.body;
-        if (creator === "user") {
-            validateJWT(req, res, next);
-            return;
-        }
-        next();
-    },
     (req, res, next) => {
         const { checkoutStatus } = req.body;
         if (checkoutStatus) {
@@ -141,7 +121,6 @@ ordersRouter.post("/create-new-order",
     },
     (req, res, next) => validateName(req.body.billingAddress.firstName, res, next, "Sorry, Please Send Valid First Name In Billing Address !!"),
     (req, res, next) => validateName(req.body.billingAddress.lastName, res, next, "Sorry, Please Send Valid Last Name In Billing Address !!"),
-    (req, res, next) => validateName(req.body.billingAddress.country, res, next, "Sorry, Please Send Valid Country Name In Billing Address !!"),
     (req, res, next) => validateName(req.body.billingAddress.city, res, next, "Sorry, Please Send Valid City Name In Billing Address !!"),
     (req, res, next) => {
         const { billingAddress } = req.body;
@@ -162,7 +141,6 @@ ordersRouter.post("/create-new-order",
     (req, res, next) => validateEmail(req.body.billingAddress.email, res, next, "Sorry, Please Send Valid Email In Billing Address !!"),
     (req, res, next) => validateName(req.body.shippingAddress.firstName, res, next, "Sorry, Please Send Valid First Name In Shipping Address !!"),
     (req, res, next) => validateName(req.body.shippingAddress.lastName, res, next, "Sorry, Please Send Valid Last Name In Shipping Address !!"),
-    (req, res, next) => validateName(req.body.shippingAddress.country, res, next, "Sorry, Please Send Valid Country Name In Shipping Address !!"),
     (req, res, next) => validateName(req.body.shippingAddress.city, res, next, "Sorry, Please Send Valid City Name In Shipping Address !!"),
     (req, res, next) => {
         const { shippingAddress } = req.body;
@@ -191,7 +169,6 @@ ordersRouter.post("/create-new-order",
         }
         validateNumbersIsGreaterThanZero(productsQuantity, res, next, errorMsgs);
     },
-    validateShippingMethod,
     ordersController.postNewOrder
 );
 

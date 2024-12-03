@@ -156,14 +156,6 @@ function validateOrderDestination(orderDestination, res, nextFunc){
     nextFunc();
 }
 
-function validateOrderCreator(orderCreator, res, nextFunc){
-    if (!["user", "guest"].includes(orderCreator)) {
-        res.status(400).json(getResponseObject("Please Send Valid Order Creator !!", true, {}));
-        return;
-    }
-    nextFunc();
-}
-
 function validatePaymentGateway(paymentGate, res, nextFunc){
     if (!["tap", "tabby", "binance"].includes(paymentGate)) {
         res.status(400).json(getResponseObject("Please Send Valid Payment Gateway !!", true, {}));
@@ -211,7 +203,6 @@ module.exports = {
     validateShippingMethod,
     validateTypeOfUseForCode,
     validateOrderDestination,
-    validateOrderCreator,
     validatePaymentGateway,
     validateOrderStatus,
     validateIsPriceGreaterThanDiscount,

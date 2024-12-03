@@ -4,28 +4,6 @@ const { orderModel, userModel, adminModel, productsWalletModel, productModel, mo
 
 const { getSuitableTranslations } = require("../global/functions");
 
-const isProductLocalOrInternational = (productCountries, shippingCountry) => {
-    return productCountries.includes(shippingCountry) ? "local" : "international";
-}
-
-const getShippingCost = (localProductsLength, internationalProductsLength, shippingMethod, totalPriceAfterDiscount) => {
-    let tempShippingCost = { forLocalProducts: 0, forInternationalProducts: 0 };
-    if (localProductsLength !== 0) {
-        if (shippingMethod.forLocalProducts === "ubuyblues") {
-            tempShippingCost.forLocalProducts = 3.1;
-        }
-    }
-    if (internationalProductsLength !== 0) {
-        if (shippingMethod.forInternationalProducts === "normal") {
-            tempShippingCost.forInternationalProducts = totalPriceAfterDiscount * 0.15;
-        }
-        else {
-            tempShippingCost.forInternationalProducts = totalPriceAfterDiscount * 0.25;
-        }
-    }
-    return tempShippingCost;
-}
-
 async function getOrdersCount(authorizationId, filters, language) {
     try {
         const user = filters.destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
@@ -117,18 +95,8 @@ const isExistOfferOnProduct = (startDateAsString, endDateAsString) => {
     return false;
 }
 
-async function createNewOrder(orderDetails, language) {
+async function createNewOrder(authorizationId, orderDetails, language) {
     try {
-        if (orderDetails.userId) {
-            const user = await userModel.findById(orderDetails.userId);
-            if (!user) {
-                return {
-                    msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
-                    error: true,
-                    data: {},
-                }
-            }
-        }
         const existOrderProducts = await productModel.find({ _id: { $in: orderDetails.products.map((product) => product.productId) }});
         if (existOrderProducts.length === 0) {
             return {
@@ -185,14 +153,6 @@ async function createNewOrder(orderDetails, language) {
                 }
             }
         }
-        if (orderDetails.couponCode) {
-            const result = await getCouponDetails(orderDetails.couponCode);
-            if (result.error) {
-                return result;
-            }
-            delete orderDetails.couponCode;
-            orderDetails.couponDetails = { code: result.data.code, discountPercentage: result.data.discountPercentage, storeId: result.data.storeId }
-        }
         let orderProductsDetails = [];
         for(let i = 0; i < orderedProducts.length; i++) {
             orderProductsDetails.push({
@@ -211,23 +171,12 @@ async function createNewOrder(orderDetails, language) {
             totalDiscount: 0,
             totalPriceAfterDiscount: 0
         }
-        let localProducts = [], internationalProducts = [];
         for(let product of orderProductsDetails){
             totalPrices.totalPriceBeforeDiscount += product.totalAmount;
             totalPrices.totalDiscount += product.discount * product.quantity;
-            if (isProductLocalOrInternational(product.countries, orderDetails.shippingAddress.country) === "local") {
-                localProducts.push(product);
-            } else {
-                internationalProducts.push(product);
-            }
         }
         totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
-        const shippingMethod = {
-            forLocalProducts: orderDetails.shippingMethod.forLocalProducts,
-            forInternationalProducts: orderDetails.shippingMethod.forInternationalProducts,
-        }
-        const shippingCost = getShippingCost(localProducts.length, internationalProducts.length, shippingMethod, totalPrices.totalPriceAfterDiscount);
-        const totalAmountBeforeApplyCoupon = totalPrices.totalPriceAfterDiscount + shippingCost.forLocalProducts + shippingCost.forInternationalProducts;
+        const totalAmountBeforeApplyCoupon = totalPrices.totalPriceAfterDiscount;
         const newOrder = await (
             new orderModel({
                 storeId: existOrderProducts[0].storeId,
@@ -235,39 +184,33 @@ async function createNewOrder(orderDetails, language) {
                 totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
                 totalDiscount: totalPrices.totalDiscount,
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
-                totalAmountBeforeApplyCoupon,
                 isApplyCoupon: orderDetails.couponDetails ? true : false,
                 couponDetails: orderDetails.couponDetails,
-                orderAmount: orderDetails.couponDetails ? totalAmountBeforeApplyCoupon - (totalAmountBeforeApplyCoupon * orderDetails.couponDetails.discountPercentage) / 100 : totalAmountBeforeApplyCoupon,
-                userId: orderDetails.userId ? orderDetails.userId : "",
-                creator: orderDetails.creator,
+                orderAmount: totalAmountBeforeApplyCoupon,
+                checkoutStatus: orderDetails.checkoutStatus,
+                userId: authorizationId,
                 paymentGateway: orderDetails.paymentGateway,
                 billingAddress: orderDetails.billingAddress,
                 shippingAddress: orderDetails.shippingAddress,
                 products: orderProductsDetails,
-                shippingCost,
-                shippingMethod,
-                language: orderDetails.language
             })
         ).save();
-        if (orderDetails.userId) {
-            let newProductsForUserInsideTheWallet = [];
-            const orderProducts = await productsWalletModel.find({ productId: { $in: orderProductsDetails.map((product) => product.productId) }, userId: orderDetails.userId });
-            for (let i = 0; i < orderProductsDetails.length; i++) {
-                const wallet_productIndex = orderProducts.findIndex((wallet_product) => wallet_product.productId == orderProductsDetails[i].productId);
-                if (wallet_productIndex == -1) {
-                    newProductsForUserInsideTheWallet.push({
-                        name: orderProductsDetails[i].name,
-                        price: orderProductsDetails[i].unitPrice,
-                        imagePath: orderProductsDetails[i].imagePath,
-                        productId: orderProductsDetails[i].productId,
-                        userId: orderDetails.userId
-                    });
-                }
+        let newProductsForUserInsideTheWallet = [];
+        const orderProducts = await productsWalletModel.find({ productId: { $in: orderProductsDetails.map((product) => product.productId) }, userId: authorizationId });
+        for (let i = 0; i < orderProductsDetails.length; i++) {
+            const wallet_productIndex = orderProducts.findIndex((wallet_product) => wallet_product.productId == orderProductsDetails[i].productId);
+            if (wallet_productIndex == -1) {
+                newProductsForUserInsideTheWallet.push({
+                    name: orderProductsDetails[i].name,
+                    price: orderProductsDetails[i].unitPrice,
+                    imagePath: orderProductsDetails[i].imagePath,
+                    productId: orderProductsDetails[i].productId,
+                    userId: authorizationId
+                });
             }
-            if (newProductsForUserInsideTheWallet.length > 0) {
-                await productsWalletModel.insertMany(newProductsForUserInsideTheWallet);
-            }
+        }
+        if (newProductsForUserInsideTheWallet.length > 0) {
+            await productsWalletModel.insertMany(newProductsForUserInsideTheWallet);
         }
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
