@@ -72,7 +72,7 @@ usersRouter.post("/create-new-user",
     (req, res, next) => {
         const { text } = req.body;
         if (!isEmail(text) && !isValidMobilePhone(text)) {
-            return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
+            return res.status(400).json(getResponseObject("Please Send Valid Text ( Email Or Mobile Phone ) !!", true, {}));
         }
         next();
     },
