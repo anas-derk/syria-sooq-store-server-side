@@ -21,19 +21,6 @@ usersRouter.get("/login",
     usersController.login
 );
 
-usersRouter.get("/login-with-google",
-    (req, res, next) => {
-        const { email, firstName, lastName, previewName } = req.query;
-        validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: true },
-            { fieldName: "First Name", fieldValue: firstName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Last Name", fieldValue: lastName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Preview Name", fieldValue: previewName, dataType: "string", isRequiredValue: true },
-        ], res, next);
-    },
-    usersController.loginWithGoogle
-);
-
 usersRouter.get("/user-info",
     validateJWT,
     usersController.getUserInfo

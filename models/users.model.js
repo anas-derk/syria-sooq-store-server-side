@@ -68,44 +68,6 @@ async function login(email, password, language) {
     }
 }
 
-async function loginByGoogle(userInfo, language) {
-    try{
-        const user = await userModel.findOne({ email: userInfo.email, provider: "google" });
-        if (user) {
-            return {
-                msg: getSuitableTranslations("Logining Process By Google Has Been Successfully !!", language),
-                error: false,
-                data: {
-                    _id: user._id,
-                    isVerified: user.isVerified,
-                    provider: "google",
-                },
-            };
-        }
-        const { _id, isVerified } = (new userModel({
-            email: userInfo.email,
-            firstName: userInfo.first_name,
-            lastName: userInfo.last_name,
-            previewName: userInfo.preview_name,
-            password: await hash(process.env.secretKey, 10),
-            isVerified: true,
-            provider: "google",
-        })).save();
-        return {
-            msg: getSuitableTranslations("Logining Process By Google Has Been Successfully !!", language),
-            error: false,
-            data: {
-                _id,
-                isVerified,
-                provider: "google"
-            },
-        }
-    }
-    catch(err){
-        throw Error(err);
-    }
-}
-
 async function getUserInfo(userId, language) {
     try {
         const user = await userModel.findById(userId);
@@ -397,7 +359,6 @@ async function deleteUser(authorizationId, userId, language){
 module.exports = {
     createNewUser,
     login,
-    loginByGoogle,
     getUserInfo,
     isExistUserAccount,
     isExistUserAndVerificationEmail,

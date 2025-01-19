@@ -9,7 +9,6 @@ const {
     addNewAccountVerificationCode,
     isAccountVerificationCodeValid
 } = require("../models/account_codes.model");
-const { createNewStore } = require("../models/stores.model");
 
 function getFiltersObject(filters) {
     let filtersObject = {};
@@ -43,26 +42,6 @@ async function login(req, res) {
         res.json(result);
     }
     catch(err){
-        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
-    }
-}
-
-async function loginWithGoogle(req, res) {
-    try{
-        const { email, firstName, lastName, previewName, language } = req.query;
-        const result = await usersOPerationsManagmentFunctions.loginByGoogle({ email, firstName, lastName, previewName }, language);
-        res.json({
-            msg: result.msg,
-            error: result.error,
-            data: {
-                ...result.data,
-                token: sign(result.data, process.env.secretKey, {
-                    expiresIn: "7d",
-                }),
-            },
-        });
-    }
-    catch(err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
