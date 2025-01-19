@@ -14,6 +14,26 @@ function validateJWT(req, res, next) {
     });
 }
 
+function validateCity(city, res, nextFunc) {
+    if (![
+        "lattakia",
+        "homs",
+        "hama",
+        "idleb",
+        "daraa",
+        "suwayda",
+        "deer-alzoor",
+        "damascus",
+        "rif-damascus",
+        "aleppo",
+        "quneitra"
+    ].includes(city)) {
+        res.status(400).json(getResponseObject("Sorry, Please Send Valid City !!", true, {}));
+        return;
+    }
+    nextFunc();
+}
+
 function validateEmail(email, res, nextFunc, errorMsg = "Sorry, Please Send Valid Email !!") {
     if (!isEmail(email)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
@@ -187,6 +207,7 @@ function keyGeneratorForRequestsRateLimit(req) {
 
 module.exports = {
     validateJWT,
+    validateCity,
     validateEmail,
     validateUserType,
     validatePassword,

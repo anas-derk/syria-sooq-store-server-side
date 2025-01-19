@@ -28,6 +28,10 @@ function isValidName(name) {
     return name.match(/^([\u0600-\u06FF\s]+|[a-zA-Z\s]+)$/);
 }
 
+function isValidMobilePhone(mobilePhone) {
+    return mobilePhone.match(/^(093|099|098|094|095|096)\d{7}$/);
+}
+
 function isValidLanguage(language) {
     return ["ar", "en"].includes(language);
 }
@@ -459,6 +463,7 @@ module.exports = {
     isEmail,
     isValidPassword,
     isValidName,
+    isValidMobilePhone,
     isValidLanguage,
     calcOrderAmount,
     sendVerificationCodeToUserEmail,

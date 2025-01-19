@@ -223,119 +223,35 @@ const productModel = mongoose.model("product", productSchema);
 // Create User Schema
 
 const userSchema = new mongoose.Schema({
-    email: String,
-    password: String,
-    provider: {
+    city: {
         type: String,
-        default: "same-site",
+        required: true,
+        enum: [
+            "lattakia",
+            "homs",
+            "hama",
+            "idleb",
+            "daraa",
+            "suwayda",
+            "deer-alzoor",
+            "damascus",
+            "rif-damascus",
+            "aleppo",
+            "quneitra"
+        ],
     },
+    text: {
+        type: String,
+        required: true,
+    },
+    password: String,
     isVerified: {
         type: Boolean,
-        default: false,
+        default: true,
     },
-    firstName: {
+    fullName: {
         type: String,
         default: "",
-    },
-    lastName: {
-        type: String,
-        default: "",
-    },
-    previewName: {
-        type: String,
-        default: "",
-    },
-    billingAddress: {
-        firstName: {
-            type: String,
-            default: "",
-        },
-        lastName: {
-            type: String,
-            default: "",
-        },
-        companyName: {
-            type: String,
-            default: "",
-        },
-        country: {
-            type: String,
-            default: "KW",
-        },
-        streetAddress: {
-            type: String,
-            default: "",
-        },
-        apartmentNumber: {
-            type: Number,
-            default: 1,
-        },
-        city: {
-            type: String,
-            default: "",
-        },
-        postalCode: {
-            type: String,
-            default: "",
-        },
-        phoneNumber: {
-            type: String,
-            default: "00963941519404",
-        },
-        email: {
-            type: String,
-            default: "",
-        },
-    },
-    shippingAddress: {
-        firstName: {
-            type: String,
-            default: "",
-        },
-        lastName: {
-            type: String,
-            default: "",
-        },
-        companyName: {
-            type: String,
-            default: "",
-        },
-        country: {
-            type: String,
-            default: "KW",
-        },
-        streetAddress: {
-            type: String,
-            default: "",
-        },
-        apartmentNumber: {
-            type: Number,
-            default: 1,
-        },
-        city: {
-            type: String,
-            default: "",
-        },
-        postalCode: {
-            type: String,
-            default: "",
-        },
-        phoneNumber: {
-            type: String,
-            default: "00963941519404",
-        },
-        email: {
-            type: String,
-            default: "",
-        },
-    },
-    language: {
-        type: String,
-        enum: [
-            "ar",
-            "en",
-        ],
-        default: "en"
     },
     dateOfCreation: {
         type: Date,

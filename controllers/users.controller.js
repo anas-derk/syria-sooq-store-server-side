@@ -24,8 +24,8 @@ function getFiltersObject(filters) {
 
 async function login(req, res) {
     try{
-        const { email, password } = req.query;
-        const result = await usersOPerationsManagmentFunctions.login(email.toLowerCase(), password, req.query.language);
+        const { text, password } = req.query;
+        const result = await usersOPerationsManagmentFunctions.login(text, password, req.query.language);
         if (!result.error) {
             res.json({
                 msg: result.msg,
@@ -114,12 +114,13 @@ async function getForgetPassword(req, res) {
 
 async function createNewUser(req, res) {
     try {
-        const { email, password, language } = req.body;
-        const result = await usersOPerationsManagmentFunctions.createNewUser(email.toLowerCase(), password, language);
+        const { city, text, password } = req.body;
+        const { language } = req.query;
+        const result = await usersOPerationsManagmentFunctions.createNewUser(city, text, password, language);
         if (result.error) {
             return res.json(result);
         }
-        await sendCongratulationsOnCreatingNewAccountEmail(email, language);
+        // await sendCongratulationsOnCreatingNewAccountEmail(email, language);
         res.json(result);
     }
     catch(err) {
@@ -221,7 +222,6 @@ module.exports = {
     createNewUser,
     postAccountVerificationCode,
     login,
-    loginWithGoogle,
     getUserInfo,
     getUsersCount,
     getAllUsersInsideThePage,
