@@ -2,7 +2,7 @@ const usersRouter = require("express").Router();
 
 const usersController = require("../controllers/users.controller");
 
-const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone } = require("../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, getResponseObject } = require("../global/functions");
 
 const { validateJWT, validateEmail, validatePassword, validateUserType, validateTypeOfUseForCode, validateCity } = require("../middlewares/global.middlewares");
 
