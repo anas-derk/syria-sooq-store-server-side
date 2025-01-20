@@ -266,7 +266,7 @@ const userModel = mongoose.model("user", userSchema);
 // Create Account Verification Codes Schema
 
 const accountVerificationCodesShema = new mongoose.Schema({
-    email: {
+    text: {
         type: String,
         required: true,
     },

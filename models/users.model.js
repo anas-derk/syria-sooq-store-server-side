@@ -168,24 +168,17 @@ async function getAllUsersInsideThePage(authorizationId, pageNumber, pageSize, f
     }
 }
 
-async function isExistUserAccount(email, userType, language) {
+async function isExistUserAccount(email, language) {
     try {
-        if (userType === "user") {
-            const user = await userModel.findOne({ email });
-            if (user) {
-                return {
-                    msg: getSuitableTranslations("User Is Exist !!", language),
-                    error: false,
-                    data: {
-                        _id: user._id,
-                        isVerified: user.isVerified,
-                    },
-                }
-            }
+        const user = await userModel.findOne({ email });
+        if (user) {
             return {
-                msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
-                error: true,
-                data: {},
+                msg: getSuitableTranslations("User Is Exist !!", language),
+                error: false,
+                data: {
+                    _id: user._id,
+                    isVerified: user.isVerified,
+                },
             }
         }
         const admin = await adminModel.findOne({ email });
@@ -199,7 +192,7 @@ async function isExistUserAccount(email, userType, language) {
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }
@@ -253,11 +246,11 @@ async function updateUserInfo(userId, newUserData, language) {
     }
 }
 
-async function updateVerificationStatus(email, language) {
+async function updateVerificationStatus(text, language) {
     try{
-        const userInfo = await userModel.findOneAndUpdate({ email }, { isVerified: true });
+        const userInfo = await userModel.findOneAndUpdate({ text }, { isVerified: true });
         if(userInfo) {
-            await accountVerificationCodesModel.deleteOne({ email, typeOfUse: "to activate account" });
+            await accountVerificationCodesModel.deleteOne({ text, typeOfUse: "to activate account" });
             return {
                 msg: getSuitableTranslations("Updating Verification Status Process Has Been Successfully !!", language),
                 error: false ,
@@ -278,37 +271,26 @@ async function updateVerificationStatus(email, language) {
     }
 }
 
-async function resetUserPassword(email, userType, newPassword, language) {
+async function resetUserPassword(text, newPassword, language) {
     try {
-        if (userType === "user") {
-            const user = await userModel.findOneAndUpdate({ email }, { password: await hash(newPassword, 10) });
-            if (user) {
-                return {
-                    msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
-                    error: false,
-                    data: {
-                        language: user.language,
-                    },
-                };
-            }
+        const user = await userModel.findOneAndUpdate({ text }, { password: await hash(newPassword, 10) });
+        if (user) {
             return {
-                msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
-                error: true,
-                data: {},
-            }
+                msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
+                error: false,
+                data: { language: user.language},
+            };
         }
-        const admin = await adminModel.findOneAndUpdate({ email }, { password: await hash(newPassword, 10) });
+        const admin = await adminModel.findOneAndUpdate({ text }, { password: await hash(newPassword, 10) });
         if (admin) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
                 error: false,
-                data: {
-                    language: admin.language,
-                },
+                data: {},
             };
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }

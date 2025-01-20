@@ -84,17 +84,15 @@ async function getAllUsersInsideThePage(req, res) {
 
 async function getForgetPassword(req, res) {
     try{
-        const { email, userType, language } = req.query;
-        let result = await usersOPerationsManagmentFunctions.isExistUserAccount(email, userType, language);
+        const { email, language } = req.query;
+        let result = await usersOPerationsManagmentFunctions.isExistUserAccount(email, language);
         if (!result.error) {
-            if (userType === "user") {
-                if (!result.data.isVerified) {
-                    return res.json({
-                        msg: "Sorry, The Email For This User Is Not Verified !!",
-                        error: true,
-                        data: result.data,
-                    });
-                }
+            if (!result.data.isVerified) {
+                return res.json({
+                    msg: "Sorry, The Email For This User Is Not Verified !!",
+                    error: true,
+                    data: result.data,
+                });
             }
             result = await isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(email, "to reset password", language);
             if (result.error) {
@@ -130,8 +128,8 @@ async function createNewUser(req, res) {
 
 async function postAccountVerificationCode(req, res) {
     try{
-        const { email, typeOfUse, userType, language } = req.query;
-        let result = typeOfUse === "to activate account" && userType === "user" ? await usersOPerationsManagmentFunctions.isExistUserAndVerificationEmail(email, language) : usersOPerationsManagmentFunctions.isExistUserAccount(email, userType, language);
+        const { email, typeOfUse, language } = req.query;
+        let result = typeOfUse === "to activate account" ? await usersOPerationsManagmentFunctions.isExistUserAndVerificationEmail(email, language) : usersOPerationsManagmentFunctions.isExistUserAccount(email, language);
         if (!result.error) {
             result = await isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(email, typeOfUse, language);
             if (result.error) {
@@ -186,10 +184,10 @@ async function putVerificationStatus(req, res) {
 
 async function putResetPassword(req, res) {
     try{
-        const { email, userType, code, newPassword, language } = req.query;
+        const { email, code, newPassword, language } = req.query;
         const result = await isAccountVerificationCodeValid(email, code, "to reset password");
         if (!result.error) {
-            result = await usersOPerationsManagmentFunctions.resetUserPassword(email, userType, newPassword, language);
+            result = await usersOPerationsManagmentFunctions.resetUserPassword(email, newPassword, language);
             if (!result.error) {
                 await sendChangePasswordEmail(email, result.data.language)
             }

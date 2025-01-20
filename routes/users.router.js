@@ -48,14 +48,19 @@ usersRouter.get("/all-users-inside-the-page",
 
 usersRouter.get("/forget-password",
     (req, res, next) => {
-        const { email, userType } = req.query;
+        const { text } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: true },
+            { fieldName: "Text", fieldValue: text, dataType: "string", isRequiredValue: true },
             { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateEmail(req.query.email, res, next),
-    (req, res, next) => validateUserType(req.query.userType, res, next),
+    (req, res, next) => {
+        const { text } = req.query;
+        if (!isEmail(text) && !isValidMobilePhone(text)) {
+            return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
+        }
+        next();
+    },
     usersController.getForgetPassword
 );
 
@@ -83,15 +88,19 @@ usersRouter.post("/create-new-user",
 usersRouter.post("/send-account-verification-code",
     // usersMiddlewares.sendingVerificationCodeLimiterMiddleware,
     (req, res, next) => {
-        const { email, typeOfUse, userType } = req.query;
+        const { email, typeOfUse } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
             { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: true },
             { fieldName: "Type Of Use", fieldValue: typeOfUse, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateUserType(req.query.userType, res, next),
-    (req, res, next) => validateEmail(req.query.email, res, next),
+    (req, res, next) => {
+        const { text } = req.query;
+        if (!isEmail(text) && !isValidMobilePhone(text)) {
+            return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
+        }
+        next();
+    },
     (req, res, next) => validateTypeOfUseForCode(req.query.typeOfUse, res, next),
     usersController.postAccountVerificationCode
 );
@@ -142,16 +151,20 @@ usersRouter.put("/update-verification-status",
 
 usersRouter.put("/reset-password",
     (req, res, next) => {
-        const { email, userType, code, newPassword } = req.query;
+        const { text, code, newPassword } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: true },
-            { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: text, dataType: "string", isRequiredValue: true },
             { fieldName: "Code", fieldValue: code, dataType: "string", isRequiredValue: true },
             { fieldName: "New Password", fieldValue: newPassword, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateEmail(req.query.email, res, next),
-    (req, res, next) => validateUserType(req.query.userType, res, next),
+    (req, res, next) => {
+        const { text } = req.query;
+        if (!isEmail(text) && !isValidMobilePhone(text)) {
+            return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
+        }
+        next();
+    },
     (req, res, next) => validatePassword(req.query.newPassword, res, next),
     usersController.putResetPassword
 );
