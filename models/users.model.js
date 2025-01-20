@@ -168,9 +168,9 @@ async function getAllUsersInsideThePage(authorizationId, pageNumber, pageSize, f
     }
 }
 
-async function isExistUserAccount(email, language) {
+async function isExistUserAccount(text, language) {
     try {
-        const user = await userModel.findOne({ email });
+        const user = await userModel.findOne({ text });
         if (user) {
             return {
                 msg: getSuitableTranslations("User Is Exist !!", language),
@@ -181,7 +181,7 @@ async function isExistUserAccount(email, language) {
                 },
             }
         }
-        const admin = await adminModel.findOne({ email });
+        const admin = await adminModel.findOne({ text });
         if (admin) {
             return {
                 msg: getSuitableTranslations("Admin Is Exist !!", language),

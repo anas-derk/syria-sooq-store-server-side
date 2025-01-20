@@ -51,7 +51,6 @@ usersRouter.get("/forget-password",
         const { text } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Text", fieldValue: text, dataType: "string", isRequiredValue: true },
-            { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {

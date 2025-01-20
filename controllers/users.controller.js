@@ -84,8 +84,8 @@ async function getAllUsersInsideThePage(req, res) {
 
 async function getForgetPassword(req, res) {
     try{
-        const { email, language } = req.query;
-        let result = await usersOPerationsManagmentFunctions.isExistUserAccount(email, language);
+        const { text, language } = req.query;
+        let result = await usersOPerationsManagmentFunctions.isExistUserAccount(text, language);
         if (!result.error) {
             if (!result.data.isVerified) {
                 return res.json({
@@ -94,13 +94,13 @@ async function getForgetPassword(req, res) {
                     data: result.data,
                 });
             }
-            result = await isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(email, "to reset password", language);
+            result = await isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(text, "to reset password", language);
             if (result.error) {
                 return res.json(result);
             }
-            result = await sendVerificationCodeToUserEmail(email);
+            result = await sendVerificationCodeToUserEmail(text);
             if (!result.error) {
-                return res.json(await addNewAccountVerificationCode(email, result.data, "to reset password", language));
+                return res.json(await addNewAccountVerificationCode(text, result.data, "to reset password", language));
             }
         }
         res.json(result);
