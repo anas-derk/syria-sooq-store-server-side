@@ -70,9 +70,9 @@ async function sendVerificationCodeToUserEmail(email) {
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ generatedCode });
         const mailConfigurations = {
-            from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+            from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
             to: email,
-            subject: "Account Verification Code On Ubuyblue Store",
+            subject: "رمز التحقق من الحساب على Syria Sooq",
             html: htmlContentAfterCompilingEjsTemplateFile,
         };
         return new Promise((resolve, reject) => {
