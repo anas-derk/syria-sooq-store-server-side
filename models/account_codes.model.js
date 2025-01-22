@@ -4,14 +4,22 @@ const { hash, compare } = require("bcryptjs");
 
 const { getSuitableTranslations } = require("../global/functions");
 
-async function addNewAccountVerificationCode(text, code, typeOfUse, language) {
+async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse, language) {
     try{
         const creatingDate = new Date(Date.now());
         const expirationDate = new Date(creatingDate.getTime() + 24 * 60 * 60 * 1000);
-        const accountVerificationCode = await accountVerificationCodesModel.findOne({ text, typeOfUse });
+        const accountVerificationCode = await accountVerificationCodesModel.findOne({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ], typeOfUse });
         if (accountVerificationCode) {
             const newRequestTimeCount = accountVerificationCode.requestTimeCount + 1;
-            await accountVerificationCodesModel.updateOne({ text },
+            await accountVerificationCodesModel.updateOne({ $or: 
+                [
+                    { email },
+                    { mobilePhone }
+                ] },
                 {
                     code: await hash(code, 10),
                     requestTimeCount: newRequestTimeCount,
@@ -29,7 +37,8 @@ async function addNewAccountVerificationCode(text, code, typeOfUse, language) {
             }
         }
         await (new accountVerificationCodesModel({
-            text,
+            ...email && { email },
+            ...mobilePhone && { mobilePhone },
             code: await hash(code, 10),
             createdDate: creatingDate,
             expirationDate: expirationDate,
@@ -46,9 +55,13 @@ async function addNewAccountVerificationCode(text, code, typeOfUse, language) {
     }
 }
 
-async function isAccountVerificationCodeValid(text, code, typeOfUse, language) {
+async function isAccountVerificationCodeValid(email, mobilePhone, code, typeOfUse, language) {
     try{
-        const accountVerificationCode = await accountVerificationCodesModel.findOne({ text, typeOfUse });
+        const accountVerificationCode = await accountVerificationCodesModel.findOne({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ], typeOfUse });
         if (accountVerificationCode) {
             if (await compare(code, accountVerificationCode.code)) {
                 return {
@@ -74,9 +87,14 @@ async function isAccountVerificationCodeValid(text, code, typeOfUse, language) {
     }
 }
 
-async function isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(text, typeOfUse, language) {
+async function isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(email, mobilePhone, typeOfUse, language) {
     try{
-        const accountVerificationCode = await accountVerificationCodesModel.findOne({ text, typeOfUse });
+        const accountVerificationCode = await accountVerificationCodesModel.findOne({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ]
+        , typeOfUse });
         if (accountVerificationCode) {
             const currentDate = new Date(Date.now());
             if (

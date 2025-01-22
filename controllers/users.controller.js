@@ -84,8 +84,8 @@ async function getAllUsersInsideThePage(req, res) {
 
 async function getForgetPassword(req, res) {
     try{
-        const { text, language } = req.query;
-        let result = await usersOPerationsManagmentFunctions.isExistUserAccount(text, language);
+        const { email, mobilePhone, language } = req.query;
+        let result = await usersOPerationsManagmentFunctions.isExistUserAccount(email, mobilePhone, language);
         if (!result.error) {
             if (!result.data.isVerified) {
                 return res.json({
@@ -94,19 +94,18 @@ async function getForgetPassword(req, res) {
                     data: result.data,
                 });
             }
-            result = await isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(text, "to reset password", language);
+            result = await isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(email, mobilePhone, "to reset password", language);
             if (result.error) {
                 return res.json(result);
             }
-            result = await sendVerificationCodeToUserEmail(text);
+            result = await sendVerificationCodeToUserEmail(email);
             if (!result.error) {
-                return res.json(await addNewAccountVerificationCode(text, result.data, "to reset password", language));
+                return res.json(await addNewAccountVerificationCode(email, mobilePhone, result.data, "to reset password", language));
             }
         }
         res.json(result);
     }
     catch(err) {
-        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -187,12 +186,14 @@ async function putVerificationStatus(req, res) {
 
 async function putResetPassword(req, res) {
     try{
-        const { text, code, newPassword, language } = req.query;
-        let result = await isAccountVerificationCodeValid(text, code, "to reset password");
+        const { email, mobilePhone, code, newPassword, language } = req.query;
+        let result = await isAccountVerificationCodeValid(email, mobilePhone, code, "to reset password");
         if (!result.error) {
-            result = await usersOPerationsManagmentFunctions.resetUserPassword(text, newPassword, language);
+            result = await usersOPerationsManagmentFunctions.resetUserPassword(email, mobilePhone, newPassword, language);
             if (!result.error) {
-                await sendChangePasswordEmail(text, result.data.language)
+                if (email) {
+                    await sendChangePasswordEmail(email, result.data.language);
+                }
             }
             return res.json(result);
         }

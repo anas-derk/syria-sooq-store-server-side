@@ -56,15 +56,23 @@ usersRouter.get("/all-users-inside-the-page",
 
 usersRouter.get("/forget-password",
     (req, res, next) => {
-        const { text } = req.query;
+        const { email, mobilePhone } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Text", fieldValue: text, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
         ], res, next);
     },
     (req, res, next) => {
-        const { text } = req.query;
-        if (!isEmail(text) && !isValidMobilePhone(text)) {
-            return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
+        const { email } = req.query;
+        if (email) {
+            return validateEmail(email, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { mobilePhone } = req.query;
+        if (mobilePhone) {
+            return validateMobilePhone(mobilePhone, res, next);
         }
         next();
     },
@@ -166,17 +174,25 @@ usersRouter.put("/update-verification-status",
 
 usersRouter.put("/reset-password",
     (req, res, next) => {
-        const { text, code, newPassword } = req.query;
+        const { email, mobilePhone, code, newPassword } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Text", fieldValue: text, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
             { fieldName: "Code", fieldValue: code, dataType: "string", isRequiredValue: true },
             { fieldName: "New Password", fieldValue: newPassword, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
-        const { text } = req.query;
-        if (!isEmail(text) && !isValidMobilePhone(text)) {
-            return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
+        const { email } = req.query;
+        if (email) {
+            return validateEmail(email, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { mobilePhone } = req.query;
+        if (mobilePhone) {
+            return validateMobilePhone(mobilePhone, res, next);
         }
         next();
     },

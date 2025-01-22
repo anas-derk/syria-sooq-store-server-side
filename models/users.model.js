@@ -179,9 +179,14 @@ async function getAllUsersInsideThePage(authorizationId, pageNumber, pageSize, f
     }
 }
 
-async function isExistUserAccount(text, language) {
+async function isExistUserAccount(email, mobilePhone, language) {
     try {
-        const user = await userModel.findOne({ text });
+        const user = await userModel.findOne({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ]
+        });
         if (user) {
             return {
                 msg: getSuitableTranslations("User Is Exist !!", language),
@@ -192,7 +197,12 @@ async function isExistUserAccount(text, language) {
                 },
             }
         }
-        const admin = await adminModel.findOne({ text });
+        const admin = await adminModel.findOne({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ]
+        });
         if (admin) {
             return {
                 msg: getSuitableTranslations("Admin Is Exist !!", language),
@@ -282,9 +292,13 @@ async function updateVerificationStatus(text, language) {
     }
 }
 
-async function resetUserPassword(text, newPassword, language) {
+async function resetUserPassword(email, mobilePhone, newPassword, language) {
     try {
-        const user = await userModel.findOneAndUpdate({ text }, { password: await hash(newPassword, 10) });
+        const user = await userModel.findOneAndUpdate({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ] }, { password: await hash(newPassword, 10) });
         if (user) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
@@ -292,7 +306,11 @@ async function resetUserPassword(text, newPassword, language) {
                 data: { language: "ar" },
             };
         }
-        const admin = await adminModel.findOneAndUpdate({ text }, { password: await hash(newPassword, 10) });
+        const admin = await adminModel.findOneAndUpdate({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ] }, { password: await hash(newPassword, 10) });
         if (admin) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
