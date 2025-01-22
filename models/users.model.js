@@ -228,19 +228,6 @@ async function updateUserInfo(userId, newUserData, language) {
         const userInfo = await userModel.findById(userId);
         if (userInfo) {
             let newUserInfo = newUserData;
-            if (newUserData.password && newUserData.newPassword) {
-                if (!(await compare(newUserData.password, userInfo.password))) {
-                    return {
-                        msg: getSuitableTranslations("Sorry, This Password Is Uncorrect !!", language),
-                        error: true,
-                        data: {},
-                    }
-                }
-                newUserInfo = {
-                    ...newUserData,
-                    password: await hash(newUserData.newPassword, 10),
-                }
-            }
             if (newUserData.email && newUserData.email !== userInfo.email) {
                 const user = await userModel.findOne({ email: newUserData.email });
                 if (user) {

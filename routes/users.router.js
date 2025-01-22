@@ -133,29 +133,32 @@ usersRouter.post("/send-account-verification-code",
 usersRouter.put("/update-user-info",
     validateJWT,
     (req, res, next) => {
-        const { firstName, lastName, previewName, email, password, newPassword } = req.body;
+        const { fullName, address, email, mobilePhone } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "First Name", fieldValue: firstName, dataType: "string", isRequiredValue: false },
-            { fieldName: "Last Name", fieldValue: lastName, dataType: "string", isRequiredValue: false },
-            { fieldName: "Preview Name", fieldValue: previewName, dataType: "string", isRequiredValue: false },
+            { fieldName: "Full Name", fieldValue: fullName, dataType: "string", isRequiredValue: false },
+            { fieldName: "Address", fieldValue: address, dataType: "string", isRequiredValue: false },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: false },
             { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: false },
-            { fieldName: "Password", fieldValue: password, dataType: "string", isRequiredValue: newPassword ? true : false },
-            { fieldName: "New Password", fieldValue: newPassword, dataType: "string", isRequiredValue: password ? true : false },
         ], res, next);
     },
     (req, res, next) => {
-        const { email } = req.body;
-        if (email) {
-            validateEmail(email, res, next);
-            return;
+        const { fullName } = req.body;
+        if (fullName) {
+            return validateName(fullName, res, next);
         }
         next();
     },
     (req, res, next) => {
-        const { password } = req.body;
-        if (password) {
-            validatePassword(password, res, next);
-            return;
+        const { mobilePhone } = req.body;
+        if (mobilePhone) {
+            return validateMobilePhone(mobilePhone, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { email } = req.body;
+        if (email) {
+            return validateEmail(email, res, next);
         }
         next();
     },
