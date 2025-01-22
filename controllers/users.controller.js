@@ -119,7 +119,7 @@ async function createNewUser(req, res) {
             return res.json(result);
         }
         if (email) {
-            await sendCongratulationsOnCreatingNewAccountEmail(email, language);
+            await sendCongratulationsOnCreatingNewAccountEmail(email, "ar");
         }
         res.json(result);
     }

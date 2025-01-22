@@ -122,9 +122,9 @@ async function sendCongratulationsOnCreatingNewAccountEmail(email, language) {
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ email, language });
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Welcome Message From Ubuyblues",
+                subject: "مرحباً بك في Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
