@@ -4,7 +4,7 @@ const usersController = require("../controllers/users.controller");
 
 const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, getResponseObject } = require("../global/functions");
 
-const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone } = require("../middlewares/global.middlewares");
+const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName } = require("../middlewares/global.middlewares");
 
 const usersMiddlewares = require("../middlewares/users.midddlewares");
 
@@ -81,15 +81,17 @@ usersRouter.get("/forget-password",
 
 usersRouter.post("/create-new-user",
     (req, res, next) => {
-        const { city, email, mobilePhone, password } = req.body;
+        const { city, fullName, email, mobilePhone, password } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "City", fieldValue: city, dataType: "string", isRequiredValue: true },
+            { fieldName: "Full Name", fieldValue: fullName, dataType: "string", isRequiredValue: true },
             { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
             { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
             { fieldName: "Password", fieldValue: password, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateCity(req.body.city, res, next),
+    (req, res, next) => validateName(req.body.fullName, res, next),
     (req, res, next) => {
         const { email } = req.body;
         if (email) {

@@ -10,7 +10,7 @@ const { hash, compare } = require("bcryptjs");
 
 const { getSuitableTranslations } = require("../global/functions");
 
-async function createNewUser(city, email, mobilePhone, password, language) {
+async function createNewUser(city, fullName, email, mobilePhone, password, language) {
     try {
         const user = await userModel.findOne({ $or: 
             [
@@ -27,6 +27,7 @@ async function createNewUser(city, email, mobilePhone, password, language) {
         }
         await (new userModel({
             city,
+            fullName,
             ...email && { email },
             ...mobilePhone && { mobilePhone },
             password: await hash(password, 10),

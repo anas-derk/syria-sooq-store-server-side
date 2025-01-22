@@ -112,9 +112,9 @@ async function getForgetPassword(req, res) {
 
 async function createNewUser(req, res) {
     try {
-        const { city, email, mobilePhone, password } = req.body;
+        const { city, fullName, email, mobilePhone, password } = req.body;
         const { language } = req.query;
-        const result = await usersOPerationsManagmentFunctions.createNewUser(city, email, mobilePhone, password, language);
+        const result = await usersOPerationsManagmentFunctions.createNewUser(city, fullName, email, mobilePhone, password, language);
         if (result.error) {
             return res.json(result);
         }
