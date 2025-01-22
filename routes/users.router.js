@@ -152,7 +152,7 @@ usersRouter.put("/reset-password",
     (req, res, next) => {
         const { text, code, newPassword } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: text, dataType: "string", isRequiredValue: true },
+            { fieldName: "Text", fieldValue: text, dataType: "string", isRequiredValue: true },
             { fieldName: "Code", fieldValue: code, dataType: "string", isRequiredValue: true },
             { fieldName: "New Password", fieldValue: newPassword, dataType: "string", isRequiredValue: true },
         ], res, next);

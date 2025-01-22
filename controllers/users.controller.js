@@ -185,12 +185,12 @@ async function putVerificationStatus(req, res) {
 
 async function putResetPassword(req, res) {
     try{
-        const { email, code, newPassword, language } = req.query;
-        const result = await isAccountVerificationCodeValid(email, code, "to reset password");
+        const { text, code, newPassword, language } = req.query;
+        let result = await isAccountVerificationCodeValid(text, code, "to reset password");
         if (!result.error) {
-            result = await usersOPerationsManagmentFunctions.resetUserPassword(email, newPassword, language);
+            result = await usersOPerationsManagmentFunctions.resetUserPassword(text, newPassword, language);
             if (!result.error) {
-                await sendChangePasswordEmail(email, result.data.language)
+                await sendChangePasswordEmail(text, result.data.language)
             }
             return res.json(result);
         }

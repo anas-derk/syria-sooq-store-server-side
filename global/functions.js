@@ -322,9 +322,9 @@ async function sendChangePasswordEmail(email, language) {
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ language });
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Changing The User Password In Ubuyblues",
+                subject: "تغيير كلمة السر الخاصة بك في Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);

@@ -278,7 +278,7 @@ async function resetUserPassword(text, newPassword, language) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
                 error: false,
-                data: { language: user.language},
+                data: { language: "ar" },
             };
         }
         const admin = await adminModel.findOneAndUpdate({ text }, { password: await hash(newPassword, 10) });
