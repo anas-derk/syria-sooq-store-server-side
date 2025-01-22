@@ -1,4 +1,4 @@
-const { getResponseObject, isEmail, isValidPassword, isValidLanguage } = require("../global/functions");
+const { getResponseObject, isEmail, isValidPassword, isValidLanguage, isValidMobilePhone } = require("../global/functions");
 
 const { verify } = require("jsonwebtoken");
 
@@ -36,6 +36,14 @@ function validateCity(city, res, nextFunc) {
 
 function validateEmail(email, res, nextFunc, errorMsg = "Sorry, Please Send Valid Email !!") {
     if (!isEmail(email)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
+function validateMobilePhone(mobilePhone, res, nextFunc, errorMsg = "Sorry, Please Send Valid Mobile Phone !!") {
+    if (!isValidMobilePhone(mobilePhone)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
         return;
     }
@@ -209,6 +217,7 @@ module.exports = {
     validateJWT,
     validateCity,
     validateEmail,
+    validateMobilePhone,
     validateUserType,
     validatePassword,
     validateCode,

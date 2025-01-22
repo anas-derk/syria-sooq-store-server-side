@@ -4,22 +4,30 @@ const usersController = require("../controllers/users.controller");
 
 const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, getResponseObject } = require("../global/functions");
 
-const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity } = require("../middlewares/global.middlewares");
+const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone } = require("../middlewares/global.middlewares");
 
 const usersMiddlewares = require("../middlewares/users.midddlewares");
 
 usersRouter.get("/login",
     (req, res, next) => {
-        const { text, password } = req.query;
+        const { email, mobilePhone, password } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Text", fieldValue: text, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
             { fieldName: "Password", fieldValue: password, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
-        const { text } = req.query;
-        if (!isEmail(text) && !isValidMobilePhone(text)) {
-            return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
+        const { email } = req.query;
+        if (email) {
+            return validateEmail(email, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { mobilePhone } = req.query;
+        if (mobilePhone) {
+            return validateMobilePhone(mobilePhone, res, next);
         }
         next();
     },
@@ -65,18 +73,26 @@ usersRouter.get("/forget-password",
 
 usersRouter.post("/create-new-user",
     (req, res, next) => {
-        const { city, text, password } = req.body;
+        const { city, email, mobilePhone, password } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "City", fieldValue: city, dataType: "string", isRequiredValue: true },
-            { fieldName: "Text", fieldValue: text, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
             { fieldName: "Password", fieldValue: password, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateCity(req.body.city, res, next),
     (req, res, next) => {
-        const { text } = req.body;
-        if (!isEmail(text) && !isValidMobilePhone(text)) {
-            return res.status(400).json(getResponseObject("Please Send Valid Text ( Email Or Mobile Phone ) !!", true, {}));
+        const { email } = req.body;
+        if (email) {
+            return validateEmail(email, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { mobilePhone } = req.body;
+        if (mobilePhone) {
+            return validateMobilePhone(mobilePhone, res, next);
         }
         next();
     },

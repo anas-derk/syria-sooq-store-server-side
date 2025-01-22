@@ -10,9 +10,14 @@ const { hash, compare } = require("bcryptjs");
 
 const { getSuitableTranslations } = require("../global/functions");
 
-async function createNewUser(city, text, password, language) {
+async function createNewUser(city, email, mobilePhone, password, language) {
     try {
-        const user = await userModel.findOne({ text });
+        const user = await userModel.findOne({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ]
+        });
         if (user) {
             return {
                 msg: getSuitableTranslations("Sorry, Can't Create New User Because It Is Already Exist !!", language),
@@ -22,7 +27,8 @@ async function createNewUser(city, text, password, language) {
         }
         await (new userModel({
             city,
-            text,
+            ...email && { email },
+            ...mobilePhone && { mobilePhone },
             password: await hash(password, 10),
         })).save();
         return {
@@ -36,9 +42,14 @@ async function createNewUser(city, text, password, language) {
     }
 }
 
-async function login(text, password, language) {
+async function login(email, mobilePhone, password, language) {
     try {
-        const user = await userModel.findOne({ text });
+        const user = await userModel.findOne({ $or: 
+            [
+                { email },
+                { mobilePhone }
+            ]
+        });
         if (user) {
             if (await compare(password, user.password)) {
                 return {

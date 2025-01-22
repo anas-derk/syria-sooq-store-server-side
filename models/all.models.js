@@ -240,10 +240,8 @@ const userSchema = new mongoose.Schema({
             "quneitra"
         ],
     },
-    text: {
-        type: String,
-        required: true,
-    },
+    email: String,
+    mobilePhone: String,
     password: String,
     isVerified: {
         type: Boolean,
