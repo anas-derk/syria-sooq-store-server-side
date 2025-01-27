@@ -34,6 +34,7 @@ storesRouter.get("/store-details/:storeId",
 storesRouter.get("/main-store-details", storesController.getMainStoreDetails);
 
 storesRouter.post("/create-new-store",
+    validateJWT,
     multer({
         storage: multer.memoryStorage(),
         fileFilter: (req, file, cb) => {
@@ -45,30 +46,49 @@ storesRouter.post("/create-new-store",
                 file.mimetype !== "image/jpeg" &&
                 file.mimetype !== "image/png" &&
                 file.mimetype !== "image/webp"
-            ){
+            ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
             cb(null, true);
         }
-    }).single("storeImg"),
+    }).fields([
+        {
+            name: "coverImage",
+            maxCount: 1,
+        },
+        {
+            name: "profileImage",
+            maxCount: 1,
+        },
+        {
+            name: "commercialRegisterFile",
+            maxCount: 1,
+        },
+        {
+            name: "taxCardFile",
+            maxCount: 1,
+        },
+        {
+            name: "addressProofFile",
+            maxCount: 1,
+        }
+    ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, ownerFirstName, ownerLastName, ownerEmail, productsType, productsDescription, language } = req.body;
+        const { name, headquarterAddress, taxNumber, ownerFullName, phoneNumber, ownerEmail, bankAccountInformation } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataType: "string", isRequiredValue: true },
-            { fieldName: "Owner First Name", fieldValue: ownerFirstName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Owner Last Name", fieldValue: ownerLastName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Headquarter Address", fieldValue: headquarterAddress, dataType: "string", isRequiredValue: true },
+            { fieldName: "Tax Number", fieldValue: taxNumber, dataType: "string", isRequiredValue: true },
+            { fieldName: "Owner Full Name", fieldValue: ownerFullName, dataType: "string", isRequiredValue: true },
+            { fieldName: "Phone Number", fieldValue: phoneNumber, dataType: "string", isRequiredValue: true },
             { fieldName: "Owner Email", fieldValue: ownerEmail, dataType: "string", isRequiredValue: true },
-            { fieldName: "Products Type", fieldValue: productsType, dataType: "string", isRequiredValue: true },
-            { fieldName: "Products Description", fieldValue: productsDescription, dataType: "string", isRequiredValue: true },
-            { fieldName: "Language", fieldValue: language, dataType: "string", isRequiredValue: true },
+            { fieldName: "Bank Account Information", fieldValue: bankAccountInformation, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateName(req.body.ownerFirstName, res, next),
-    (req, res, next) => validateName(req.body.ownerLastName, res, next),
+    (req, res, next) => validateName(req.body.ownerFullName, res, next),
     (req, res, next) => validateEmail(req.body.ownerEmail, res, next),
-    (req, res, next) => validateLanguage(req.body.language, res, next),
     storesController.postNewStore
 );
 
@@ -133,7 +153,7 @@ storesRouter.put("/change-store-image/:storeId",
                 file.mimetype !== "image/jpeg" &&
                 file.mimetype !== "image/png" &&
                 file.mimetype !== "image/webp"
-            ){
+            ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }

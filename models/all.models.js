@@ -85,19 +85,31 @@ const adminModel = mongoose.model("admin", adminSchema);
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
+    coverImagePath: {
+        type: String,
+        required: true,
+    },
+    profileImagePath: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
         required: true,
     },
-    imagePath: {
+    headquarterAddress: {
         type: String,
         required: true,
     },
-    ownerFirstName: {
+    taxNumber: {
         type: String,
         required: true,
     },
-    ownerLastName: {
+    ownerFullName: {
+        type: String,
+        required: true,
+    },
+    phoneNumber: {
         type: String,
         required: true,
     },
@@ -105,11 +117,19 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    productsType: {
+    bankAccountInformation: {
         type: String,
         required: true,
     },
-    productsDescription: {
+    commercialRegisterFile: {
+        type: String,
+        required: true,
+    },
+    taxCardFile: {
+        type: String,
+        required: true,
+    },
+    addressProofFile: {
         type: String,
         required: true,
     },
@@ -124,14 +144,6 @@ const storeSchema = new mongoose.Schema({
         ],
     },
     isMainStore: Boolean,
-    language: {
-        type: String,
-        enum: [
-            "ar",
-            "en",
-        ],
-        default: "en"
-    },
     creatingOrderDate: {
         type: Date,
         default: Date.now,
@@ -654,7 +666,7 @@ const productsRatingShema = new mongoose.Schema({
     rating: {
         type: Number,
         required: true,
-        enum: [1,2,3,4,5]
+        enum: [1, 2, 3, 4, 5]
     }
 });
 

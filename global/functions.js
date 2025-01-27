@@ -66,7 +66,7 @@ async function sendVerificationCodeToUserEmail(email) {
     if (!result.error) {
         const generator = new CodeGenerator();
         const generatedCode = generator.generateCodes("####")[0];
-        const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_templates", "email_template.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "email_template.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ generatedCode });
         const mailConfigurations = {
@@ -92,7 +92,7 @@ async function sendVerificationCodeToUserEmail(email) {
 async function sendApproveStoreEmail(email, password, adminId, storeId, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_templates", "accept_add_store_request.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "accept_add_store_request.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ password, adminId, storeId, language });
         return new Promise((resolve, reject) => {
@@ -172,9 +172,9 @@ async function sendConfirmRequestAddStoreArrivedEmail(email, language) {
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ language });
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Confirmation Of Store Addition Request At Ubuyblues",
+                subject: "تأكيد طلب إضافة متجر جديد لدى Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
@@ -192,7 +192,7 @@ async function sendConfirmRequestAddStoreArrivedEmail(email, language) {
 async function sendBlockStoreEmail(email, adminId, storeId, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_templates", "block_store.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "block_store.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ adminId, storeId, language });
         return new Promise((resolve, reject) => {
@@ -217,7 +217,7 @@ async function sendBlockStoreEmail(email, adminId, storeId, language) {
 async function sendDeleteStoreEmail(email, adminId, storeId, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_templates", "delete_store.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "delete_store.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ adminId, storeId, language });
         return new Promise((resolve, reject) => {
@@ -242,7 +242,7 @@ async function sendDeleteStoreEmail(email, adminId, storeId, language) {
 async function sendReceiveOrderEmail(email, orderDetails, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_templates", "receive_order.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "receive_order.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ orderDetails, language });
         return new Promise((resolve, reject) => {
@@ -267,7 +267,7 @@ async function sendReceiveOrderEmail(email, orderDetails, language) {
 async function sendUpdateOrderEmail(email, newOrderDetails, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent =  readFileSync(join(__dirname, "..", "assets", "email_templates", `${newOrderDetails.status === "shipping" ? "order_in_shipping_status" : "order_shipped"}.ejs`), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", `${newOrderDetails.status === "shipping" ? "order_in_shipping_status" : "order_shipped"}.ejs`), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ newOrderDetails, language });
         return new Promise((resolve, reject) => {
@@ -351,7 +351,7 @@ function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes)
     for (let fieldnameAndValueAndDataType of fieldNamesAndValuesAndDataTypes) {
         if (fieldnameAndValueAndDataType.isRequiredValue) {
             if (fieldnameAndValueAndDataType.dataType === "array") {
-                if (Array.isArray(fieldnameAndValueAndDataType.fieldValue)){
+                if (Array.isArray(fieldnameAndValueAndDataType.fieldValue)) {
                     if (fieldnameAndValueAndDataType.fieldValue.length === 0) {
                         return getResponseObject(
                             `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`,
@@ -366,7 +366,7 @@ function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes)
                     {}
                 );
             }
-            if (!fieldnameAndValueAndDataType.fieldValue) 
+            if (!fieldnameAndValueAndDataType.fieldValue)
                 return getResponseObject(
                     `Invalid Request, Please Send ${fieldnameAndValueAndDataType.fieldName} Value !!`,
                     true,
@@ -380,15 +380,15 @@ function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes)
                     true,
                     {}
                 );
-            } 
-            if (fieldnameAndValueAndDataType.dataType === "ObjectId" && !Types.ObjectId.isValid(fieldnameAndValueAndDataType.fieldValue))  {
+            }
+            if (fieldnameAndValueAndDataType.dataType === "ObjectId" && !Types.ObjectId.isValid(fieldnameAndValueAndDataType.fieldValue)) {
                 return getResponseObject(
                     `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
                     true,
                     {}
                 );
             }
-            if (fieldnameAndValueAndDataType.dataType === "array" && !Array.isArray(fieldnameAndValueAndDataType.fieldValue))  {
+            if (fieldnameAndValueAndDataType.dataType === "array" && !Array.isArray(fieldnameAndValueAndDataType.fieldValue)) {
                 return getResponseObject(
                     `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${fieldnameAndValueAndDataType.dataType} ) !!`,
                     true,
@@ -416,21 +416,21 @@ function validateIsExistValueForFieldsAndDataTypes(fieldsDetails, res, nextFunc)
 }
 
 async function handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths) {
-    try{
-        for(let i = 0; i < files.length; i++) {
+    try {
+        for (let i = 0; i < files.length; i++) {
             await sharp(files[i])
-            .withMetadata()
-            .rotate()
-            .resize({
-                width: 550,
-            })
-            .toFormat("webp", {
-                quality: 100
-            })
-            .toFile(outputImageFilePaths[i]);
+                .withMetadata()
+                .rotate()
+                .resize({
+                    width: 550,
+                })
+                .toFormat("webp", {
+                    quality: 100
+                })
+                .toFile(outputImageFilePaths[i]);
         }
     }
-    catch(err) {
+    catch (err) {
         throw err;
     }
 }
@@ -448,7 +448,7 @@ function processingTranslation(variablesObject, translation) {
 
 function getSuitableTranslations(msg, language, variables = {}) {
     if (language) {
-        switch(language) {
+        switch (language) {
             case "ar": return processingTranslation(variables, arTranslations[msg] ? arTranslations[msg] : msg);
             default: return processingTranslation(variables, msg);
         }
