@@ -133,12 +133,13 @@ usersRouter.post("/send-account-verification-code",
 usersRouter.put("/update-user-info",
     validateJWT,
     (req, res, next) => {
-        const { fullName, address, email, mobilePhone } = req.body;
+        const { fullName, address, email, mobilePhone, city } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Full Name", fieldValue: fullName, dataType: "string", isRequiredValue: false },
             { fieldName: "Address", fieldValue: address, dataType: "string", isRequiredValue: false },
             { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: false },
             { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: false },
+            { fieldName: "City", fieldValue: city, dataType: "string", isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => {
@@ -159,6 +160,13 @@ usersRouter.put("/update-user-info",
         const { email } = req.body;
         if (email) {
             return validateEmail(email, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { city } = req.body;
+        if (city) {
+            return validateCity(city, res, next);
         }
         next();
     },
