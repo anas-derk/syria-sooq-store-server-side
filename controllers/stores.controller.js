@@ -82,6 +82,7 @@ async function postNewStore(req, res) {
         ];
         await handleResizeImagesAndConvertFormatToWebp(bufferFiles, outputImageFilePaths);
         const result = await storesOPerationsManagmentFunctions.createNewStore({
+            userId: req.data._id,
             ...Object.assign({}, req.body),
             coverImagePath: outputImageFilePaths[0],
             profileImagePath: outputImageFilePaths[1],

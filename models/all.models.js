@@ -85,6 +85,10 @@ const adminModel = mongoose.model("admin", adminSchema);
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
     coverImagePath: {
         type: String,
         required: true,
