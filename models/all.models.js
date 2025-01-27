@@ -125,15 +125,15 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    commercialRegisterFile: {
+    commercialRegisterFilePath: {
         type: String,
         required: true,
     },
-    taxCardFile: {
+    taxCardFilePath: {
         type: String,
         required: true,
     },
-    addressProofFile: {
+    addressProofFilePath: {
         type: String,
         required: true,
     },

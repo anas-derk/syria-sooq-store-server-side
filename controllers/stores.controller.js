@@ -86,9 +86,9 @@ async function postNewStore(req, res) {
             ...Object.assign({}, req.body),
             coverImagePath: outputImageFilePaths[0],
             profileImagePath: outputImageFilePaths[1],
-            commercialRegisterFile: outputImageFilePaths[2],
-            taxCardFile: outputImageFilePaths[3],
-            addressProofFile: outputImageFilePaths[4],
+            commercialRegisterFilePath: outputImageFilePaths[2],
+            taxCardFilePath: outputImageFilePaths[3],
+            addressProofFilePath: outputImageFilePaths[4],
         }, req.query.language);
         if (result.error) {
             for (let filePath of outputImageFilePaths) {

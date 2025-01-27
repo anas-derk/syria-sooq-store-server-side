@@ -6,20 +6,36 @@ require("dotenv").config({
 
 // Create Store Schema
 
-const storeSchema = mongoose.Schema({
+const storeSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
+    coverImagePath: {
+        type: String,
+        required: true,
+    },
+    profileImagePath: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
         required: true,
     },
-    imagePath: {
+    headquarterAddress: {
         type: String,
         required: true,
     },
-    ownerFirstName: {
+    taxNumber: {
         type: String,
         required: true,
     },
-    ownerLastName: {
+    ownerFullName: {
+        type: String,
+        required: true,
+    },
+    phoneNumber: {
         type: String,
         required: true,
     },
@@ -27,11 +43,19 @@ const storeSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    productsType: {
+    bankAccountInformation: {
         type: String,
         required: true,
     },
-    productsDescription: {
+    commercialRegisterFilePath: {
+        type: String,
+        required: true,
+    },
+    taxCardFilePath: {
+        type: String,
+        required: true,
+    },
+    addressProofFilePath: {
         type: String,
         required: true,
     },
@@ -46,21 +70,14 @@ const storeSchema = mongoose.Schema({
         ],
     },
     isMainStore: Boolean,
-    language: {
-        type: String,
-        enum: [
-            "ar",
-            "en",
-        ],
-        default: "en"
-    },
     creatingOrderDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     approveDate: Date,
     blockingDate: Date,
     dateOfCancelBlocking: Date,
+    blockingReason: String,
 });
 
 // Create Store Model From Store Schema
@@ -68,14 +85,20 @@ const storeSchema = mongoose.Schema({
 const storeModel = mongoose.model("store", storeSchema);
 
 const storeInfo = {
+    userId: "674f61fc74fbe8e7d7355c07",
     name: "Syria Sooq",
-    imagePath: "assets/images/stores/syria-sooq.jpg",
-    ownerFirstName: "Ahmad",
-    ownerLastName: "Hussein",
+    headquarterAddress: "Lattakia, Alzeraa",
+    taxNumber: "1234",
+    ownerFullName: "Ahmad Hussein",
+    phoneNumber: "0941519404",
     ownerEmail: process.env.MAIN_ADMIN_EMAIL,
+    bankAccountInformation: "Test Bank Info",
+    coverImagePath: "assets/images/stores/syria-sooq.jpg",
+    profileImagePath: "assets/images/stores/syria-sooq.jpg",
+    commercialRegisterFilePath: "assets/images/stores/syria-sooq.jpg",
+    taxCardFilePath: "assets/images/stores/syria-sooq.jpg",
+    addressProofFilePath: "assets/images/stores/syria-sooq.jpg",
     isApproved: true,
-    productsType: "Multiple",
-    productsDescription: "Welcome To Syria Sooq Store",
     status: "approving",
     isMainStore: true,
     approveDate: Date.now(),
@@ -84,11 +107,10 @@ const storeInfo = {
 async function create_initial_store() {
     try {
         await mongoose.connect(process.env.DB_URL);
-        const newStore = new storeModel(storeInfo);
-        await newStore.save();
+        await (new storeModel(storeInfo)).save();
         await mongoose.disconnect();
         return "Ok !!, Create Initial Store Process Has Been Successfuly !!";
-    } catch(err) {
+    } catch (err) {
         await mongoose.disconnect();
         throw Error(err);
     }
