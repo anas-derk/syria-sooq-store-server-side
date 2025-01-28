@@ -5,11 +5,7 @@ const { mongoose } = require("../server");
 // Create Admin Schema
 
 const adminSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
+    fullName: {
         type: String,
         required: true,
     },

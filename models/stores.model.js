@@ -74,7 +74,7 @@ async function getMainStoreDetails(language) {
 
 async function createNewStore(storeDetails, language) {
     try {
-        const store = await storeModel.findOne({ ownerEmail: storeDetails.ownerEmail });
+        const store = await storeModel.findOne({ email: storeDetails.email });
         if (store) {
             return {
                 msg: getSuitableTranslations("Sorry, This Email Is Already Exist !!", language),
@@ -120,8 +120,7 @@ async function approveStore(authorizationId, storeId, password, language) {
                     }
                     await storeModel.updateOne({ _id: storeId }, { status: "approving", approveDate: Date.now() });
                     const newMerchant = new adminModel({
-                        firstName: store.ownerFirstName,
-                        lastName: store.ownerLastName,
+                        fullName: store.ownerFullName,
                         email: store.ownerEmail,
                         password: await hash(password, 10),
                         isMerchant: true,
@@ -221,7 +220,6 @@ async function blockingStore(authorizationId, storeId, blockingReason, language)
                             data: {
                                 adminId: merchant._id,
                                 email: merchant.email,
-                                language: store.language
                             }
                         }
                     }
@@ -354,17 +352,21 @@ async function deleteStore(authorizationId, storeId, language) {
                         await storeModel.deleteOne({ _id: storeId });
                         await categoryModel.deleteMany({ storeId });
                         await productModel.deleteMany({ storeId });
-                        await brandModel.deleteMany({ storeId });
                         const merchant = await adminModel.findOne({ storeId, isMerchant: true });
                         await adminModel.deleteMany({ storeId });
                         return {
                             msg: getSuitableTranslations("Deleting Store Process Has Been Successfully !!", language),
                             error: false,
                             data: {
-                                storeImagePath: store.imagePath,
+                                filePaths: [
+                                    store.coverImagePath,
+                                    store.profileImagePath,
+                                    store.commercialRegisterFilePath,
+                                    store.taxCardFilePath,
+                                    store.addressProofFilePath,
+                                ],
                                 adminId: merchant._id,
                                 email: merchant.email,
-                                language: store.language
                             },
                         }
                     }
@@ -408,9 +410,14 @@ async function rejectStore(authorizationId, storeId, language) {
                         msg: getSuitableTranslations("Rejecting Store Process Has Been Successfully !!", language),
                         error: false,
                         data: {
-                            storeImagePath: store.imagePath,
-                            ownerEmail: store.ownerEmail,
-                            language: store.language
+                            filePaths: [
+                                store.coverImagePath,
+                                store.profileImagePath,
+                                store.commercialRegisterFilePath,
+                                store.taxCardFilePath,
+                                store.addressProofFilePath,
+                            ],
+                            email: store.email,
                         },
                     }
                 }
