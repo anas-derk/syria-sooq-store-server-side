@@ -141,6 +141,7 @@ async function sendCongratulationsOnCreatingNewAccountEmail(email, language) {
 
 async function sendRejectStoreEmail(email, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
+    console.log(result.data)
     if (!result.error) {
         const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "reject_add_store_request.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
