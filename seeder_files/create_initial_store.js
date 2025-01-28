@@ -39,7 +39,7 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ownerEmail: {
+    email: {
         type: String,
         required: true,
     },
@@ -91,7 +91,7 @@ const storeInfo = {
     taxNumber: "1234",
     ownerFullName: "Ahmad Hussein",
     phoneNumber: "0941519404",
-    ownerEmail: process.env.MAIN_ADMIN_EMAIL,
+    email: process.env.MAIN_ADMIN_EMAIL,
     bankAccountInformation: "Test Bank Info",
     coverImagePath: "assets/images/stores/StoreLogo.png",
     profileImagePath: "assets/images/stores/StoreLogo.png",

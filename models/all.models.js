@@ -117,7 +117,7 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ownerEmail: {
+    email: {
         type: String,
         required: true,
     },

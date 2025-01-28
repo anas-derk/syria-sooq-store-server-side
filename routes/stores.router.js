@@ -76,19 +76,19 @@ storesRouter.post("/create-new-store",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, headquarterAddress, taxNumber, ownerFullName, phoneNumber, ownerEmail, bankAccountInformation } = req.body;
+        const { name, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataType: "string", isRequiredValue: true },
             { fieldName: "Headquarter Address", fieldValue: headquarterAddress, dataType: "string", isRequiredValue: true },
             { fieldName: "Tax Number", fieldValue: taxNumber, dataType: "string", isRequiredValue: true },
             { fieldName: "Owner Full Name", fieldValue: ownerFullName, dataType: "string", isRequiredValue: true },
             { fieldName: "Phone Number", fieldValue: phoneNumber, dataType: "string", isRequiredValue: true },
-            { fieldName: "Owner Email", fieldValue: ownerEmail, dataType: "string", isRequiredValue: true },
+            { fieldName: "Owner Email", fieldValue: email, dataType: "string", isRequiredValue: true },
             { fieldName: "Bank Account Information", fieldValue: bankAccountInformation, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateName(req.body.ownerFullName, res, next),
-    (req, res, next) => validateEmail(req.body.ownerEmail, res, next),
+    (req, res, next) => validateEmail(req.body.email, res, next),
     storesController.postNewStore
 );
 
