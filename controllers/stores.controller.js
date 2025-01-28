@@ -119,7 +119,7 @@ async function postApproveStore(req, res) {
             }
             return res.json(result);
         }
-        res.json(await sendApproveStoreEmail(result.data.email, req.query.password, result.data.adminId, req.params.storeId, result.data.language));
+        res.json(await sendApproveStoreEmail(result.data.email, req.query.password, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -150,7 +150,7 @@ async function putBlockingStore(req, res) {
             }
             return res.json(result);
         }
-        res.json(await sendBlockStoreEmail(result.data.email, result.data.adminId, req.params.storeId, result.data.language));
+        res.json(await sendBlockStoreEmail(result.data.email, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -207,8 +207,10 @@ async function deleteStore(req, res) {
             }
             return res.json(result);
         }
-        unlinkSync(result.data.storeImagePath);
-        res.json(await sendDeleteStoreEmail(result.data.email, result.data.adminId, req.params.storeId, result.data.language));
+        for (let filePath of result.data.filePaths) {
+            unlinkSync(filePath);
+        }
+        res.json(await sendDeleteStoreEmail(result.data.email, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -224,8 +226,10 @@ async function deleteRejectStore(req, res) {
             }
             return res.json(result);
         }
-        unlinkSync(result.data.storeImagePath);
-        res.json(await sendRejectStoreEmail(result.data.ownerEmail, result.data.language));
+        for (let filePath of result.data.filePaths) {
+            unlinkSync(filePath);
+        }
+        res.json(await sendRejectStoreEmail(result.data.email, "ar"));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));

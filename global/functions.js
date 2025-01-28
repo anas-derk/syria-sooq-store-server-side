@@ -97,9 +97,9 @@ async function sendApproveStoreEmail(email, password, adminId, storeId, language
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ password, adminId, storeId, language });
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Approve The Store Addition Request At Ubuyblues",
+                subject: "الموافقة على طلب إضافة متجر جديد لدى Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
@@ -147,9 +147,9 @@ async function sendRejectStoreEmail(email, language) {
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ language });
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Reject The Store Addition Request At Ubuyblues",
+                subject: "رفض طلب إضافة متجر جديد لدى Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
@@ -197,9 +197,9 @@ async function sendBlockStoreEmail(email, adminId, storeId, language) {
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ adminId, storeId, language });
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Block Store On Ubuyblues",
+                subject: "حظر متجر في Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
@@ -222,9 +222,9 @@ async function sendDeleteStoreEmail(email, adminId, storeId, language) {
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ adminId, storeId, language });
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria Sooq <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Delete Store On Ubuyblues",
+                subject: "حذف متجر في Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
@@ -297,9 +297,9 @@ async function sendReceiveAddStoreRequestEmail(email, storeDetails) {
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate(storeDetails);
         return new Promise((resolve, reject) => {
             transporterObj(result.data).sendMail({
-                from: `Ubuyblues <${process.env.BUSSINESS_EMAIL}>`,
+                from: `Syria <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "Receive Add Store Request",
+                subject: "استقبال طلب إضافة متجر في Syria Sooq",
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
