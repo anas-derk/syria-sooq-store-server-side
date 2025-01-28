@@ -106,6 +106,7 @@ async function postNewStore(req, res) {
         res.json(result);
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -122,6 +123,7 @@ async function postApproveStore(req, res) {
         res.json(await sendApproveStoreEmail(result.data.email, req.query.password, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -153,6 +155,7 @@ async function putBlockingStore(req, res) {
         res.json(await sendBlockStoreEmail(result.data.email, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -168,6 +171,7 @@ async function putCancelBlockingStore(req, res) {
         res.json(result);
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -213,6 +217,7 @@ async function deleteStore(req, res) {
         res.json(await sendDeleteStoreEmail(result.data.email, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -232,6 +237,7 @@ async function deleteRejectStore(req, res) {
         res.json(await sendRejectStoreEmail(result.data.email, "ar"));
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
