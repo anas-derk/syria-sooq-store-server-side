@@ -76,7 +76,7 @@ async function postNewStore(req, res) {
         ], outputImageFilePaths = [
             `assets/images/stores/cover/${Math.random()}_${Date.now()}__${storeFiles.coverImage[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
             `assets/images/stores/profile/${Math.random()}_${Date.now()}__${storeFiles.profileImage[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
-            `assets/images/stores/commercial/${Math.random()}_${Date.now()}__${storeFiles.commercialRegisterFile[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
+            `assets/images/stores/commercial_register/${Math.random()}_${Date.now()}__${storeFiles.commercialRegisterFile[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
             `assets/images/stores/tax_card/${Math.random()}_${Date.now()}__${storeFiles.taxCardFile[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
             `assets/images/stores/address_proof/${Math.random()}_${Date.now()}__${storeFiles.addressProofFile[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
         ];
