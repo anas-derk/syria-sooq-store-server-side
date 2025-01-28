@@ -97,8 +97,8 @@ async function postNewStore(req, res) {
         }
         else {
             try {
-                await sendConfirmRequestAddStoreArrivedEmail(result.data.ownerEmail, "ar");
-                await sendReceiveAddStoreRequestEmail("info@syriasooq.com", result.data);
+                await sendConfirmRequestAddStoreArrivedEmail(result.data.email, "ar");
+                await sendReceiveAddStoreRequestEmail(process.env.BUSSINESS_EMAIL, result.data);
             } catch (err) {
                 console.log(err);
             }

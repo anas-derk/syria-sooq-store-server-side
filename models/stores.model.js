@@ -121,7 +121,7 @@ async function approveStore(authorizationId, storeId, password, language) {
                     await storeModel.updateOne({ _id: storeId }, { status: "approving", approveDate: Date.now() });
                     const newMerchant = new adminModel({
                         fullName: store.ownerFullName,
-                        email: store.ownerEmail,
+                        email: store.email,
                         password: await hash(password, 10),
                         isMerchant: true,
                         storeId,
@@ -132,7 +132,7 @@ async function approveStore(authorizationId, storeId, password, language) {
                         error: false,
                         data: {
                             adminId: newMerchant._id,
-                            email: store.ownerEmail,
+                            email: store.email,
                             language: store.language
                         },
                     };
