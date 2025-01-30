@@ -69,7 +69,7 @@
     "Get All Favorite Products For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل المنتجات المفضلة لهذا المستخدم بداخل الصفحة: {{pageNumber}} تمت بنجاح !!",
     "Get Favorite Products By Products Ids And User Id Process Has Been Successfully !!": "عملية جلب المنتجات المفضلة بناءً على معرفات المنتجات ومعرّف المنتج تمت بنجاح !!",
     "Deleting Product From Favorite Products List For This User Process Has Been Successfully !!": "عملية حذف المنتج من قائمة المنتجات المفضلة لهذا المستخدم تمت بنجاح !!",
-    "Deleting Favorite Products For This User Process Has Been Successfully !!": "عملية حذف المنتجات المفضلة لهذا المستخدم تمت بنجاح !!",
+    "Deleting All Favorite Products For This User Process Has Been Successfully !!": "عملية حذف المنتجات المفضلة لهذا المستخدم تمت بنجاح !!",
     "Sorry, Can't Find Any Products Inside Favorite Products List For This User !!": "عذراً ، لا يوجد أي منتجات بداخل المنتجات المفضلة لهذا المستخدم !!",
     "Sorry, This Product Is Not Exist In Favorite Products List For This User !!": "عذراً ، هذا المنتج غير موجود في قائمة المنتجات المفضلة لهذا المستخدم !!",
     "Get Password For Bussiness Email Process Has Been Successfully !!": "عملية جلب كلمة السر لحساب الأعمال تمت بنجاح !!",
@@ -166,5 +166,12 @@
     "Creating New Payment Order By Tabby Process Has Been Successfully !!": "عملية إنشاء طلب دفع من خلال Tabby تمت بنجاح !!",
     "Sorry, Can't Creating New Payment Order By Tabby Because Exceeding The Payment Limit !!": "عذراً ، لا يمكن إنشاء طلب دفع جديد من خلال Tabby بسبب تجاوز حدود الدفع !!",
     "Creating New Payment Order By Binance Process Has Been Successfully !!": "عملية إنشاء طلب دفع جديد من خلال Binance تمت بنجاح !!",
-    "Sorry, Please Send Valid Discount Value !!": "عذراً ، الرجاء إرسال قيمة تخفيض صالحة !!"
+    "Sorry, Please Send Valid Discount Value !!": "عذراً ، الرجاء إرسال قيمة تخفيض صالحة !!",
+    "Sorry, This Product Is Already Exist Inside The Cart For This User !!": "عذراً ، هذا المنتج موجود مسبقاً بداخل سلة الخاصة لهذا المستخدم !!",
+    "Adding New Product To Cart For This User Process Has Been Successfuly !!": "عملية إضافة منتج لسلة الشراء لهذا المستخدم تمت بنجاح !!",
+    "Get All Products Inside The Cart For This User Process Has Been Successfully !!": "عملية جلب كل المنتجات بداخل سلة الشراء لهذا المستخدم تمت بنجاح !!",
+    "Deleting Product From Cart For This User Process Has Been Successfuly !!": "عملية حذف منتج من سلة الشراء لهذا المستخدم تمت بنجاح !!",
+    "Updating Product Info Inside The Cart For This User Process Has Been Successfully !!": "عملية تحديث بيانات المنتج بداخل سلة الشراء لهذا المستخدم تمت بنجاح !!",
+    "Deleting All Products Inside Cart For This User Process Has Been Successfuly !!": "عملية حذف كل المنتجات بداخل سلة الشراء لهذا المستخدم !!",
+    "Sorry, Can't Find Any Products Inside Cart For This User !!": "عذراً ، لا يوجد أي منتجات بداخل  سلة الشراء لهذا المستخدم تمت بنجاح !!"
 }

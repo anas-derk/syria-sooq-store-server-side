@@ -197,10 +197,6 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 1,
     },
-    countries: {
-        type: Array,
-        default: ["KW"],
-    },
     ratings: {
         type: Object,
         default: {
@@ -699,6 +695,28 @@ const adsSchema = new mongoose.Schema({
 
 const adsModel = mongoose.model("ad", adsSchema);
 
+// Create Cart Schema
+
+const cartSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
+    product: {
+        type: mongoose.Types.ObjectId,
+        ref: "product",
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        default: 1,
+    },
+});
+
+// Create Cart Model From Cart Schema
+
+const cartModel = mongoose.model("cart", cartSchema);
+
 module.exports = {
     mongoose,
     adminModel,
@@ -714,4 +732,5 @@ module.exports = {
     productsWalletModel,
     productsRatingModel,
     adsModel,
+    cartModel,
 }

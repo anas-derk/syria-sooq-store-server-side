@@ -69,7 +69,7 @@
     "Get All Favorite Products For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "Der Prozess zum Abrufen aller Favoritenprodukte für diesen Benutzer auf der Seite: {{pageNumber}} war erfolgreich!!",
     "Get Favorite Products By Products Ids And User Id Process Has Been Successfully !!": "Der Prozess zum Abrufen der Favoritenprodukte anhand der Produkt-IDs und der Benutzer-ID war erfolgreich!!",
     "Deleting Product From Favorite Products List For This User Process Has Been Successfully !!": "Der Prozess zum Löschen eines Produkts aus der Favoritenliste für diesen Benutzer war erfolgreich!!",
-    "Deleting Favorite Products For This User Process Has Been Successfully !!": "Das Löschen der Lieblingsprodukte für diesen Benutzer wurde erfolgreich durchgeführt!!",
+    "Deleting All Favorite Products For This User Process Has Been Successfully !!": "Der Prozess zum Löschen aller Lieblingsprodukte für diesen Benutzer wurde erfolgreich abgeschlossen!!",
     "Sorry, Can't Find Any Products Inside Favorite Products List For This User !!": "Entschuldigung, es wurden keine Produkte in der Liste der Lieblingsprodukte für diesen Benutzer gefunden!!",
     "Sorry, This Product Is Not Exist In Favorite Products List For This User !!": "Entschuldigung, dieses Produkt existiert nicht in der Favoritenliste für diesen Benutzer!!",
     "Get Password For Bussiness Email Process Has Been Successfully !!": "Der Prozess zum Abrufen des Passworts für die Geschäftsemail war erfolgreich!!",
@@ -166,5 +166,12 @@
     "Creating New Payment Order By Tabby Process Has Been Successfully !!": "Der Prozess zur Erstellung einer neuen Zahlungsbestellung über Tabby war erfolgreich!!",
     "Sorry, Can't Creating New Payment Order By Tabby Because Exceeding The Payment Limit !!": "Entschuldigung, kann keine neue Zahlungsbestellung über Tabby erstellen, da das Zahlungslimit überschritten wurde!!",
     "Creating New Payment Order By Binance Process Has Been Successfully !!": "Der Prozess zur Erstellung einer neuen Zahlungsbestellung über Binance war erfolgreich!!",
-    "Sorry, Please Send Valid Discount Value !!": "Entschuldigung, bitte senden Sie einen gültigen Rabattwert!!"
+    "Sorry, Please Send Valid Discount Value !!": "Entschuldigung, bitte senden Sie einen gültigen Rabattwert!!",
+    "Sorry, This Product Is Already Exist Inside The Cart For This User !!": "Entschuldigung, dieses Produkt befindet sich bereits im Warenkorb für diesen Benutzer!!",
+    "Adding New Product To Cart For This User Process Has Been Successfuly !!": "Das Hinzufügen eines neuen Produkts zum Warenkorb für diesen Benutzer war erfolgreich!!",
+    "Get All Products Inside The Cart For This User Process Has Been Successfully !!": "Alle Produkte im Warenkorb für diesen Benutzer wurden erfolgreich abgerufen!!",
+    "Deleting Product From Cart For This User Process Has Been Successfuly !!": "Das Löschen des Produkts aus dem Warenkorb für diesen Benutzer war erfolgreich!!",
+    "Updating Product Info Inside The Cart For This User Process Has Been Successfully !!": "Das Aktualisieren der Produktinformationen im Warenkorb für diesen Benutzer war erfolgreich!!",
+    "Deleting All Products Inside Cart For This User Process Has Been Successfuly !!": "Der Prozess zum Löschen aller Produkte im Warenkorb für diesen Benutzer wurde erfolgreich abgeschlossen!!",
+    "Sorry, Can't Find Any Products Inside Cart For This User !!": "Entschuldigung, es wurden keine Produkte im Warenkorb für diesen Benutzer gefunden!!"
 }

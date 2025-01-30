@@ -71,7 +71,7 @@ app.listen(PORT, async () => {
     /* End direct the browser to statics files path */
 
     const { validateLanguage } = require("./middlewares/global.middlewares");
-        
+
     app.use((req, res, next) => {
         const { language } = req.query;
         if (language) {
@@ -80,7 +80,7 @@ app.listen(PORT, async () => {
         }
         next();
     });
-    
+
     /* Start Handle The Routes */
 
     app.use("/admins", require("./routes/admins.router"));
@@ -106,6 +106,8 @@ app.listen(PORT, async () => {
     app.use("/ratings", require("./routes/ratings.router"));
 
     app.use("/ads", require("./routes/ads.router"));
+
+    app.use("/cart", require("./routes/cart.router"));
 
     /* End Handle The Routes */
 });

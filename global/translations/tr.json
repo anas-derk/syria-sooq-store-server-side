@@ -69,7 +69,7 @@
     "Get All Favorite Products For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "Bu kullanıcının favori ürünlerini {{pageNumber}} sayfasında alma işlemi başarıyla tamamlandı!!",
     "Get Favorite Products By Products Ids And User Id Process Has Been Successfully !!": "Ürün kimlikleri ve kullanıcı kimliği ile favori ürünleri alma işlemi başarıyla tamamlandı!!",
     "Deleting Product From Favorite Products List For This User Process Has Been Successfully !!": "Bu kullanıcının favori ürünler listesinden ürün silme işlemi başarıyla tamamlandı!!",
-    "Deleting Favorite Products For This User Process Has Been Successfully !!": "Bu kullanıcının favori ürünlerini silme işlemi başarıyla tamamlandı!!",
+    "Deleting All Favorite Products For This User Process Has Been Successfully !!": "Bu kullanıcının tüm favori ürünlerini silme işlemi başarıyla tamamlandı!!",
     "Sorry, Can't Find Any Products Inside Favorite Products List For This User !!": "Üzgünüz, bu kullanıcının favori ürünler listesinde herhangi bir ürün bulunamadı!!",
     "Sorry, This Product Is Not Exist In Favorite Products List For This User !!": "Üzgünüz, bu ürün bu kullanıcının favori ürünler listesinde mevcut değil!!",
     "Get Password For Bussiness Email Process Has Been Successfully !!": "İş e-postası için şifre alma işlemi başarıyla tamamlandı!!",
@@ -166,5 +166,12 @@
     "Creating New Payment Order By Tabby Process Has Been Successfully !!": "Tabby üzerinden yeni bir ödeme siparişi oluşturma işlemi başarıyla tamamlandı!!",
     "Sorry, Can't Creating New Payment Order By Tabby Because Exceeding The Payment Limit !!": "Üzgöz, Tabby üzerinden yeni bir ödeme siparişi oluşturulamıyor, çünkü ödeme limiti aşıldı!!",
     "Creating New Payment Order By Binance Process Has Been Successfully !!": "Binance üzerinden yeni bir ödeme siparişi oluşturma işlemi başarıyla tamamlandı!!",
-    "Sorry, Please Send Valid Discount Value !!":"Üzgöz, lütfen geçerli bir indirim değeri gönderin!!"
+    "Sorry, Please Send Valid Discount Value !!":"Üzgöz, lütfen geçerli bir indirim değeri gönderin!!",
+    "Sorry, This Product Is Already Exist Inside The Cart For This User !!": "Üzgünüz, bu ürün zaten bu kullanıcının sepetinde mevcut!!",
+    "Adding New Product To Cart For This User Process Has Been Successfuly !!": "Bu kullanıcı için sepete yeni ürün ekleme işlemi başarıyla tamamlandı!!",
+    "Get All Products Inside The Cart For This User Process Has Been Successfully !!": "Bu kullanıcı için sepetteki tüm ürünler başarıyla getirildi!!",
+    "Deleting Product From Cart For This User Process Has Been Successfuly !!": "Bu kullanıcı için sepetteki ürün silme işlemi başarıyla tamamlandı!!",
+    "Updating Product Info Inside The Cart For This User Process Has Been Successfully !!": "Bu kullanıcı için sepetteki ürün bilgilerini güncelleme işlemi başarıyla tamamlandı!!",
+    "Deleting All Products Inside Cart For This User Process Has Been Successfuly !!": "Bu kullanıcının sepetindeki tüm ürünleri silme işlemi başarıyla tamamlandı!!",
+    "Sorry, Can't Find Any Products Inside Cart For This User !!": "Üzgünüz, bu kullanıcının sepetinde herhangi bir ürün bulunamadı!!"
 }
