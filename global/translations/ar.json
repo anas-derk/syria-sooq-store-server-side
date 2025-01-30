@@ -69,6 +69,8 @@
     "Get All Favorite Products For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل المنتجات المفضلة لهذا المستخدم بداخل الصفحة: {{pageNumber}} تمت بنجاح !!",
     "Get Favorite Products By Products Ids And User Id Process Has Been Successfully !!": "عملية جلب المنتجات المفضلة بناءً على معرفات المنتجات ومعرّف المنتج تمت بنجاح !!",
     "Deleting Product From Favorite Products List For This User Process Has Been Successfully !!": "عملية حذف المنتج من قائمة المنتجات المفضلة لهذا المستخدم تمت بنجاح !!",
+    "Deleting Favorite Products For This User Process Has Been Successfully !!": "عملية حذف المنتجات المفضلة لهذا المستخدم تمت بنجاح !!",
+    "Sorry, Can't Find Any Products Inside Favorite Products List For This User !!": "عذراً ، لا يوجد أي منتجات بداخل المنتجات المفضلة لهذا المستخدم !!",
     "Sorry, This Product Is Not Exist In Favorite Products List For This User !!": "عذراً ، هذا المنتج غير موجود في قائمة المنتجات المفضلة لهذا المستخدم !!",
     "Get Password For Bussiness Email Process Has Been Successfully !!": "عملية جلب كلمة السر لحساب الأعمال تمت بنجاح !!",
     "Sorry, Email Incorrect !!": "عذراً ، بريد  الكتروني غير صحيح !!",

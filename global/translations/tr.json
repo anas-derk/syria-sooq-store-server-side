@@ -69,6 +69,8 @@
     "Get All Favorite Products For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "Bu kullanıcının favori ürünlerini {{pageNumber}} sayfasında alma işlemi başarıyla tamamlandı!!",
     "Get Favorite Products By Products Ids And User Id Process Has Been Successfully !!": "Ürün kimlikleri ve kullanıcı kimliği ile favori ürünleri alma işlemi başarıyla tamamlandı!!",
     "Deleting Product From Favorite Products List For This User Process Has Been Successfully !!": "Bu kullanıcının favori ürünler listesinden ürün silme işlemi başarıyla tamamlandı!!",
+    "Deleting Favorite Products For This User Process Has Been Successfully !!": "Bu kullanıcının favori ürünlerini silme işlemi başarıyla tamamlandı!!",
+    "Sorry, Can't Find Any Products Inside Favorite Products List For This User !!": "Üzgünüz, bu kullanıcının favori ürünler listesinde herhangi bir ürün bulunamadı!!",
     "Sorry, This Product Is Not Exist In Favorite Products List For This User !!": "Üzgünüz, bu ürün bu kullanıcının favori ürünler listesinde mevcut değil!!",
     "Get Password For Bussiness Email Process Has Been Successfully !!": "İş e-postası için şifre alma işlemi başarıyla tamamlandı!!",
     "Sorry, Email Incorrect !!": "Üzgünüz, e-posta yanlış!!",

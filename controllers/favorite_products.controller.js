@@ -11,19 +11,19 @@ function getFiltersObject(filters) {
 }
 
 async function postNewFavoriteProducts(req, res) {
-    try{
+    try {
         res.json(await favoriteProductsOPerationsManagmentFunctions.addNewFavoriteProduct(req.data._id, req.params.productId, req.query.language));
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function getFavoriteProductsByProductsIdsAndUserId(req, res) {
-    try{
+    try {
         res.json(await favoriteProductsOPerationsManagmentFunctions.getFavoriteProductsByProductsIdsAndUserId(req.data._id, req.body.productsIds, req.query.language));
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -51,10 +51,19 @@ async function getAllFavoriteProductsInsideThePage(req, res) {
 }
 
 async function deleteFavoriteProduct(req, res) {
-    try{
+    try {
         res.json(await favoriteProductsOPerationsManagmentFunctions.deleteFavoriteProduct(req.data._id, req.params.productId, req.query.language));
     }
-    catch(err) {
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
+async function deleteAllFavoriteProducts(req, res) {
+    try {
+        res.json(await favoriteProductsOPerationsManagmentFunctions.deleteAllFavoriteProducts(req.data._id, req.query.language));
+    }
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -64,5 +73,6 @@ module.exports = {
     getFavoriteProductsCount,
     getAllFavoriteProductsInsideThePage,
     getFavoriteProductsByProductsIdsAndUserId,
-    deleteFavoriteProduct
+    deleteFavoriteProduct,
+    deleteAllFavoriteProducts
 }

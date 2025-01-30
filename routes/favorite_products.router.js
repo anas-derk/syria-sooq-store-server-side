@@ -22,14 +22,14 @@ favoriteProductsRouter.post("/favorite-products-by-products-ids-and-user-id",
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Products By Ids", fieldValue: req.body.productsIds, dataType: "array", isRequiredValue: true }
         ],
-        res, next);
+            res, next);
     },
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes(
             req.body.productsIds.map((productId, index) => (
                 { fieldName: `Id In Product ${index + 1}`, fieldValue: productId, dataType: "ObjectId", isRequiredValue: true }
             )),
-        res, next);
+            res, next);
     },
     favoriteProductsController.getFavoriteProductsByProductsIdsAndUserId
 );
@@ -47,6 +47,8 @@ favoriteProductsRouter.get("/all-favorite-products-inside-the-page",
     },
     favoriteProductsController.getAllFavoriteProductsInsideThePage
 );
+
+favoriteProductsRouter.delete("/all-favorite-products", validateJWT, favoriteProductsController.deleteAllFavoriteProducts);
 
 favoriteProductsRouter.delete("/:productId",
     validateJWT,

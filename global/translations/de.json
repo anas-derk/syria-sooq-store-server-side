@@ -69,6 +69,8 @@
     "Get All Favorite Products For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "Der Prozess zum Abrufen aller Favoritenprodukte für diesen Benutzer auf der Seite: {{pageNumber}} war erfolgreich!!",
     "Get Favorite Products By Products Ids And User Id Process Has Been Successfully !!": "Der Prozess zum Abrufen der Favoritenprodukte anhand der Produkt-IDs und der Benutzer-ID war erfolgreich!!",
     "Deleting Product From Favorite Products List For This User Process Has Been Successfully !!": "Der Prozess zum Löschen eines Produkts aus der Favoritenliste für diesen Benutzer war erfolgreich!!",
+    "Deleting Favorite Products For This User Process Has Been Successfully !!": "Das Löschen der Lieblingsprodukte für diesen Benutzer wurde erfolgreich durchgeführt!!",
+    "Sorry, Can't Find Any Products Inside Favorite Products List For This User !!": "Entschuldigung, es wurden keine Produkte in der Liste der Lieblingsprodukte für diesen Benutzer gefunden!!",
     "Sorry, This Product Is Not Exist In Favorite Products List For This User !!": "Entschuldigung, dieses Produkt existiert nicht in der Favoritenliste für diesen Benutzer!!",
     "Get Password For Bussiness Email Process Has Been Successfully !!": "Der Prozess zum Abrufen des Passworts für die Geschäftsemail war erfolgreich!!",
     "Sorry, Email Incorrect !!": "Entschuldigung, die E-Mail ist falsch!!",
