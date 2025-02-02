@@ -313,6 +313,10 @@ const categorySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    color: {
+        type: String,
+        required: true,
+    },
     storeId: {
         type: String,
         required: true,
