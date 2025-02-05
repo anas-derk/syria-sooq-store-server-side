@@ -7,7 +7,7 @@ const { getSuitableTranslations } = require("../global/functions");
 async function addNewProduct(authorizationId, productInfo, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const product = await productModel.findOne({ name: productInfo.name, categoryId: productInfo.categoryId });
                 if (!product) {
@@ -55,18 +55,18 @@ async function addNewProduct(authorizationId, productInfo, language) {
 }
 
 async function addNewImagesToProductGallery(authorizationId, productId, newGalleryImagePaths, language) {
-    try{
+    try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
                     if (product.storeId === admin.storeId) {
                         const galleryImagePathsAfterAddNewPaths = product.galleryImagesPaths.concat(newGalleryImagePaths);
                         await productModel.updateOne({ _id: productId },
-                        {
-                            galleryImagesPaths: galleryImagePathsAfterAddNewPaths,
-                        });
+                            {
+                                galleryImagesPaths: galleryImagePathsAfterAddNewPaths,
+                            });
                         return {
                             msg: getSuitableTranslations("Add New Images To Product Gallery Process Has Been Successfuly !!", language),
                             error: false,
@@ -102,13 +102,13 @@ async function addNewImagesToProductGallery(authorizationId, productId, newGalle
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
 async function getProductsByIds(productsIds, language) {
-    try{
+    try {
         const products = await productModel.find({ _id: { $in: productsIds }, quantity: { $gte: 1 } }).populate("categories");
         if (products.length === 0) {
             return {
@@ -137,13 +137,13 @@ async function getProductsByIds(productsIds, language) {
             }
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
 async function getProductsByIdsAndStoreId(storeId, productsIds, language) {
-    try{
+    try {
         return {
             msg: getSuitableTranslations("Get Products By Store Id And Ids Process Has Been Successfully !!", language),
             error: false,
@@ -153,14 +153,14 @@ async function getProductsByIdsAndStoreId(storeId, productsIds, language) {
             },
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
 async function getProductInfo(productId, language) {
     try {
-        const productInfo = await productModel.findById(productId).populate("categories");
+        const productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
         if (productInfo) {
             return {
                 msg: getSuitableTranslations("Get Product Info Process Has Been Successfuly !!", language),
@@ -237,11 +237,11 @@ async function getAllFlashProductsInsideThePage(pageNumber, pageSize, filters, s
             error: false,
             data: {
                 products: await productModel
-                            .find(filters)
-                            .sort(sortDetailsObject)
-                            .skip((pageNumber - 1) * pageSize)
-                            .limit(pageSize)
-                            .populate("categories"),
+                    .find(filters)
+                    .sort(sortDetailsObject)
+                    .skip((pageNumber - 1) * pageSize)
+                    .limit(pageSize)
+                    .populate("categories"),
                 currentDate: new Date(),
             },
         }
@@ -278,7 +278,7 @@ async function getRelatedProductsInTheProduct(productId, language) {
 async function getAllGalleryImages(authorizationId, productId, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const product = await productModel.findOne({ _id: productId });
                 if (product) {
@@ -324,7 +324,7 @@ async function getAllGalleryImages(authorizationId, productId, language) {
 async function deleteProduct(authorizationId, productId, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const productInfo = await productModel.findById(productId);
                 if (productInfo) {
@@ -374,9 +374,9 @@ async function deleteProduct(authorizationId, productId, language) {
 }
 
 async function deleteImageFromProductGallery(authorizationId, productId, galleryImagePath, language) {
-    try{
+    try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
@@ -417,7 +417,7 @@ async function deleteImageFromProductGallery(authorizationId, productId, gallery
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
@@ -425,7 +425,7 @@ async function deleteImageFromProductGallery(authorizationId, productId, gallery
 async function updateProduct(authorizationId, productId, newData, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
@@ -476,9 +476,9 @@ async function updateProduct(authorizationId, productId, newData, language) {
 }
 
 async function updateProductGalleryImage(authorizationId, productId, oldGalleryImagePath, newGalleryImagePath, language) {
-    try{
+    try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
@@ -528,15 +528,15 @@ async function updateProductGalleryImage(authorizationId, productId, oldGalleryI
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
 async function updateProductImage(authorizationId, productId, newProductImagePath, language) {
-    try{
+    try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
@@ -579,7 +579,7 @@ async function updateProductImage(authorizationId, productId, newProductImagePat
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
