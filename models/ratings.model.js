@@ -1,43 +1,51 @@
 // Import User, Product Model And Products Rating Model  Object
 
-const { userModel, productModel, productsRatingModel } = require("../models/all.models");
+const { userModel, productModel, ratingModel, storeModel } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
 async function selectProductRating(userId, ratingInfo, language) {
-    try{
+    try {
         const user = await userModel.findById(userId);
         if (user) {
-            const product = await productModel.findById(ratingInfo.productId);
-            if (product) {
-                const ratingDetails = await productsRatingModel.findOne({ userId, productId: ratingInfo.productId });
+            const info = ratingInfo.type === "product" ? await productModel.findById(ratingInfo.id) : await storeModel.findById(ratingInfo.id);
+            if (info) {
+                const ratingDetails = await ratingModel.findOne({ userId, id: ratingInfo.id, type: ratingInfo.type });
                 if (ratingDetails) {
-                    await productsRatingModel.updateOne({ userId, productId: ratingInfo.productId }, { rating: ratingInfo.rating });
-                    product.ratings[ratingDetails.rating] = product.ratings[ratingDetails.rating] - 1;
-                    product.ratings[ratingInfo.rating] = product.ratings[ratingInfo.rating] + 1;
-                    await productModel.updateOne({ _id: ratingInfo.productId }, { ratings: product.ratings });
+                    await ratingModel.updateOne({ userId, id: ratingInfo.id, type: ratingInfo.type }, { rating: ratingInfo.rating });
+                    info.ratings[ratingDetails.rating] = info.ratings[ratingDetails.rating] - 1;
+                    info.ratings[ratingInfo.rating] = info.ratings[ratingInfo.rating] + 1;
+                    if (ratingInfo.type === "product") {
+                        await productModel.updateOne({ _id: ratingInfo.id }, { ratings: info.ratings });
+                    } else {
+                        await storeModel.updateOne({ _id: ratingInfo.id }, { ratings: info.ratings });
+                    }
                     return {
-                        msg: getSuitableTranslations("Updating Product Rating By This User Process Has Been Successfully !!", language),
+                        msg: getSuitableTranslations(`Updating Rating ${ratingInfo.type.replace(ratingInfo.type[0], ratingInfo.type[0].toUpperCase())} By This User Process Has Been Successfully !!`, language),
                         error: false,
                         data: {},
                     }
                 }
-                const newRating = new productsRatingModel({
+                await (new ratingModel({
                     userId,
-                    productId: ratingInfo.productId,
+                    id: ratingInfo.id,
+                    type: ratingInfo.type,
                     rating: ratingInfo.rating
-                });
-                await newRating.save();
-                product.ratings[ratingInfo.rating] = product.ratings[ratingInfo.rating] + 1;
-                await productModel.updateOne({ _id: ratingInfo.productId }, { ratings: product.ratings });
+                })).save();
+                info.ratings[ratingInfo.rating] = info.ratings[ratingInfo.rating] + 1;
+                if (ratingInfo.type === "product") {
+                    await productModel.updateOne({ _id: ratingInfo.id }, { ratings: info.ratings });
+                } else {
+                    await storeModel.updateOne({ _id: ratingInfo.id }, { ratings: info.ratings });
+                }
                 return {
-                    msg: getSuitableTranslations("Adding New Product Rating By This User Process Has Been Successfully !!", language),
+                    msg: getSuitableTranslations(`Adding New ${ratingInfo.type.replace(ratingInfo.type[0], ratingInfo.type[0].toUpperCase())} Rating By This User Process Has Been Successfully !!`, language),
                     error: false,
                     data: {},
                 }
             }
             return {
-                msg: getSuitableTranslations("Sorry, This Product Is Not Found !!", language),
+                msg: getSuitableTranslations(`Sorry, This ${ratingInfo.type.replace(ratingInfo.type[0], ratingInfo.type[0].toUpperCase())} Is Not Found !!`, language),
                 error: true,
                 data: {},
             }
@@ -48,33 +56,33 @@ async function selectProductRating(userId, ratingInfo, language) {
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
-async function getProductRatingByUserId(userId, productId, language) {
-    try{
+async function getRatingByUserId(userId, id, type, language) {
+    try {
         const user = await userModel.findById(userId);
         if (user) {
-            const product = await productModel.findById(productId);
-            if (product) {
-                const ratingInfo = await productsRatingModel.findOne({ userId, productId });
+            const info = type === "product" ? await productModel.findById(id) : await storeModel.findById(id);
+            if (info) {
+                const ratingInfo = await ratingModel.findOne({ userId, id, type });
                 if (ratingInfo) {
                     return {
-                        msg: getSuitableTranslations("Get Product Rating By User Process Has Been Successfully !!", language),
+                        msg: getSuitableTranslations(`Get ${type.replace(type[0], type[0].toUpperCase())} Rating By User Process Has Been Successfully !!`, language),
                         error: false,
                         data: ratingInfo.rating,
                     }
                 }
                 return {
-                    msg: getSuitableTranslations("Sorry, This Product Is Not Exist Any Rating By This User !!", language),
+                    msg: getSuitableTranslations(`Sorry, This ${type.replace(type[0], type[0].toUpperCase())} Is Not Exist Any Rating By This User !!`, language),
                     error: true,
                     data: {},
                 }
             }
             return {
-                msg: getSuitableTranslations("Sorry, This Product Is Not Found !!", language),
+                msg: getSuitableTranslations(`Sorry, This ${type.replace(type[0], type[0].toUpperCase())} Is Not Found !!`, language),
                 error: true,
                 data: {},
             }
@@ -85,12 +93,12 @@ async function getProductRatingByUserId(userId, productId, language) {
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
 module.exports = {
     selectProductRating,
-    getProductRatingByUserId
+    getRatingByUserId
 }

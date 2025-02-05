@@ -152,6 +152,16 @@ const storeSchema = new mongoose.Schema({
     blockingDate: Date,
     dateOfCancelBlocking: Date,
     blockingReason: String,
+    ratings: {
+        type: Object,
+        default: {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0
+        }
+    },
 });
 
 // Create Store Model From Store Schema
@@ -658,14 +668,18 @@ const productsWalletShema = new mongoose.Schema({
 
 const productsWalletModel = mongoose.model("products_wallet", productsWalletShema);
 
-// Create Product Rating Schema
+// Create Rating Schema
 
-const productsRatingShema = new mongoose.Schema({
+const ratingShema = new mongoose.Schema({
     userId: {
         type: String,
         required: true,
     },
-    productId: {
+    type: {
+        type: String,
+        enum: ["product", "store"]
+    },
+    id: {
         type: String,
         required: true,
     },
@@ -676,9 +690,9 @@ const productsRatingShema = new mongoose.Schema({
     }
 });
 
-// Create Products Rating Model From Products Rating Schema
+// Create Rating Model From Rating Schema
 
-const productsRatingModel = mongoose.model("products_rating", productsRatingShema);
+const ratingModel = mongoose.model("rating", ratingShema);
 
 // Create Ads Schema
 
@@ -740,7 +754,7 @@ module.exports = {
     referalModel,
     favoriteProductModel,
     productsWalletModel,
-    productsRatingModel,
+    ratingModel,
     adsModel,
     cartModel,
 }

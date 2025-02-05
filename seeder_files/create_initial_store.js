@@ -78,6 +78,16 @@ const storeSchema = new mongoose.Schema({
     blockingDate: Date,
     dateOfCancelBlocking: Date,
     blockingReason: String,
+    ratings: {
+        type: Object,
+        default: {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0
+        }
+    },
 });
 
 // Create Store Model From Store Schema
