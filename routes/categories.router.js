@@ -2,17 +2,38 @@ const categoriesRouter = require("express").Router();
 
 const categoriesController = require("../controllers/categories.controller");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
+const multer = require("multer");
+
 categoriesRouter.post("/add-new-category",
     validateJWT,
+    multer({
+        storage: multer.memoryStorage(),
+        fileFilter: (req, file, cb) => {
+            if (!file) {
+                req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
+                return cb(null, false);
+            }
+            if (
+                file.mimetype !== "image/jpeg" &&
+                file.mimetype !== "image/png" &&
+                file.mimetype !== "image/webp"
+            ) {
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp Files Are Allowed !!";
+                return cb(null, false);
+            }
+            cb(null, true);
+        }
+    }).single("categoryImg"),
+    validateIsExistErrorInFiles,
     (req, res, next) => {
         const { name, color, parent } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: name, dataType: "string", isRequiredValue: true },
-            { fieldName: "Category Color", fieldValue: name, dataType: "string", isRequiredValue: true },
+            { fieldName: "Category Color", fieldValue: color, dataType: "string", isRequiredValue: true },
             { fieldName: "Category Parent Id", fieldValue: parent, dataType: "ObjectId", isRequiredValue: false },
         ], res, next);
     },

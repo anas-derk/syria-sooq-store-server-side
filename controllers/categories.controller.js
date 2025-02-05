@@ -1,4 +1,4 @@
-const { getResponseObject, getSuitableTranslations } = require("../global/functions");
+const { getResponseObject, getSuitableTranslations, handleResizeImagesAndConvertFormatToWebp } = require("../global/functions");
 
 const categoriesManagmentFunctions = require("../models/categories.model");
 
@@ -18,7 +18,12 @@ function getFiltersObject(filters) {
 
 async function postNewCategory(req, res) {
     try {
-        const result = await categoriesManagmentFunctions.addNewCategory(req.data._id, { name, color, parent } = req.body, req.query.language);
+        const outputImageFilePath = `assets/images/categories/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
+        const result = await categoriesManagmentFunctions.addNewCategory(req.data._id, {
+            imagePath: outputImageFilePath,
+            ...{ name, color, parent } = Object.assign({}, req.body)
+        } = req.body, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Cateogry Is Already Exist !!" || result.msg !== "Sorry, This Parent Cateogry Is Not Exist !!") {
                 return res.status(401).json(result);

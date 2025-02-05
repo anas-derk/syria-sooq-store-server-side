@@ -23,7 +23,7 @@ function getFiltersObject(filters) {
 }
 
 async function login(req, res) {
-    try{
+    try {
         const { email, mobilePhone, password } = req.query;
         const result = await usersOPerationsManagmentFunctions.login(email, mobilePhone, password, req.query.language);
         if (!result.error) {
@@ -41,35 +41,35 @@ async function login(req, res) {
         }
         res.json(result);
     }
-    catch(err){
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function getUserInfo(req, res) {
-    try{
+    try {
         res.json(await usersOPerationsManagmentFunctions.getUserInfo(req.data._id, req.query.language));
     }
-    catch(err){
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function getUsersCount(req, res) {
-    try{
+    try {
         const result = await usersOPerationsManagmentFunctions.getUsersCount(req.data._id, getFiltersObject(req.query), req.query.language);
         if (result.error) {
             return res.status(401).json(result);
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function getAllUsersInsideThePage(req, res) {
-    try{
+    try {
         const filters = req.query;
         const result = await usersOPerationsManagmentFunctions.getAllUsersInsideThePage(req.data._id, filters.pageNumber, filters.pageSize, getFiltersObject(filters), filters.language);
         if (result.error) {
@@ -77,13 +77,13 @@ async function getAllUsersInsideThePage(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function getForgetPassword(req, res) {
-    try{
+    try {
         const { email, mobilePhone, language } = req.query;
         let result = await usersOPerationsManagmentFunctions.isExistUserAccount(email, mobilePhone, language);
         if (!result.error) {
@@ -105,7 +105,16 @@ async function getForgetPassword(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
+async function getMainPageData(req, res) {
+    try {
+        res.json(await usersOPerationsManagmentFunctions.getMainPageData(req.data._id, req.query.language));
+    }
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -123,13 +132,13 @@ async function createNewUser(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function postAccountVerificationCode(req, res) {
-    try{
+    try {
         const { email, typeOfUse, language } = req.query;
         let result = typeOfUse === "to activate account" ? await usersOPerationsManagmentFunctions.isExistUserAndVerificationEmail(email, language) : usersOPerationsManagmentFunctions.isExistUserAccount(email, language);
         if (!result.error) {
@@ -144,22 +153,22 @@ async function postAccountVerificationCode(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function putUserInfo(req, res) {
-    try{
+    try {
         res.json(await usersOPerationsManagmentFunctions.updateUserInfo(req.data._id, req.body, req.query.language));
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function putVerificationStatus(req, res) {
-    try{
+    try {
         const { email, code, language } = req.query;
         let result = await isAccountVerificationCodeValid(email, code, "to activate account", language);
         if (!result.error) {
@@ -179,13 +188,13 @@ async function putVerificationStatus(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function putResetPassword(req, res) {
-    try{
+    try {
         const { email, mobilePhone, code, newPassword, language } = req.query;
         let result = await isAccountVerificationCodeValid(email, mobilePhone, code, "to reset password");
         if (!result.error) {
@@ -199,13 +208,13 @@ async function putResetPassword(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function deleteUser(req, res) {
-    try{
+    try {
         const result = await usersOPerationsManagmentFunctions.deleteUser(req.data._id, req.params.userId, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This User Is Not Found !!") {
@@ -215,7 +224,7 @@ async function deleteUser(req, res) {
         }
         res.json(result);
     }
-    catch(err){
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -228,6 +237,7 @@ module.exports = {
     getUsersCount,
     getAllUsersInsideThePage,
     getForgetPassword,
+    getMainPageData,
     putUserInfo,
     putVerificationStatus,
     putResetPassword,

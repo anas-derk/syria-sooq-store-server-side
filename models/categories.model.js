@@ -9,7 +9,6 @@ async function addNewCategory(authorizationId, categoryData, language) {
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (!admin.isBlocked) {
-                const category = await categoryModel.findOne({ name: categoryData.name });
                 if (categoryData.parent) {
                     if (!(await categoryModel.findById(categoryData.parent))) {
                         return {

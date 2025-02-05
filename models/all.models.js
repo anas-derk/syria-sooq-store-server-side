@@ -326,6 +326,10 @@ const categorySchema = new mongoose.Schema({
         ref: "categorie",
         default: null
     },
+    imagePath: {
+        type: String,
+        required: true,
+    },
 });
 
 // Create Category Model From Category Schema

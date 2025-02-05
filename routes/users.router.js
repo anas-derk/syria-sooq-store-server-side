@@ -6,8 +6,6 @@ const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, 
 
 const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName } = require("../middlewares/global.middlewares");
 
-const usersMiddlewares = require("../middlewares/users.midddlewares");
-
 usersRouter.get("/login",
     (req, res, next) => {
         const { email, mobilePhone, password } = req.query;
@@ -78,6 +76,8 @@ usersRouter.get("/forget-password",
     },
     usersController.getForgetPassword
 );
+
+usersRouter.get("/main-page-data", validateJWT, usersController.getMainPageData);
 
 usersRouter.post("/create-new-user",
     (req, res, next) => {

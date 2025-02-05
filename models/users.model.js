@@ -1,6 +1,6 @@
 // Import User, Account Verification Codes And Product Model Object
 
-const { userModel, accountVerificationCodesModel, adminModel, productsWalletModel, favoriteProductModel } = require("../models/all.models");
+const { userModel, accountVerificationCodesModel, adminModel, productsWalletModel, favoriteProductModel, productModel, categoryModel } = require("../models/all.models");
 
 // require bcryptjs module for password encrypting
 
@@ -12,11 +12,12 @@ const { getSuitableTranslations } = require("../global/functions");
 
 async function createNewUser(city, fullName, email, mobilePhone, password, language) {
     try {
-        const user = await userModel.findOne({ $or: 
-            [
-                { email },
-                { mobilePhone }
-            ]
+        const user = await userModel.findOne({
+            $or:
+                [
+                    { email },
+                    { mobilePhone }
+                ]
         });
         if (user) {
             return {
@@ -45,11 +46,12 @@ async function createNewUser(city, fullName, email, mobilePhone, password, langu
 
 async function login(email, mobilePhone, password, language) {
     try {
-        const user = await userModel.findOne({ $or: 
-            [
-                { email },
-                { mobilePhone }
-            ]
+        const user = await userModel.findOne({
+            $or:
+                [
+                    { email },
+                    { mobilePhone }
+                ]
         });
         if (user) {
             if (await compare(password, user.password)) {
@@ -180,13 +182,43 @@ async function getAllUsersInsideThePage(authorizationId, pageNumber, pageSize, f
     }
 }
 
+async function getMainPageData(authorizationId, language) {
+    try {
+        const user = await userModel.findById(authorizationId);
+        const currentDate = new Date();
+        if (user) {
+            return {
+                msg: getSuitableTranslations("Get Main Page Data Process Has Been Successfully !!", language),
+                error: true,
+                data: {
+                    categories: await categoryModel.find().limit(10),
+                    mostPopularCategories: await categoryModel.find().limit(10),
+                    products: [],
+                    offers: await productModel
+                        .find({ startDiscountPeriod: { $lte: currentDate }, endDiscountPeriod: { $gte: currentDate } })
+                        .limit(10)
+                        .populate("categories"),
+                },
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function isExistUserAccount(email, mobilePhone, language) {
     try {
-        const user = await userModel.findOne({ $or: 
-            [
-                { email },
-                { mobilePhone }
-            ]
+        const user = await userModel.findOne({
+            $or:
+                [
+                    { email },
+                    { mobilePhone }
+                ]
         });
         if (user) {
             return {
@@ -198,11 +230,12 @@ async function isExistUserAccount(email, mobilePhone, language) {
                 },
             }
         }
-        const admin = await adminModel.findOne({ $or: 
-            [
-                { email },
-                { mobilePhone }
-            ]
+        const admin = await adminModel.findOne({
+            $or:
+                [
+                    { email },
+                    { mobilePhone }
+                ]
         });
         if (admin) {
             return {
@@ -256,13 +289,13 @@ async function updateUserInfo(userId, newUserData, language) {
 }
 
 async function updateVerificationStatus(text, language) {
-    try{
+    try {
         const userInfo = await userModel.findOneAndUpdate({ text }, { isVerified: true });
-        if(userInfo) {
+        if (userInfo) {
             await accountVerificationCodesModel.deleteOne({ text, typeOfUse: "to activate account" });
             return {
                 msg: getSuitableTranslations("Updating Verification Status Process Has Been Successfully !!", language),
-                error: false ,
+                error: false,
                 data: {
                     _id: userInfo._id,
                     isVerified: userInfo.isVerified,
@@ -275,18 +308,20 @@ async function updateVerificationStatus(text, language) {
             data: {},
         };
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
 async function resetUserPassword(email, mobilePhone, newPassword, language) {
     try {
-        const user = await userModel.findOneAndUpdate({ $or: 
-            [
-                { email },
-                { mobilePhone }
-            ] }, { password: await hash(newPassword, 10) });
+        const user = await userModel.findOneAndUpdate({
+            $or:
+                [
+                    { email },
+                    { mobilePhone }
+                ]
+        }, { password: await hash(newPassword, 10) });
         if (user) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
@@ -294,11 +329,13 @@ async function resetUserPassword(email, mobilePhone, newPassword, language) {
                 data: { language: "ar" },
             };
         }
-        const admin = await adminModel.findOneAndUpdate({ $or: 
-            [
-                { email },
-                { mobilePhone }
-            ] }, { password: await hash(newPassword, 10) });
+        const admin = await adminModel.findOneAndUpdate({
+            $or:
+                [
+                    { email },
+                    { mobilePhone }
+                ]
+        }, { password: await hash(newPassword, 10) });
         if (admin) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
@@ -316,8 +353,8 @@ async function resetUserPassword(email, mobilePhone, newPassword, language) {
     }
 }
 
-async function deleteUser(authorizationId, userId, language){
-    try{
+async function deleteUser(authorizationId, userId, language) {
+    try {
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (admin.isWebsiteOwner) {
@@ -349,7 +386,7 @@ async function deleteUser(authorizationId, userId, language){
             data: {},
         }
     }
-    catch(err){
+    catch (err) {
         throw Error(err);
     }
 }
@@ -362,6 +399,7 @@ module.exports = {
     isExistUserAndVerificationEmail,
     getUsersCount,
     getAllUsersInsideThePage,
+    getMainPageData,
     updateUserInfo,
     updateVerificationStatus,
     resetUserPassword,
