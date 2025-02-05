@@ -193,8 +193,7 @@ async function getMainPageData(authorizationId, language) {
                 data: {
                     categories: await categoryModel.find().limit(10),
                     mostPopularCategories: await categoryModel.find().limit(10),
-                    products: [],
-                    offers: await productModel
+                    products: await productModel
                         .find({})
                         .limit(10)
                         .populate("categories").populate("storeId"),
