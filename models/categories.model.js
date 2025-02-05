@@ -157,7 +157,9 @@ async function deleteCategory(authorizationId, categoryId, language) {
                         return {
                             msg: getSuitableTranslations("Deleting Category Process Has Been Successfuly !!", language),
                             error: false,
-                            data: {},
+                            data: {
+                                deletedCategoryImagePath: category.imagePath,
+                            },
                         };
                     }
                     return {
