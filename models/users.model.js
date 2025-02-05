@@ -202,7 +202,7 @@ async function getMainPageData(authorizationId, language) {
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }
