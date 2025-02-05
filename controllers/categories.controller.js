@@ -2,6 +2,8 @@ const { getResponseObject, getSuitableTranslations, handleResizeImagesAndConvert
 
 const categoriesManagmentFunctions = require("../models/categories.model");
 
+const { unlinkSync } = require("fs");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -85,7 +87,10 @@ async function getAllCategoriesInsideThePage(req, res) {
 async function deleteCategory(req, res) {
     try {
         const result = await categoriesManagmentFunctions.deleteCategory(req.data._id, req.params.categoryId, req.query.language);
-        if (result.error) {
+        if (!result.error) {
+            unlinkSync(result.data.deletedCategoryImagePath);
+        }
+        else {
             if (result.msg !== "Sorry, This Category Is Not Exist !!") {
                 return res.status(401).json(result);
             }
@@ -112,6 +117,26 @@ async function putCategory(req, res) {
     }
 }
 
+async function putCategoryImage(req, res) {
+    try {
+        const outputImageFilePath = `assets/images/categories/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
+        const result = await categoriesManagmentFunctions.changeCategoryImage(req.data._id, req.params.categoryId, outputImageFilePath, req.query.language);
+        if (!result.error) {
+            unlinkSync(result.data.deletedCategoryImagePath);
+        }
+        else {
+            if (result.msg === "Sorry, This Admin Is Not Exist !!") {
+                return res.status(401).json(result);
+            }
+        }
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 module.exports = {
     postNewCategory,
     getAllCategories,
@@ -121,4 +146,5 @@ module.exports = {
     getCategoryInfo,
     deleteCategory,
     putCategory,
+    putCategoryImage,
 }

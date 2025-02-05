@@ -248,6 +248,35 @@ async function updateCategory(authorizationId, categoryId, newCategoryData, lang
     }
 }
 
+async function changeCategoryImage(authorizationId, categoryId, newCategoryImagePath, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            const category = await categoryModel.findOneAndUpdate({ _id: categoryId }, { imagePath: newCategoryImagePath });
+            if (category) {
+                return {
+                    msg: getSuitableTranslations("Updating Category Image Process Has Been Successfully !!", language),
+                    error: false,
+                    data: { deletedCategoryImagePath: category.imagePath }
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Category Is Not Exist !!", language),
+                error: true,
+                data: {}
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addNewCategory,
     getAllCategories,
@@ -258,4 +287,5 @@ module.exports = {
     getCategoryInfo,
     deleteCategory,
     updateCategory,
+    changeCategoryImage
 }
