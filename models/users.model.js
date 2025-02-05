@@ -195,9 +195,13 @@ async function getMainPageData(authorizationId, language) {
                     mostPopularCategories: await categoryModel.find().limit(10),
                     products: [],
                     offers: await productModel
+                        .find({})
+                        .limit(10)
+                        .populate("categories").populate("storeId"),
+                    offers: await productModel
                         .find({ startDiscountPeriod: { $lte: currentDate }, endDiscountPeriod: { $gte: currentDate } })
                         .limit(10)
-                        .populate("categories"),
+                        .populate("categories").populate("storeId"),
                 },
             }
         }
