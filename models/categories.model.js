@@ -1,6 +1,6 @@
 // Import Category And Admin Model Object
 
-const { categoryModel, adminModel, productModel } = require("../models/all.models");
+const { categoryModel, adminModel, productModel, userModel } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -63,12 +63,31 @@ function buildNestedCategories(categories) {
     return result;
 }
 
-async function getAllCategories(filters, language) {
+async function getAllCategories(authorizationId, filters, userType, language) {
     try {
+        if (userType === "user") {
+            const user = await userModel.findById(authorizationId);
+            if (!user) {
+                return {
+                    msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+        } else {
+            const admin = await adminModel.findById(authorizationId);
+            if (!admin) {
+                return {
+                    msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+        }
         return {
             msg: getSuitableTranslations("Get All Categories Process Has Been Successfully !!", language),
             error: false,
-            data: await categoryModel.find(filters, { name: 1, storeId: 1, parent: 1 }).populate("parent"),
+            data: await categoryModel.find(filters, { name: 1, storeId: 1, parent: 1, color: 1, imagePath: 1 }).populate("parent"),
         }
     }
     catch (err) {
@@ -127,12 +146,34 @@ async function getCategoriesCount(filters, language) {
     }
 }
 
-async function getAllCategoriesInsideThePage(pageNumber, pageSize, filters, language) {
+async function getAllCategoriesInsideThePage(authorizationId, pageNumber, pageSize, userType, filters, language) {
     try {
+        if (userType === "user") {
+            const user = await userModel.findById(authorizationId);
+            if (!user) {
+                return {
+                    msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+        } else {
+            const admin = await adminModel.findById(authorizationId);
+            if (!admin) {
+                return {
+                    msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+        }
         return {
             msg: getSuitableTranslations("Get All Categories Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
             error: false,
-            data: await categoryModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("parent"),
+            data: {
+                categories: await categoryModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("parent"),
+                categoriesCount: await categoryModel.countDocuments(filters),
+            },
         }
     }
     catch (err) {

@@ -2,7 +2,7 @@ const categoriesRouter = require("express").Router();
 
 const categoriesController = require("../controllers/categories.controller");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles, validateUserType } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -49,7 +49,17 @@ categoriesRouter.get("/category-info/:categoryId",
     categoriesController.getCategoryInfo
 );
 
-categoriesRouter.get("/all-categories", categoriesController.getAllCategories);
+categoriesRouter.get("/all-categories",
+    validateJWT,
+    (req, res, next) => {
+        const { userType } = req.query;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
+        ], res, next);
+    },
+    (req, res, next) => validateUserType(req.query.userType, res, next),
+    categoriesController.getAllCategories
+);
 
 categoriesRouter.get("/all-categories-with-hierarechy", categoriesController.getAllCategoriesWithHierarechy);
 
@@ -63,15 +73,18 @@ categoriesRouter.get("/categories-count",
 );
 
 categoriesRouter.get("/all-categories-inside-the-page",
+    validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize } = req.query;
+        const { pageNumber, pageSize, userType } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
+            { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
+    (req, res, next) => validateUserType(req.query.userType, res, next),
     categoriesController.getAllCategoriesInsideThePage
 );
 

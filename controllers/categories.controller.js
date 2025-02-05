@@ -40,7 +40,8 @@ async function postNewCategory(req, res) {
 
 async function getAllCategories(req, res) {
     try {
-        res.json(await categoriesManagmentFunctions.getAllCategories(getFiltersObject(req.query), req.query.language));
+        const filters = req.query;
+        res.json(await categoriesManagmentFunctions.getAllCategories(req.data._id, getFiltersObject(filters), filters.userType, req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -77,7 +78,7 @@ async function getCategoriesCount(req, res) {
 async function getAllCategoriesInsideThePage(req, res) {
     try {
         const filters = req.query;
-        res.json(await categoriesManagmentFunctions.getAllCategoriesInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters), filters.language));
+        res.json(await categoriesManagmentFunctions.getAllCategoriesInsideThePage(req.data._id, filters.pageNumber, filters.pageSize, filters.userType, getFiltersObject(filters), filters.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
