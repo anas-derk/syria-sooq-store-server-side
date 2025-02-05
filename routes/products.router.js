@@ -128,6 +128,7 @@ productsRouter.post("/products-by-ids-and-store-id",
 );
 
 productsRouter.get("/product-info/:productId",
+    validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: req.params.productId, dataType: "ObjectId", isRequiredValue: true },
