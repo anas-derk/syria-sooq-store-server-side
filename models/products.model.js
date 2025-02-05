@@ -1,6 +1,6 @@
 // Import Product Model Object
 
-const { productModel, categoryModel, adminModel, mongoose } = require("../models/all.models");
+const { productModel, categoryModel, adminModel, mongoose, userModel } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -211,15 +211,42 @@ async function getFlashProductsCount(filters, language) {
     }
 }
 
-async function getAllProductsInsideThePage(pageNumber, pageSize, filters, sortDetailsObject, language) {
+async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize, userType, filters, sortDetailsObject, language) {
     try {
-        return {
-            msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
-            error: false,
-            data: {
-                products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
-                currentDate: new Date()
-            },
+        if (userType === "user") {
+            const user = await userModel.findById(authorizationId);
+            if (user) {
+                return {
+                    msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+                    error: false,
+                    data: {
+                        products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
+                        currentDate: new Date()
+                    },
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                error: true,
+                data: {},
+            }
+        } else {
+            const admin = await adminModel.findById(authorizationId);
+            if (admin) {
+                return {
+                    msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+                    error: false,
+                    data: {
+                        products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
+                        currentDate: new Date()
+                    },
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                error: true,
+                data: {},
+            }
         }
     }
     catch (err) {
@@ -227,23 +254,55 @@ async function getAllProductsInsideThePage(pageNumber, pageSize, filters, sortDe
     }
 }
 
-async function getAllFlashProductsInsideThePage(pageNumber, pageSize, filters, sortDetailsObject, language) {
+async function getAllFlashProductsInsideThePage(authorizationId, pageNumber, pageSize, userType, filters, sortDetailsObject, language) {
     try {
         const currentDate = new Date();
         filters.startDiscountPeriod = { $lte: currentDate };
         filters.endDiscountPeriod = { $gte: currentDate };
-        return {
-            msg: getSuitableTranslations("Get All Flash Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
-            error: false,
-            data: {
-                products: await productModel
-                    .find(filters)
-                    .sort(sortDetailsObject)
-                    .skip((pageNumber - 1) * pageSize)
-                    .limit(pageSize)
-                    .populate("categories"),
-                currentDate: new Date(),
-            },
+        if (userType === "user") {
+            const user = await userModel.findById(authorizationId);
+            if (user) {
+                return {
+                    msg: getSuitableTranslations("Get All Flash Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+                    error: false,
+                    data: {
+                        products: await productModel
+                            .find(filters)
+                            .sort(sortDetailsObject)
+                            .skip((pageNumber - 1) * pageSize)
+                            .limit(pageSize)
+                            .populate("categories"),
+                        currentDate: new Date(),
+                    },
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                error: true,
+                data: {},
+            }
+        } else {
+            const admin = await adminModel.findById(authorizationId);
+            if (admin) {
+                return {
+                    msg: getSuitableTranslations("Get All Flash Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+                    error: false,
+                    data: {
+                        products: await productModel
+                            .find(filters)
+                            .sort(sortDetailsObject)
+                            .skip((pageNumber - 1) * pageSize)
+                            .limit(pageSize)
+                            .populate("categories"),
+                        currentDate: new Date(),
+                    },
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                error: true,
+                data: {},
+            }
         }
     }
     catch (err) {

@@ -83,7 +83,7 @@ function validateLanguage(language, res, nextFunc, errorMsg = "Sorry, Please Sen
 }
 
 function validateNumbersIsGreaterThanZero(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Greater Than Zero ) !!") {
-    for(let i = 0; i < numbers.length; i++) {
+    for (let i = 0; i < numbers.length; i++) {
         if (numbers[i] <= 0) {
             res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
             return;
@@ -93,7 +93,7 @@ function validateNumbersIsGreaterThanZero(numbers, res, nextFunc, errorMsgs, def
 }
 
 function validateNumbersIsNotFloat(numbers, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Number ( Number Must Be Not Float ) !!") {
-    for(let i = 0; i < numbers.length; i++) {
+    for (let i = 0; i < numbers.length; i++) {
         if (numbers[i] % 1 !== 0) {
             res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
             return;
@@ -112,7 +112,7 @@ function validateName(name, res, nextFunc, errorMsg = "Sorry, Please Send Valid 
 
 function validateIsNotExistDublicateProductId(products, res, nextFunc) {
     let seenProductIds = {};
-    for(let product of products) {
+    for (let product of products) {
         if (seenProductIds[product.productId]) {
             res.status(400).json(getResponseObject(`Sorry, Dublicate Product Id: ${product.productId} !!`, true, {}));
             return;
@@ -176,7 +176,7 @@ function validateTypeOfUseForCode(typeOfUse, res, nextFunc) {
     nextFunc();
 }
 
-function validateOrderDestination(orderDestination, res, nextFunc){
+function validateOrderDestination(orderDestination, res, nextFunc) {
     if (!["admin", "user"].includes(orderDestination)) {
         res.status(400).json(getResponseObject("Please Send Valid Order Destination !!", true, {}));
         return;
@@ -184,7 +184,7 @@ function validateOrderDestination(orderDestination, res, nextFunc){
     nextFunc();
 }
 
-function validatePaymentGateway(paymentGate, res, nextFunc){
+function validatePaymentGateway(paymentGate, res, nextFunc) {
     if (!["tap", "tabby", "binance"].includes(paymentGate)) {
         res.status(400).json(getResponseObject("Please Send Valid Payment Gateway !!", true, {}));
         return;
@@ -192,7 +192,7 @@ function validatePaymentGateway(paymentGate, res, nextFunc){
     nextFunc();
 }
 
-function validateOrderStatus(status, res, nextFunc){
+function validateOrderStatus(status, res, nextFunc) {
     if (!["pending", "shipping", "completed"].includes(status)) {
         res.status(400).json(getResponseObject("Please Send Valid Order Status !!", true, {}));
         return;
@@ -205,6 +205,14 @@ function validateIsPriceGreaterThanDiscount(price, discount, res, next) {
         return res.status(400).json(getResponseObject("Sorry, Please Send Valid Price And / Or Discount Value ( Must Be Price Greater Than Discount ) !!", true, {}));
     }
     next();
+}
+
+function validateUserType(userType, res, nextFunc, errorMsg = "Sorry, Please Send Valid User Type !!") {
+    if (userType !== "user" && userType !== "admin") {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
 }
 
 function keyGeneratorForRequestsRateLimit(req) {
@@ -236,5 +244,6 @@ module.exports = {
     validatePaymentGateway,
     validateOrderStatus,
     validateIsPriceGreaterThanDiscount,
+    validateUserType,
     keyGeneratorForRequestsRateLimit,
 }

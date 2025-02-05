@@ -4,7 +4,7 @@ const productsController = require("../controllers/products.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount, validateUserType } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -159,17 +159,20 @@ productsRouter.get("/flash-products-count",
 );
 
 productsRouter.get("/all-products-inside-the-page",
+    validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, sortBy, sortType } = req.query;
+        const { pageNumber, pageSize, userType, sortBy, sortType } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
+            { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
             { fieldName: "Sort By", fieldValue: sortBy, dataType: "string", isRequiredValue: sortType ? true : false },
             { fieldName: "Sort Type", fieldValue: sortType, dataType: "string", isRequiredValue: sortBy ? true : false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
+    (req, res, next) => validateUserType(req.query.userType, res, next),
     (req, res, next) => {
         const { sortBy } = req.query;
         if (sortBy) {
@@ -190,17 +193,20 @@ productsRouter.get("/all-products-inside-the-page",
 );
 
 productsRouter.get("/all-flash-products-inside-the-page",
+    validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, sortBy, sortType } = req.query;
+        const { pageNumber, pageSize, userType, sortBy, sortType } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
+            { fieldName: "User Type", fieldValue: userType, dataType: "string", isRequiredValue: true },
             { fieldName: "Sort By", fieldValue: sortBy, dataType: "string", isRequiredValue: sortType ? true : false },
             { fieldName: "Sort Type", fieldValue: sortType, dataType: "string", isRequiredValue: sortBy ? true : false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
+    (req, res, next) => validateUserType(req.query.userType, res, next),
     (req, res, next) => {
         const { sortBy } = req.query;
         if (sortBy) {
