@@ -254,6 +254,39 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
     }
 }
 
+async function getAllProductsByCategory(authorizationId, categoryId, language) {
+    try {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            const subcategories = await categoryModel.find({ parent: categoryId }, { name: 1, storeId: 1, parent: 1, color: 1 });
+            console.log(subcategories)
+            let groupedProducts = {};
+            subcategories.forEach(async (category) => {
+                const categoryName = category.name;
+                if (!groupedProducts[categoryName]) {
+                    groupedProducts[categoryName] = [];
+                }
+                groupedProducts[categoryName].push(
+                    await productModel.find({ categories: category._id }).limit(10).populate("categories")
+                );
+            });
+            return {
+                msg: getSuitableTranslations("Get All Products By Category Process Has Been Successfully !!", language),
+                error: false,
+                data: groupedProducts,
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 async function getAllFlashProductsInsideThePage(authorizationId, pageNumber, pageSize, userType, filters, sortDetailsObject, language) {
     try {
         const currentDate = new Date();
@@ -653,6 +686,7 @@ module.exports = {
     getFlashProductsCount,
     getAllFlashProductsInsideThePage,
     getAllProductsInsideThePage,
+    getAllProductsByCategory,
     getRelatedProductsInTheProduct,
     getAllGalleryImages,
     deleteProduct,

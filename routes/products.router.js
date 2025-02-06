@@ -226,6 +226,16 @@ productsRouter.get("/all-flash-products-inside-the-page",
     productsController.getAllFlashProductsInsideThePage
 );
 
+productsRouter.get("/all-products-by-category/:categoryId",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "ObjectId", isRequiredValue: true },
+        ], res, next);
+    },
+    productsController.getAllProductsByCategory
+);
+
 productsRouter.get("/sample-from-related-products-in-the-product/:productId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([

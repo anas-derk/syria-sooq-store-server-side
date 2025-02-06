@@ -139,6 +139,15 @@ async function getAllFlashProductsInsideThePage(req, res) {
     }
 }
 
+async function getAllProductsByCategory(req, res) {
+    try {
+        res.json(await productsManagmentFunctions.getAllProductsByCategory(req.data._id, req.params.categoryId, req.query.language));
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function getRelatedProductsInTheProduct(req, res) {
     try {
         res.json(await productsManagmentFunctions.getRelatedProductsInTheProduct(req.data._id, req.params.productId, req.query.language));
@@ -267,6 +276,7 @@ module.exports = {
     getFlashProductsCount,
     getAllFlashProductsInsideThePage,
     getAllProductsInsideThePage,
+    getAllProductsByCategory,
     getProductInfo,
     getRelatedProductsInTheProduct,
     getProductsByIds,
