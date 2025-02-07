@@ -1,6 +1,8 @@
 // Import Product Model Object
 
-const { productModel, categoryModel, adminModel, mongoose, userModel } = require("../models/all.models");
+const { productModel, categoryModel, adminModel, userModel } = require("../models/all.models");
+
+const { mongoose } = require("../server");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -521,7 +523,7 @@ async function updateProduct(authorizationId, productId, newData, language) {
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
-                    if (product.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
                         const categories = await categoryModel.find({ _id: { $in: newData.categories } });
                         if (categories.length > 0) {
                             newData.categories = categories.map((category) => category._id);

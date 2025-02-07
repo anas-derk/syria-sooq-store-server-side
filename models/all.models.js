@@ -228,10 +228,8 @@ const productSchema = new mongoose.Schema({
     startDiscountPeriod: Date,
     endDiscountPeriod: Date,
     storeId: {
-        type: [{
-            type: mongoose.Types.ObjectId,
-            ref: "store",
-        }],
+        type: mongoose.Types.ObjectId,
+        ref: "store",
         required: true,
     }
 });
