@@ -63,7 +63,7 @@ async function addNewImagesToProductGallery(authorizationId, productId, newGalle
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
-                    if (product.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
                         const galleryImagePathsAfterAddNewPaths = product.galleryImagesPaths.concat(newGalleryImagePaths);
                         await productModel.updateOne({ _id: productId },
                             {
@@ -376,7 +376,7 @@ async function getAllGalleryImages(authorizationId, productId, language) {
             if (!admin.isBlocked) {
                 const product = await productModel.findOne({ _id: productId });
                 if (product) {
-                    if (product.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
                         return {
                             msg: getSuitableTranslations("Get All Gallery Images For This Product Process Has Been Successfully !!", language),
                             error: false,
@@ -422,7 +422,7 @@ async function deleteProduct(authorizationId, productId, language) {
             if (!admin.isBlocked) {
                 const productInfo = await productModel.findById(productId);
                 if (productInfo) {
-                    if (productInfo.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
                         await productModel.deleteOne({
                             _id: productId,
                         });
@@ -474,7 +474,7 @@ async function deleteImageFromProductGallery(authorizationId, productId, gallery
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
-                    if (product.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
                         await productModel.updateOne({ _id: productId }, {
                             galleryImagesPaths: product.galleryImagesPaths.filter((path) => galleryImagePath !== path)
                         });
@@ -576,7 +576,7 @@ async function updateProductGalleryImage(authorizationId, productId, oldGalleryI
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
-                    if (product.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
                         const galleryImagePathIndex = product.galleryImagesPaths.findIndex((galleryImagePath) => galleryImagePath === oldGalleryImagePath);
                         if (galleryImagePathIndex >= 0) {
                             product.galleryImagesPaths[galleryImagePathIndex] = newGalleryImagePath;
@@ -634,7 +634,7 @@ async function updateProductImage(authorizationId, productId, newProductImagePat
             if (!admin.isBlocked) {
                 const product = await productModel.findById(productId);
                 if (product) {
-                    if (product.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
                         await productModel.updateOne({ _id: productId }, {
                             imagePath: newProductImagePath,
                         });
