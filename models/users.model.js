@@ -12,13 +12,7 @@ const { getSuitableTranslations } = require("../global/functions");
 
 async function createNewUser(city, fullName, email, mobilePhone, password, language) {
     try {
-        const user = await userModel.findOne({
-            $or:
-                [
-                    { email },
-                    { mobilePhone }
-                ]
-        });
+        const user = await userModel.findOne(email ? { email } : { mobilePhone });
         if (user) {
             return {
                 msg: getSuitableTranslations("Sorry, Can't Create New User Because It Is Already Exist !!", language),
