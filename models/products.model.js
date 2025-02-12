@@ -262,15 +262,9 @@ async function getAllProductsByCategory(authorizationId, categoryId, language) {
         if (user) {
             const subcategories = await categoryModel.find({ parent: categoryId }, { name: 1, storeId: 1, parent: 1, color: 1 });
             let groupedProducts = {};
-            subcategories.forEach(async (category) => {
-                const categoryName = category.name;
-                if (!groupedProducts[categoryName]) {
-                    groupedProducts[categoryName] = [];
-                }
-                groupedProducts[categoryName].push(
-                    await productModel.find({ categories: category._id }).limit(10).populate("categories")
-                );
-            });
+            for (let category of subcategories) {
+                groupedProducts[category.name] = await productModel.find({ categories: category._id }).limit(10).populate("categories");
+            }
             return {
                 msg: getSuitableTranslations("Get All Products By Category Process Has Been Successfully !!", language),
                 error: false,
