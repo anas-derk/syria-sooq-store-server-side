@@ -398,10 +398,6 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    totalAmountBeforeApplyCoupon: {
-        type: Number,
-        default: 0,
-    },
     orderAmount: {
         type: Number,
         default: 0,
@@ -418,7 +414,9 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: [
-            "binance"
+            "Wallet",
+            "Credit Card",
+            "Upon Receipt"
         ],
     },
     status: {
@@ -429,106 +427,6 @@ const orderSchema = new mongoose.Schema({
             "shipping",
             "completed"
         ]
-    },
-    isApplyCoupon: {
-        type: Boolean,
-        default: false,
-    },
-    couponDetails: {
-        code: {
-            type: String,
-            required: function () {
-                return this.isApplyCoupon;
-            },
-        },
-        discountPercentage: {
-            type: Number,
-            required: function () {
-                return this.isApplyCoupon;
-            },
-        },
-        storeId: {
-            type: String,
-            required: function () {
-                return this.isApplyCoupon;
-            },
-        },
-    },
-    billingAddress: {
-        firstName: {
-            type: String,
-            default: "none",
-        },
-        lastName: {
-            type: String,
-            default: "none",
-        },
-        companyName: {
-            type: String,
-            default: "none",
-        },
-        streetAddress: {
-            type: String,
-            default: "none",
-        },
-        apartmentNumber: {
-            type: Number,
-            default: 1,
-        },
-        city: {
-            type: String,
-            default: "none",
-        },
-        postalCode: {
-            type: Number,
-            default: 0,
-        },
-        phone: {
-            type: String,
-            default: "",
-        },
-        email: {
-            type: String,
-            default: "none",
-        },
-    },
-    shippingAddress: {
-        firstName: {
-            type: String,
-            default: "none",
-        },
-        lastName: {
-            type: String,
-            default: "none",
-        },
-        companyName: {
-            type: String,
-            default: "none",
-        },
-        streetAddress: {
-            type: String,
-            default: "none",
-        },
-        apartmentNumber: {
-            type: Number,
-            default: 1,
-        },
-        city: {
-            type: String,
-            default: "none",
-        },
-        postalCode: {
-            type: Number,
-            default: 0,
-        },
-        phone: {
-            type: String,
-            default: "",
-        },
-        email: {
-            type: String,
-            default: "none",
-        },
     },
     products: [{
         productId: {
@@ -565,9 +463,54 @@ const orderSchema = new mongoose.Schema({
         default: Date.now,
     },
     orderNumber: Number,
-    requestNotes: {
+    city: {
         type: String,
         default: "",
+        enum: [
+            "lattakia",
+            "homs",
+            "hama",
+            "idleb",
+            "daraa",
+            "suwayda",
+            "deer-alzoor",
+            "damascus",
+            "rif-damascus",
+            "aleppo",
+            "quneitra"
+        ]
+    },
+    address: {
+        type: String,
+        required: true,
+    },
+    addressDetails: {
+        type: String,
+        required: true,
+    },
+    closestPoint: {
+        type: String,
+        default: "",
+    },
+    additionalAddressDetails: {
+        type: String,
+        default: "",
+    },
+    floorNumber: {
+        type: Number,
+        required: true,
+    },
+    additionalNotes: {
+        type: String,
+        default: "",
+    },
+    mobilePhone: {
+        type: String,
+        required: true,
+    },
+    backupMobilePhone: {
+        type: String,
+        required: true,
     },
     isReturned: {
         type: Boolean,
@@ -578,14 +521,8 @@ const orderSchema = new mongoose.Schema({
         type: Boolean,
     },
     shippingCost: {
-        forLocalProducts: {
-            type: Number,
-            default: 0,
-        },
-        forInternationalProducts: {
-            type: Number,
-            default: 0,
-        }
+        type: Number,
+        default: 0
     },
 });
 

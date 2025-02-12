@@ -163,7 +163,6 @@ async function createNewOrder(authorizationId, orderDetails, language) {
                 totalAmount: orderedProducts[i].price * orderDetails.products[i].quantity,
                 quantity: orderDetails.products[i].quantity,
                 imagePath: orderedProducts[i].imagePath,
-                countries: orderedProducts[i].countries,
             });
         }
         const totalPrices = {
@@ -184,14 +183,19 @@ async function createNewOrder(authorizationId, orderDetails, language) {
                 totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
                 totalDiscount: totalPrices.totalDiscount,
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
-                isApplyCoupon: orderDetails.couponDetails ? true : false,
-                couponDetails: orderDetails.couponDetails,
                 orderAmount: totalAmountBeforeApplyCoupon,
                 checkoutStatus: orderDetails.checkoutStatus,
                 userId: authorizationId,
                 paymentGateway: orderDetails.paymentGateway,
-                billingAddress: orderDetails.billingAddress,
-                shippingAddress: orderDetails.shippingAddress,
+                city: orderDetails.city,
+                address: orderDetails.address,
+                addressDetails: orderDetails.addressDetails,
+                closestPoint: orderDetails.closestPoint,
+                additionalAddressDetails: orderDetails.additionalAddressDetails,
+                floorNumber: orderDetails.floorNumber,
+                additionalNotes: orderDetails.additionalNotes,
+                mobilePhone: orderDetails.mobilePhone,
+                backupMobilePhone: orderDetails.backupMobilePhone,
                 products: orderProductsDetails,
             })
         ).save();
