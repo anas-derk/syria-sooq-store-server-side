@@ -199,23 +199,6 @@ async function createNewOrder(authorizationId, orderDetails, language) {
                 products: orderProductsDetails,
             })
         ).save();
-        let newProductsForUserInsideTheWallet = [];
-        const orderProducts = await productsWalletModel.find({ productId: { $in: orderProductsDetails.map((product) => product.productId) }, userId: authorizationId });
-        for (let i = 0; i < orderProductsDetails.length; i++) {
-            const wallet_productIndex = orderProducts.findIndex((wallet_product) => wallet_product.productId == orderProductsDetails[i].productId);
-            if (wallet_productIndex == -1) {
-                newProductsForUserInsideTheWallet.push({
-                    name: orderProductsDetails[i].name,
-                    price: orderProductsDetails[i].unitPrice,
-                    imagePath: orderProductsDetails[i].imagePath,
-                    productId: orderProductsDetails[i].productId,
-                    userId: authorizationId
-                });
-            }
-        }
-        if (newProductsForUserInsideTheWallet.length > 0) {
-            await productsWalletModel.insertMany(newProductsForUserInsideTheWallet);
-        }
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
             error: false,
@@ -224,15 +207,11 @@ async function createNewOrder(authorizationId, orderDetails, language) {
                 totalDiscount: totalPrices.totalDiscount,
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
                 orderAmount: newOrder.orderAmount,
-                billingAddress: newOrder.billingAddress,
-                shippingAddress: newOrder.shippingAddress,
                 products: newOrder.products,
                 addedDate: newOrder.addedDate,
                 orderNumber: newOrder.orderNumber,
                 shippingCost: newOrder.shippingCost,
-                shippingMethod: newOrder.shippingMethod,
                 storeId: newOrder.storeId,
-                language: newOrder.language,
                 _id: newOrder._id
             },
         }
