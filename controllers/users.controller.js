@@ -128,12 +128,11 @@ async function createNewUser(req, res) {
             return res.json(result);
         }
         if (email) {
-            await sendCongratulationsOnCreatingNewAccountEmail(email, "ar");
+            // await sendCongratulationsOnCreatingNewAccountEmail(email, "ar");
         }
         res.json(result);
     }
     catch (err) {
-        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
