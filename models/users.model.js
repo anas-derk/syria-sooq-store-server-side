@@ -186,8 +186,8 @@ async function getMainPageData(authorizationId, language) {
                 error: true,
                 data: {
                     categories: await categoryModel.find().limit(10),
-                    mostPopularCategories: await categoryModel.find().limit(10),
                     ads: await adsModel.find({}),
+                    mostPopularCategories: await categoryModel.find().limit(10),
                     products: await productModel
                         .find({})
                         .limit(10)
