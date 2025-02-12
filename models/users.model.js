@@ -210,13 +210,7 @@ async function getMainPageData(authorizationId, language) {
 
 async function isExistUserAccount(email, mobilePhone, language) {
     try {
-        const user = await userModel.findOne({
-            $or:
-                [
-                    { email },
-                    { mobilePhone }
-                ]
-        });
+        const user = await userModel.findOne(email ? { email } : { mobilePhone });
         if (user) {
             return {
                 msg: getSuitableTranslations("User Is Exist !!", language),
@@ -227,13 +221,7 @@ async function isExistUserAccount(email, mobilePhone, language) {
                 },
             }
         }
-        const admin = await adminModel.findOne({
-            $or:
-                [
-                    { email },
-                    { mobilePhone }
-                ]
-        });
+        const admin = await adminModel.findOne(email ? { email } : { mobilePhone });
         if (admin) {
             return {
                 msg: getSuitableTranslations("Admin Is Exist !!", language),
