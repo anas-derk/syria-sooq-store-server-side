@@ -13,7 +13,7 @@ function getFiltersObject(filters) {
 }
 
 async function postNewAd(req, res) {
-    try{
+    try {
         const outputImageFilePath = `assets/images/ads/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const adInfo = {
@@ -28,18 +28,18 @@ async function postNewAd(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
 
 async function getAllAds(req, res) {
-    try{
+    try {
         const filters = req.query;
         res.json(await adsOPerationsManagmentFunctions.getAllAds(getFiltersObject(filters), filters.language));
 
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -47,7 +47,7 @@ async function getAllAds(req, res) {
 async function deleteAd(req, res) {
     try {
         const result = await adsOPerationsManagmentFunctions.deleteAd(req.data._id, req.params.adId, req.query.language);
-        if(!result.error) {
+        if (!result.error) {
             if (result.data?.deletedAdImagePath) {
                 unlinkSync(result.data.deletedAdImagePath);
             }
@@ -86,7 +86,7 @@ async function putAdImage(req, res) {
 }
 
 async function putTextAdContent(req, res) {
-    try{
+    try {
         const result = await adsOPerationsManagmentFunctions.updateTextAdContent(req.data._id, req.params.adId, req.body.content, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Ad Is Not Exist !!") {
@@ -95,7 +95,7 @@ async function putTextAdContent(req, res) {
         }
         res.json(result);
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }

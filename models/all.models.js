@@ -701,11 +701,16 @@ const adsSchema = new mongoose.Schema({
     },
     content: {
         type: String,
-        required: true,
+        required: () => this.type === "elite",
     },
     imagePath: {
         type: String,
         required: true,
+    },
+    type: {
+        type: String,
+        default: "panner",
+        enum: ["panner", "elite"],
     },
     dateOfPost: {
         type: Date,

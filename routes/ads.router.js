@@ -4,7 +4,7 @@ const adsController = require("../controllers/ads.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+const { validateJWT, validateIsExistErrorInFiles, validateAdvertismentType } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -21,7 +21,7 @@ adsRouter.post("/add-new-ad",
                 file.mimetype !== "image/jpeg" &&
                 file.mimetype !== "image/png" &&
                 file.mimetype !== "image/webp"
-            ){
+            ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
@@ -30,11 +30,13 @@ adsRouter.post("/add-new-ad",
     }).single("adImage"),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { content } = req.body;
+        const { content, type } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Content", fieldValue: content, dataType: "string", isRequiredValue: true },
+            { fieldName: "Type", fieldValue: type, dataType: "string", isRequiredValue: true },
+            { fieldName: "Content", fieldValue: content, dataType: "string", isRequiredValue: type === "elite" },
         ], res, next);
     },
+    (req, res, next) => validateAdvertismentType((Object.assign({}, req.body)).type, res, next),
     adsController.postNewAd
 );
 
@@ -63,7 +65,7 @@ adsRouter.put("/change-ad-image/:adId",
                 file.mimetype !== "image/jpeg" &&
                 file.mimetype !== "image/png" &&
                 file.mimetype !== "image/webp"
-            ){
+            ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
                 return cb(null, false);
             }
