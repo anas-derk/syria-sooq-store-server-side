@@ -177,5 +177,6 @@
     "Get Main Page Data Process Has Been Successfully !!": "عملية جلب بيانات الصفحة الرئيسية تمت بنجاح !!",
     "Get All Products By Category Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل المنتجات بحسب التصنيف بداخل الصفحة {{pageNumber}} تمت بنجاح !!",
     "Sorry, Please Send At Least One Interest Category !!": "عذراً ، يرجى إرسال على الأقل فئة اهتمام واحدة على الأقل !!",
-    "Sorry, Category Id: {{categoryId}} Is Not Exist !!": "عذراً ، التصنيف ذو المعرّف: {{categoryId}} غير موجود !!"
+    "Sorry, Category Id: {{categoryId}} Is Not Exist !!": "عذراً ، التصنيف ذو المعرّف: {{categoryId}} غير موجود !!",
+    "Adding New Interests Process Has Been Successfully !!": "عملية إضافة اهتمامات جديدة تمت بنجاح !!"
 }
