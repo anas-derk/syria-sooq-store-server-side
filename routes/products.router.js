@@ -226,14 +226,19 @@ productsRouter.get("/all-flash-products-inside-the-page",
     productsController.getAllFlashProductsInsideThePage
 );
 
-productsRouter.get("/all-products-by-category/:categoryId",
+productsRouter.get("/all-products-by-category-inside-the-page/:categoryId",
     validateJWT,
     (req, res, next) => {
+        const { pageNumber, pageSize } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
+            { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
             { fieldName: "Category Id", fieldValue: req.params.categoryId, dataType: "ObjectId", isRequiredValue: true },
         ], res, next);
     },
-    productsController.getAllProductsByCategory
+    (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
+    (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
+    productsController.getAllProductsByCategoryInsideThePage
 );
 
 productsRouter.get("/sample-from-related-products-in-the-product/:productId",

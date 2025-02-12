@@ -175,5 +175,5 @@
     "Deleting All Products Inside Cart For This User Process Has Been Successfuly !!": "عملية حذف كل المنتجات بداخل سلة الشراء لهذا المستخدم !!",
     "Sorry, Can't Find Any Products Inside Cart For This User !!": "عذراً ، لا يوجد أي منتجات بداخل  سلة الشراء لهذا المستخدم تمت بنجاح !!",
     "Get Main Page Data Process Has Been Successfully !!": "عملية جلب بيانات الصفحة الرئيسية تمت بنجاح !!",
-    "Get All Products By Category Process Has Been Successfully !!": "عملية جلب كل المنتجات بحسب التصنيف تمت بنجاح !!"
+    "Get All Products By Category Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل المنتجات بحسب التصنيف بداخل الصفحة {{pageNumber}} تمت بنجاح !!"
 }

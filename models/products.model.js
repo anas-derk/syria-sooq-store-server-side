@@ -256,17 +256,17 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
     }
 }
 
-async function getAllProductsByCategory(authorizationId, categoryId, language) {
+async function getAllProductsByCategoryInsideThePage(authorizationId, pageNumber, pageSize, categoryId, language) {
     try {
         const user = await userModel.findById(authorizationId);
         if (user) {
-            const subcategories = await categoryModel.find({ parent: categoryId }, { name: 1, storeId: 1, parent: 1, color: 1 });
+            const subcategories = await categoryModel.find({ parent: categoryId }, { name: 1, storeId: 1, parent: 1, color: 1 }).limit(pageSize);
             let groupedProducts = {};
             for (let category of subcategories) {
-                groupedProducts[category.name] = await productModel.find({ categories: category._id }).limit(10).populate("categories");
+                groupedProducts[category.name] = await productModel.find({ categories: category._id }).skip((pageNumber - 1) * pageSize).limit(10).populate("categories");
             }
             return {
-                msg: getSuitableTranslations("Get All Products By Category Process Has Been Successfully !!", language),
+                msg: getSuitableTranslations("Get All Products By Category Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
                 error: false,
                 data: groupedProducts,
             }
@@ -681,7 +681,7 @@ module.exports = {
     getFlashProductsCount,
     getAllFlashProductsInsideThePage,
     getAllProductsInsideThePage,
-    getAllProductsByCategory,
+    getAllProductsByCategoryInsideThePage,
     getRelatedProductsInTheProduct,
     getAllGalleryImages,
     deleteProduct,
