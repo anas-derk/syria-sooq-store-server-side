@@ -1,6 +1,6 @@
 // Import User, Account Verification Codes And Product Model Object
 
-const { userModel, accountVerificationCodesModel, adminModel, productsWalletModel, favoriteProductModel, productModel, categoryModel } = require("../models/all.models");
+const { userModel, accountVerificationCodesModel, adminModel, productsWalletModel, favoriteProductModel, productModel, categoryModel, adsModel } = require("../models/all.models");
 
 // require bcryptjs module for password encrypting
 
@@ -187,6 +187,7 @@ async function getMainPageData(authorizationId, language) {
                 data: {
                     categories: await categoryModel.find().limit(10),
                     mostPopularCategories: await categoryModel.find().limit(10),
+                    ads: await adsModel.find({}),
                     products: await productModel
                         .find({})
                         .limit(10)
