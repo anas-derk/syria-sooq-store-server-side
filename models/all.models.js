@@ -284,6 +284,20 @@ const userSchema = new mongoose.Schema({
         }],
         default: [],
     },
+    wallet: {
+        fullDepositAmount: {
+            type: Number,
+            default: 0
+        },
+        fullWithdrawAmount: {
+            type: Number,
+            default: 0
+        },
+        remainingAmount: {
+            type: Number,
+            default: 0
+        },
+    },
     dateOfCreation: {
         type: Date,
         default: Date.now
@@ -755,9 +769,31 @@ const cartSchema = new mongoose.Schema({
     },
 });
 
-// Create Cart Model From Cart Schema
+// Create Card Model From Cart Schema
 
 const cartModel = mongoose.model("cart", cartSchema);
+
+// Create Card Operations Schema
+
+const cardOperationsSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ["deposit", "withdraw"]
+    },
+    amount: {
+        type: Number,
+        required: true,
+    },
+});
+
+// Create Card Operations Model From Card Operations Schema
+
+const cardOperationsModel = mongoose.model("card_operations", cardOperationsSchema);
 
 module.exports = {
     mongoose,
@@ -775,4 +811,5 @@ module.exports = {
     ratingModel,
     adsModel,
     cartModel,
+    cardOperationsModel
 }
