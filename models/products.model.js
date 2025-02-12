@@ -261,7 +261,6 @@ async function getAllProductsByCategory(authorizationId, categoryId, language) {
         const user = await userModel.findById(authorizationId);
         if (user) {
             const subcategories = await categoryModel.find({ parent: categoryId }, { name: 1, storeId: 1, parent: 1, color: 1 });
-            console.log(subcategories)
             let groupedProducts = {};
             subcategories.forEach(async (category) => {
                 const categoryName = category.name;
