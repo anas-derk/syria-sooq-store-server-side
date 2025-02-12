@@ -175,5 +175,7 @@
     "Deleting All Products Inside Cart For This User Process Has Been Successfuly !!": "عملية حذف كل المنتجات بداخل سلة الشراء لهذا المستخدم !!",
     "Sorry, Can't Find Any Products Inside Cart For This User !!": "عذراً ، لا يوجد أي منتجات بداخل  سلة الشراء لهذا المستخدم تمت بنجاح !!",
     "Get Main Page Data Process Has Been Successfully !!": "عملية جلب بيانات الصفحة الرئيسية تمت بنجاح !!",
-    "Get All Products By Category Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل المنتجات بحسب التصنيف بداخل الصفحة {{pageNumber}} تمت بنجاح !!"
+    "Get All Products By Category Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل المنتجات بحسب التصنيف بداخل الصفحة {{pageNumber}} تمت بنجاح !!",
+    "Sorry, Please Send At Least One Interest Category !!": "عذراً ، يرجى إرسال على الأقل فئة اهتمام واحدة على الأقل !!",
+    "Sorry, Category Id: {{categoryId}} Is Not Exist !!": "عذراً ، التصنيف ذو المعرّف: {{categoryId}} غير موجود !!"
 }

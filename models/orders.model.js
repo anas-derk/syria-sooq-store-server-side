@@ -97,7 +97,7 @@ const isExistOfferOnProduct = (startDateAsString, endDateAsString) => {
 
 async function createNewOrder(authorizationId, orderDetails, language) {
     try {
-        const existOrderProducts = await productModel.find({ _id: { $in: orderDetails.products.map((product) => product.productId) }});
+        const existOrderProducts = await productModel.find({ _id: { $in: orderDetails.products.map((product) => product.productId) } });
         if (existOrderProducts.length === 0) {
             return {
                 msg: getSuitableTranslations("Sorry, Please Send At Least One Product !!", language),
@@ -106,9 +106,9 @@ async function createNewOrder(authorizationId, orderDetails, language) {
             }
         }
         if (existOrderProducts.length < orderDetails.products.length) {
-            for(let product of orderDetails.products) {
+            for (let product of orderDetails.products) {
                 let isExistProduct = false;
-                for(let existProduct of existOrderProducts) {
+                for (let existProduct of existOrderProducts) {
                     if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)) {
                         isExistProduct = true;
                         break;
@@ -124,7 +124,7 @@ async function createNewOrder(authorizationId, orderDetails, language) {
             }
         }
         let storeIdsAssociatedWithTheirProducts = [existOrderProducts[0].storeId];
-        for(let product of existOrderProducts) {
+        for (let product of existOrderProducts) {
             if (storeIdsAssociatedWithTheirProducts.includes(product.storeId)) {
                 continue;
             }
@@ -135,7 +135,7 @@ async function createNewOrder(authorizationId, orderDetails, language) {
             }
         }
         const orderedProducts = orderDetails.products.map((product) => existOrderProducts.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
-        for(let i = 0; i < orderedProducts.length; i++) {
+        for (let i = 0; i < orderedProducts.length; i++) {
             if ((new mongoose.Types.ObjectId(orderDetails.products[i].productId)).equals(orderedProducts[i]._id)) {
                 if (orderedProducts[i].quantity === 0) {
                     return {
@@ -154,7 +154,7 @@ async function createNewOrder(authorizationId, orderDetails, language) {
             }
         }
         let orderProductsDetails = [];
-        for(let i = 0; i < orderedProducts.length; i++) {
+        for (let i = 0; i < orderedProducts.length; i++) {
             orderProductsDetails.push({
                 productId: orderedProducts[i]._id,
                 name: orderedProducts[i].name,
@@ -171,7 +171,7 @@ async function createNewOrder(authorizationId, orderDetails, language) {
             totalDiscount: 0,
             totalPriceAfterDiscount: 0
         }
-        for(let product of orderProductsDetails){
+        for (let product of orderProductsDetails) {
             totalPrices.totalPriceBeforeDiscount += product.totalAmount;
             totalPrices.totalDiscount += product.discount * product.quantity;
         }
@@ -240,7 +240,7 @@ async function createNewOrder(authorizationId, orderDetails, language) {
 async function updateOrder(authorizationId, orderId, newOrderDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const order = await orderModel.findById(orderId);
                 if (order) {
@@ -306,7 +306,7 @@ async function updateOrder(authorizationId, orderId, newOrderDetails, language) 
 }
 
 async function changeCheckoutStatusToSuccessfull(orderId, language) {
-    try{
+    try {
         const order = await orderModel.findOneAndUpdate({ _id: orderId }, { checkoutStatus: "Checkout Successfull" });
         if (order) {
             const totalPrices = {
@@ -314,7 +314,7 @@ async function changeCheckoutStatusToSuccessfull(orderId, language) {
                 totalDiscount: 0,
                 totalPriceAfterDiscount: 0
             }
-            for(let product of order.products){
+            for (let product of order.products) {
                 totalPrices.totalPriceBeforeDiscount += product.totalAmount;
                 totalPrices.totalDiscount += product.discount * product.quantity;
                 totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
@@ -341,7 +341,7 @@ async function changeCheckoutStatusToSuccessfull(orderId, language) {
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
@@ -349,7 +349,7 @@ async function changeCheckoutStatusToSuccessfull(orderId, language) {
 async function updateOrderProduct(authorizationId, orderId, productId, newOrderProductDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const order = await orderModel.findOne({ _id: orderId });
                 if (order) {
@@ -405,10 +405,10 @@ async function updateOrderProduct(authorizationId, orderId, productId, newOrderP
     }
 }
 
-async function deleteOrder(authorizationId, orderId, language){
-    try{
+async function deleteOrder(authorizationId, orderId, language) {
+    try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const order = await orderModel.findOne({ _id: orderId });
                 if (order) {
@@ -447,7 +447,7 @@ async function deleteOrder(authorizationId, orderId, language){
             data: {},
         }
     }
-    catch(err){
+    catch (err) {
         throw Error(err);
     }
 }
@@ -455,7 +455,7 @@ async function deleteOrder(authorizationId, orderId, language){
 async function deleteProductFromOrder(authorizationId, orderId, productId, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const order = await orderModel.findOne({ _id: orderId });
                 if (order) {

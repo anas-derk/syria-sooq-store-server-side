@@ -1,6 +1,6 @@
 // Import User, Account Verification Codes And Product Model Object
 
-const { userModel, accountVerificationCodesModel, adminModel, productsWalletModel, favoriteProductModel, productModel, categoryModel, adsModel } = require("../models/all.models");
+const { userModel, accountVerificationCodesModel, adminModel, productsWalletModel, favoriteProductModel, productModel, categoryModel, adsModel, mongoose } = require("../models/all.models");
 
 // require bcryptjs module for password encrypting
 
@@ -30,6 +30,54 @@ async function createNewUser(city, fullName, email, mobilePhone, password, langu
         return {
             msg: getSuitableTranslations("Creating New User Process Has Been Successfuly !!", language),
             error: false,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
+async function addNewInterests(userId, interests, language) {
+    try {
+        const user = await userModel.findById(userId);
+        if (user) {
+            const existsCategories = await categoryModel.find({ _id: { $in: interests } });
+            if (existsCategories.length === 0) {
+                return {
+                    msg: getSuitableTranslations("Sorry, Please Send At Least One Interest Category !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            if (existsCategories.length < interests.length) {
+                for (let category of interests) {
+                    let isExistCategory = false;
+                    for (let existCategory of existsCategories) {
+                        if ((new mongoose.Types.ObjectId(category)).equals(existCategory._id)) {
+                            isExistCategory = true;
+                            break;
+                        }
+                    }
+                    if (!isExistCategory) {
+                        return {
+                            msg: getSuitableTranslations("Sorry, Category Id: {{categoryId}} Is Not Exist !!", language, { categoryId: category }),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                }
+            }
+            await userModel.updateOne({ _id: userId }, { $push: { existsCategories } });
+            return {
+                msg: getSuitableTranslations("Adding New Interests Process Has Been Successfully !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+            error: true,
             data: {},
         }
     }
@@ -379,6 +427,7 @@ async function deleteUser(authorizationId, userId, language) {
 
 module.exports = {
     createNewUser,
+    addNewInterests,
     login,
     getUserInfo,
     isExistUserAccount,

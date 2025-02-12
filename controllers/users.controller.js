@@ -137,6 +137,15 @@ async function createNewUser(req, res) {
     }
 }
 
+async function postAddNewInterests(req, res) {
+    try {
+        res.json(await usersOPerationsManagmentFunctions.addNewInterests(req.data._id, req.body.interests, req.query.language));
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function postAccountVerificationCode(req, res) {
     try {
         const { email, typeOfUse, language } = req.query;
@@ -231,6 +240,7 @@ async function deleteUser(req, res) {
 
 module.exports = {
     createNewUser,
+    postAddNewInterests,
     postAccountVerificationCode,
     login,
     getUserInfo,

@@ -110,6 +110,20 @@ usersRouter.post("/create-new-user",
     usersController.createNewUser
 );
 
+usersRouter.post("/add-new-interests",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Interests", fieldValue: req.body.interests, dataType: "array", isRequiredValue: true }
+        ],
+            res, next);
+    },
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes(req.body.interests.map((category) => ({ fieldName: "Category", fieldValue: category, dataType: "ObjectId", isRequiredValue: true })), res, next);
+    },
+    usersController.postAddNewInterests
+);
+
 usersRouter.post("/send-account-verification-code",
     // usersMiddlewares.sendingVerificationCodeLimiterMiddleware,
     (req, res, next) => {

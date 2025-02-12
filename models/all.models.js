@@ -273,6 +273,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    interests: {
+        type: Array,
+        default: [],
+    },
     dateOfCreation: {
         type: Date,
         default: Date.now
