@@ -277,6 +277,13 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
+    followedStores: {
+        type: [{
+            type: mongoose.Types.ObjectId,
+            ref: "store",
+        }],
+        default: [],
+    },
     dateOfCreation: {
         type: Date,
         default: Date.now

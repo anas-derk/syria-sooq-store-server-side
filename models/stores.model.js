@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { storeModel, adminModel, categoryModel, productModel, brandModel } = require("../models/all.models");
+const { storeModel, adminModel, categoryModel, productModel, userModel } = require("../models/all.models");
 
 // require bcryptjs module for password encrypting
 
@@ -106,7 +106,7 @@ async function approveStore(authorizationId, storeId, password, language) {
                             msg: getSuitableTranslations("Sorry, This Store Is Already Approved !!", language),
                             error: true,
                             data: {},
-                        };
+                        }
                     }
                     if (store.status === "blocking") {
                         return {
@@ -135,13 +135,13 @@ async function approveStore(authorizationId, storeId, password, language) {
                             email: store.email,
                             language: store.language
                         },
-                    };
+                    }
                 }
                 return {
                     msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
                     error: true,
                     data: {},
-                };
+                }
             }
             return {
                 msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
@@ -151,6 +151,55 @@ async function approveStore(authorizationId, storeId, password, language) {
         }
         return {
             msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
+async function followStoreByUser(userId, storeId, language) {
+    try {
+        const user = await userModel.findById(userId);
+        if (user) {
+            const store = await storeModel.findById(storeId);
+            if (store) {
+                if (store.status === "blocking") {
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Store Is Blocked !!", language),
+                        error: true,
+                        data: {
+                            blockingDate: store.blockingDate,
+                            blockingReason: store.blockingReason,
+                        },
+                    }
+                }
+                if (store.status === "approving") {
+                    if (user.followedStores.includes(storeId)) {
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Store Is Already Followed By This User !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    await userModel.updateOne({ _id: userId }, { $push: { followedStores: storeId } });
+                    return {
+                        msg: getSuitableTranslations("Adding New Store To The Followed Stores List By This User Process Has Been Successfully !!", language),
+                        error: false,
+                        data: {},
+                    };
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                error: true,
+                data: {},
+            };
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }
@@ -451,6 +500,7 @@ module.exports = {
     getMainStoreDetails,
     createNewStore,
     approveStore,
+    followStoreByUser,
     updateStoreInfo,
     blockingStore,
     cancelBlockingStore,

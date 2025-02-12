@@ -123,7 +123,22 @@ async function postApproveStore(req, res) {
         res.json(await sendApproveStoreEmail(result.data.email, req.query.password, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
-        console.log(err);
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
+async function postFollowStoreByUser(req, res) {
+    try {
+        const result = await storesOPerationsManagmentFunctions.followStoreByUser(req.data._id, req.params.storeId, req.query.language);
+        if (result.error) {
+            if (result.msg === "Sorry, This User Is Not Exist !!") {
+                return res.status(401).json(result);
+            }
+            return res.json(result);
+        }
+        res.json(result);
+    }
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -249,6 +264,7 @@ module.exports = {
     getMainStoreDetails,
     postNewStore,
     postApproveStore,
+    postFollowStoreByUser,
     putStoreInfo,
     putBlockingStore,
     putStoreImage,
