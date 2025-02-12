@@ -206,6 +206,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 1,
     },
+    isAvailableForDelivery: {
+        type: Boolean,
+        default: false,
+    },
     ratings: {
         type: Object,
         default: {

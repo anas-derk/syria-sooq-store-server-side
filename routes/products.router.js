@@ -33,7 +33,7 @@ productsRouter.post("/add-new-product",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, price, description, categories, discount, quantity } = Object.assign({}, req.body);
+        const { name, price, description, categories, discount, quantity, isAvailableForDelivery } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataType: "string", isRequiredValue: true },
             { fieldName: "Price", fieldValue: Number(price), dataType: "number", isRequiredValue: true },
@@ -41,6 +41,7 @@ productsRouter.post("/add-new-product",
             { fieldName: "Categories", fieldValue: categories, dataType: "array", isRequiredValue: true },
             { fieldName: "Discount", fieldValue: Number(discount), dataType: "number", isRequiredValue: discount < 0 },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataType: "number", isRequiredValue: true },
+            { fieldName: "Is Available For Delivery", fieldValue: isAvailableForDelivery, dataType: "boolean", isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => {
