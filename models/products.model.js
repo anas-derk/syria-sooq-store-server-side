@@ -164,13 +164,14 @@ async function getProductInfo(authorizationId, productId, language) {
     try {
         const user = await userModel.findById(authorizationId);
         if (user) {
-            let productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
+            let productInfo = await productModel.findById(productId);
             if (productInfo) {
+                productInfo._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId, userId: authorizationId }) ? true : false;
                 return {
                     msg: getSuitableTranslations("Get Product Info Process Has Been Successfuly !!", language),
                     error: false,
                     data: {
-                        productDetails: { ...productInfo, isFavoriteProductForUser: await favoriteProductModel.findOne({ productId, userId: authorizationId }) ? true : false },
+                        productDetails: productInfo,
                         currentDate: new Date(),
                     },
                 }
