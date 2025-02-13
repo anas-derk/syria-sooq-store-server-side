@@ -200,7 +200,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 totalDiscount: totalPrices.totalDiscount,
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
                 orderAmount: totalPrices.totalPriceAfterDiscount,
-                checkoutStatus: orderDetails.checkoutStatus,
+                checkoutStatus: orderDetails.paymentGateway === "Wallet" ? "Checkout Successfull" : orderDetails.checkoutStatus,
                 userId: userId,
                 paymentGateway: orderDetails.paymentGateway,
                 city: orderDetails.city,
