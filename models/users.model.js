@@ -152,19 +152,19 @@ async function isExistUserAndVerificationEmail(email, language) {
                     msg: getSuitableTranslations("This User Is Exist !!", language),
                     error: false,
                     data: user,
-                };
+                }
             }
             return {
                 msg: getSuitableTranslations("Sorry, This Email Has Been Verified !!", language),
                 error: true,
                 data: {},
-            };
-        };
+            }
+        }
         return {
             msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
-        };
+        }
     } catch (err) {
         throw Error(err);
     }

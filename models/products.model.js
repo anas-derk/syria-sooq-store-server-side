@@ -1,6 +1,6 @@
 // Import Product Model Object
 
-const { productModel, categoryModel, adminModel, userModel } = require("../models/all.models");
+const { productModel, categoryModel, adminModel, userModel, favoriteProductModel } = require("../models/all.models");
 
 const { mongoose } = require("../server");
 
@@ -160,21 +160,29 @@ async function getProductsByIdsAndStoreId(storeId, productsIds, language) {
     }
 }
 
-async function getProductInfo(productId, language) {
+async function getProductInfo(authorizationId, productId, language) {
     try {
-        const productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
-        if (productInfo) {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            let productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
+            if (productInfo) {
+                return {
+                    msg: getSuitableTranslations("Get Product Info Process Has Been Successfuly !!", language),
+                    error: false,
+                    data: {
+                        productDetails: { ...productInfo, isFavoriteProductForUser: await favoriteProductModel.findOne({ productId, userId: authorizationId }) ? true : false },
+                        currentDate: new Date(),
+                    },
+                }
+            }
             return {
-                msg: getSuitableTranslations("Get Product Info Process Has Been Successfuly !!", language),
-                error: false,
-                data: {
-                    productDetails: productInfo,
-                    currentDate: new Date(),
-                },
+                msg: getSuitableTranslations("Sorry, This Product Is Not Exist !!", language),
+                error: true,
+                data: {},
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Product Is Not Exist !!", language),
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }
