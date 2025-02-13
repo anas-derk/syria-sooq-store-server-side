@@ -45,7 +45,10 @@ async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, 
             return {
                 msg: getSuitableTranslations("Get All Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
                 error: false,
-                data: await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
+                data: {
+                    orders: await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
+                    ordersCount: await orderModel.countDocuments(filters)
+                },
             }
         }
         return {
