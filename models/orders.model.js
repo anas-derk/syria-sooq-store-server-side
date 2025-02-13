@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { orderModel, userModel, adminModel, productsWalletModel, productModel, mongoose } = require("../models/all.models");
+const { orderModel, userModel, adminModel, productModel, mongoose } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -95,8 +95,16 @@ const isExistOfferOnProduct = (startDateAsString, endDateAsString) => {
     return false;
 }
 
-async function createNewOrder(authorizationId, orderDetails, language) {
+async function createNewOrder(userId, orderDetails, language) {
     try {
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return {
+                msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                error: true,
+                data: {},
+            }
+        }
         const existOrderProducts = await productModel.find({ _id: { $in: orderDetails.products.map((product) => product.productId) } });
         if (existOrderProducts.length === 0) {
             return {
@@ -123,9 +131,9 @@ async function createNewOrder(authorizationId, orderDetails, language) {
                 }
             }
         }
-        let storeIdsAssociatedWithTheirProducts = [existOrderProducts[0].storeId];
+        let storeIdsAssociatedWithTheirProducts = [String(existOrderProducts[0].storeId)];
         for (let product of existOrderProducts) {
-            if (storeIdsAssociatedWithTheirProducts.includes(product.storeId)) {
+            if (storeIdsAssociatedWithTheirProducts.includes(String(product.storeId))) {
                 continue;
             }
             return {
@@ -175,7 +183,15 @@ async function createNewOrder(authorizationId, orderDetails, language) {
             totalPrices.totalDiscount += product.discount * product.quantity;
         }
         totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
-        const totalAmountBeforeApplyCoupon = totalPrices.totalPriceAfterDiscount;
+        if (user.wallet.remainingAmount < totalPrices.totalPriceAfterDiscount) {
+            return {
+                msg: getSuitableTranslations("Sorry, There Is Not Enough Balance In This User's Wallet To Complete The Purchase", language),
+                error: true,
+                data: {},
+            }
+        }
+        user.wallet.remainingAmount -= totalPrices.totalPriceAfterDiscount;
+        await user.save();
         const newOrder = await (
             new orderModel({
                 storeId: existOrderProducts[0].storeId,
@@ -183,9 +199,9 @@ async function createNewOrder(authorizationId, orderDetails, language) {
                 totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
                 totalDiscount: totalPrices.totalDiscount,
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
-                orderAmount: totalAmountBeforeApplyCoupon,
+                orderAmount: totalPrices.totalPriceAfterDiscount,
                 checkoutStatus: orderDetails.checkoutStatus,
-                userId: authorizationId,
+                userId: userId,
                 paymentGateway: orderDetails.paymentGateway,
                 city: orderDetails.city,
                 address: orderDetails.address,
@@ -209,6 +225,7 @@ async function createNewOrder(authorizationId, orderDetails, language) {
                 orderAmount: newOrder.orderAmount,
                 products: newOrder.products,
                 addedDate: newOrder.addedDate,
+                orderId: newOrder._id,
                 orderNumber: newOrder.orderNumber,
                 shippingCost: newOrder.shippingCost,
                 storeId: newOrder.storeId,

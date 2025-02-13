@@ -76,7 +76,7 @@ ordersRouter.get("/order-details/:orderId",
 ordersRouter.post("/create-new-order",
     validateJWT,
     (req, res, next) => {
-        const { city, address, addressDetails, closestPoint, additionalAddressDetails, floorNumber, additionalNotes, mobilePhones, backupMobilePhone, paymentGateway, checkoutStatus, products } = req.body;
+        const { city, address, addressDetails, closestPoint, additionalAddressDetails, floorNumber, additionalNotes, mobilePhone, backupMobilePhone, paymentGateway, checkoutStatus, products } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "City", fieldValue: city, dataType: "string", isRequiredValue: true },
             { fieldName: "Address", fieldValue: address, dataType: "string", isRequiredValue: true },
@@ -85,10 +85,10 @@ ordersRouter.post("/create-new-order",
             { fieldName: "Additional Address Details", fieldValue: additionalAddressDetails, dataType: "string", isRequiredValue: false },
             { fieldName: "Floor Number", fieldValue: floorNumber, dataType: "number", isRequiredValue: true },
             { fieldName: "Additional Notes", fieldValue: additionalNotes, dataType: "string", isRequiredValue: false },
-            { fieldName: "Mobile Phones", fieldValue: mobilePhones, dataType: "string", isRequiredValue: true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: true },
             { fieldName: "Backup Mobile Phones", fieldValue: backupMobilePhone, dataType: "string", isRequiredValue: true },
             { fieldName: "Payment Gateway", fieldValue: paymentGateway, dataType: "string", isRequiredValue: true },
-            { fieldName: "Checkout Status", fieldValue: checkoutStatus, dataType: "string", isRequiredValue: true },
+            { fieldName: "Checkout Status", fieldValue: checkoutStatus, dataType: "string", isRequiredValue: false },
             { fieldName: "Order Products", fieldValue: products, dataType: "array", isRequiredValue: true },
         ], res, next);
     },
