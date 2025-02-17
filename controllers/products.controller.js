@@ -87,7 +87,6 @@ async function getProductInfo(req, res) {
         res.json(await productsManagmentFunctions.getProductInfo(req.data._id, req.params.productId, req.query.language));
     }
     catch (err) {
-        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -143,7 +142,7 @@ async function getAllFlashProductsInsideThePage(req, res) {
 async function getAllProductsByCategoryInsideThePage(req, res) {
     try {
         const { pageNumber, pageSize } = req.query;
-        res.json(await productsManagmentFunctions.getAllProductssByCategoryInsideThePage(req.data._id, pageNumber, pageSize, req.params.categoryId, req.query.language));
+        res.json(await productsManagmentFunctions.getAllProductsByCategoryInsideThePage(req.data._id, pageNumber, pageSize, req.params.categoryId, req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
