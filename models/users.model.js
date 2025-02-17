@@ -88,13 +88,7 @@ async function addNewInterests(userId, interests, language) {
 
 async function login(email, mobilePhone, password, language) {
     try {
-        const user = await userModel.findOne({
-            $or:
-                [
-                    { email },
-                    { mobilePhone }
-                ]
-        });
+        const user = await userModel.findOne(email ? { email } : { mobilePhone });
         if (user) {
             if (await compare(password, user.password)) {
                 return {
