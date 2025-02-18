@@ -2,7 +2,7 @@ const storesRouter = require("express").Router();
 
 const storesController = require("../controllers/stores.controller");
 
-const { validateJWT, validatePassword, validateEmail, validateLanguage, validateName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+const { validateJWT, validatePassword, validateEmail, validateName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -11,6 +11,7 @@ const multer = require("multer");
 storesRouter.get("/stores-count", storesController.getStoresCount);
 
 storesRouter.get("/all-stores-inside-the-page",
+    validateJWT,
     (req, res, next) => {
         const { pageNumber, pageSize, _id } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -23,6 +24,7 @@ storesRouter.get("/all-stores-inside-the-page",
 );
 
 storesRouter.get("/store-details/:storeId",
+    validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
@@ -31,7 +33,7 @@ storesRouter.get("/store-details/:storeId",
     storesController.getStoreDetails
 );
 
-storesRouter.get("/main-store-details", storesController.getMainStoreDetails);
+storesRouter.get("/main-store-details", validateJWT, storesController.getMainStoreDetails);
 
 storesRouter.post("/create-new-store",
     validateJWT,

@@ -39,7 +39,7 @@ async function getStoresCount(req, res) {
 async function getAllStoresInsideThePage(req, res) {
     try {
         const filters = req.query;
-        res.json(await storesOPerationsManagmentFunctions.getAllStoresInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters), filters.language));
+        res.json(await storesOPerationsManagmentFunctions.getAllStoresInsideThePage(req.data._id, filters.pageNumber, filters.pageSize, getFiltersObject(filters), filters.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -48,7 +48,7 @@ async function getAllStoresInsideThePage(req, res) {
 
 async function getStoreDetails(req, res) {
     try {
-        res.json(await storesOPerationsManagmentFunctions.getStoreDetails(req.params.storeId, req.query.language));
+        res.json(await storesOPerationsManagmentFunctions.getStoreDetails(req.data._id, req.params.storeId, req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -57,7 +57,7 @@ async function getStoreDetails(req, res) {
 
 async function getMainStoreDetails(req, res) {
     try {
-        res.json(await storesOPerationsManagmentFunctions.getMainStoreDetails(req.query.language));
+        res.json(await storesOPerationsManagmentFunctions.getMainStoreDetails(req.data._id, req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));

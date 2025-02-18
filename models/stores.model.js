@@ -20,30 +20,48 @@ async function getStoresCount(filters, language) {
     }
 }
 
-async function getAllStoresInsideThePage(pageNumber, pageSize, filters, language) {
+async function getAllStoresInsideThePage(authorizationId, pageNumber, pageSize, filters, language) {
     try {
-        return {
-            msg: getSuitableTranslations("Get All Stores Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
-            error: false,
-            data: await storeModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ creatingOrderDate: -1 }),
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (admin.isWebsiteOwner) {
+                return {
+                    msg: getSuitableTranslations("Get All Stores Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+                    error: false,
+                    data: await storeModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ creatingOrderDate: -1 }),
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
+                error: true,
+                data: {},
+            }
         }
     } catch (err) {
         throw Error(err);
     }
 }
 
-async function getStoreDetails(storeId, language) {
+async function getStoreDetails(authorizationId, storeId, language) {
     try {
-        const store = await storeModel.findById(storeId);
-        if (store) {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            const store = await storeModel.findById(storeId);
+            if (store) {
+                return {
+                    msg: getSuitableTranslations("Get Details For This Store Process Has Been Successfully !!", language),
+                    error: false,
+                    data: store,
+                }
+            }
             return {
-                msg: getSuitableTranslations("Get Details For This Store Process Has Been Successfully !!", language),
-                error: false,
-                data: store,
+                msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                error: true,
+                data: {},
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+            msg: getSuitableTranslations("Sorry, This User Is Not Found !!", language),
             error: true,
             data: {},
         }
@@ -54,16 +72,24 @@ async function getStoreDetails(storeId, language) {
 
 async function getMainStoreDetails(language) {
     try {
-        const store = await storeModel.findOne({ isMainStore: true });
-        if (store) {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            const store = await storeModel.findOne({ isMainStore: true });
+            if (store) {
+                return {
+                    msg: getSuitableTranslations("Get Main Store Details Process Has Been Successfully !!", language),
+                    error: false,
+                    data: store,
+                }
+            }
             return {
-                msg: getSuitableTranslations("Get Main Store Details Process Has Been Successfully !!", language),
-                error: false,
-                data: store,
+                msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                error: true,
+                data: {},
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+            msg: getSuitableTranslations("Sorry, This User Is Not Found !!", language),
             error: true,
             data: {},
         }
