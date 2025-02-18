@@ -70,7 +70,7 @@ async function getStoreDetails(authorizationId, storeId, language) {
     }
 }
 
-async function getMainStoreDetails(language) {
+async function getMainStoreDetails(authorizationId, language) {
     try {
         const user = await userModel.findById(authorizationId);
         if (user) {
