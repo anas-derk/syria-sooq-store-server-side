@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { orderModel, userModel, adminModel, productModel, mongoose } = require("../models/all.models");
+const { orderModel, userModel, adminModel, productModel, cardOperationsModel, mongoose } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -218,6 +218,11 @@ async function createNewOrder(userId, orderDetails, language) {
                 products: orderProductsDetails,
             })
         ).save();
+        await (new cardOperationsModel({
+            type: "withdraw",
+            userId,
+            amount: totalPrices.totalPriceAfterDiscount
+        })).save();
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
             error: false,
