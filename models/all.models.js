@@ -710,9 +710,9 @@ const cartSchema = new mongoose.Schema({
 
 const cartModel = mongoose.model("cart", cartSchema);
 
-// Create Card Operations Schema
+// Create Wallet Operations Schema
 
-const cardOperationsSchema = new mongoose.Schema({
+const walletOperationsSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true,
@@ -728,9 +728,9 @@ const cardOperationsSchema = new mongoose.Schema({
     },
 });
 
-// Create Card Operations Model From Card Operations Schema
+// Create Wallet Operations Model From Wallet Operations Schema
 
-const cardOperationsModel = mongoose.model("card_operations", cardOperationsSchema);
+const walletOperationsModel = mongoose.model("wallet_operations", walletOperationsSchema);
 
 module.exports = {
     mongoose,
@@ -748,5 +748,5 @@ module.exports = {
     ratingModel,
     adsModel,
     cartModel,
-    cardOperationsModel
+    walletOperationsModel
 }

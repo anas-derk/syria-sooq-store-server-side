@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { orderModel, userModel, adminModel, productModel, cardOperationsModel, mongoose } = require("../models/all.models");
+const { orderModel, userModel, adminModel, productModel, walletOperationsModel, mongoose } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -218,7 +218,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 products: orderProductsDetails,
             })
         ).save();
-        await (new cardOperationsModel({
+        await (new walletOperationsModel({
             type: "withdraw",
             userId,
             amount: totalPrices.totalPriceAfterDiscount
