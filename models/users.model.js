@@ -227,9 +227,9 @@ async function getMainPageData(authorizationId, language) {
                 msg: getSuitableTranslations("Get Main Page Data Process Has Been Successfully !!", language),
                 error: true,
                 data: {
-                    categories: await categoryModel.find().limit(10),
+                    categories: await categoryModel.find({ parent: null }).limit(10),
                     ads: await adsModel.find({}),
-                    mostPopularCategories: await categoryModel.find().limit(10),
+                    mostPopularCategories: await categoryModel.find({ parent: null }).limit(10),
                     products: await productModel
                         .find({})
                         .limit(10)
