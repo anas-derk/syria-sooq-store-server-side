@@ -12,9 +12,9 @@ ratingsRouter.post("/select-rating",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Id", fieldValue: req.body.id, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Type", fieldValue: req.body.type, dataType: "string", isRequiredValue: true },
-            { fieldName: "Rating", fieldValue: req.body.rating, dataType: "number", isRequiredValue: true },
+            { fieldName: "Id", fieldValue: req.body.id, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Type", fieldValue: req.body.type, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Rating", fieldValue: req.body.rating, dataTypes: ["number"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateRatingType(req.body.type, res, next),
@@ -26,8 +26,8 @@ ratingsRouter.get("/rating-by-user-id/:id",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Id", fieldValue: req.params.id, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Type", fieldValue: req.query.type, dataType: "string", isRequiredValue: true },
+            { fieldName: "Id", fieldValue: req.params.id, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Type", fieldValue: req.query.type, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateRatingType(req.query.type, res, next),

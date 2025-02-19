@@ -32,8 +32,8 @@ adsRouter.post("/add-new-ad",
     (req, res, next) => {
         const { content, type } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Type", fieldValue: type, dataType: "string", isRequiredValue: true },
-            { fieldName: "Content", fieldValue: content, dataType: "string", isRequiredValue: type === "elite" },
+            { fieldName: "Type", fieldValue: type, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Content", fieldValue: content, dataTypes: ["string"], isRequiredValue: type === "elite" },
         ], res, next);
     },
     (req, res, next) => validateAdvertismentType((Object.assign({}, req.body)).type, res, next),
@@ -46,7 +46,7 @@ adsRouter.delete("/:adId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Ad Id", fieldValue: req.params.adId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Ad Id", fieldValue: req.params.adId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     adsController.deleteAd
@@ -75,7 +75,7 @@ adsRouter.put("/change-ad-image/:adId",
     validateIsExistErrorInFiles,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Ad Id", fieldValue: req.params.adId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Ad Id", fieldValue: req.params.adId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     adsController.putAdImage
@@ -85,8 +85,8 @@ adsRouter.put("/update-ad-content/:adId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Ad Id", fieldValue: req.params.adId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "New Ad Content", fieldValue: req.body.content, dataType: "string", isRequiredValue: true },
+            { fieldName: "Ad Id", fieldValue: req.params.adId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "New Ad Content", fieldValue: req.body.content, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     adsController.putTextAdContent

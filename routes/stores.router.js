@@ -15,9 +15,9 @@ storesRouter.get("/all-stores-inside-the-page",
     (req, res, next) => {
         const { pageNumber, pageSize, _id } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
-            { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
-            { fieldName: "Store Id", fieldValue: _id, dataType: "ObjectId", isRequiredValue: false },
+            { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: _id, dataTypes: ["ObjectId"], isRequiredValue: false },
         ], res, next);
     },
     storesController.getAllStoresInsideThePage
@@ -27,7 +27,7 @@ storesRouter.get("/store-details/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     storesController.getStoreDetails
@@ -80,13 +80,13 @@ storesRouter.post("/create-new-store",
     (req, res, next) => {
         const { name, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Name", fieldValue: name, dataType: "string", isRequiredValue: true },
-            { fieldName: "Headquarter Address", fieldValue: headquarterAddress, dataType: "string", isRequiredValue: true },
-            { fieldName: "Tax Number", fieldValue: taxNumber, dataType: "string", isRequiredValue: true },
-            { fieldName: "Owner Full Name", fieldValue: ownerFullName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Phone Number", fieldValue: phoneNumber, dataType: "string", isRequiredValue: true },
-            { fieldName: "Owner Email", fieldValue: email, dataType: "string", isRequiredValue: true },
-            { fieldName: "Bank Account Information", fieldValue: bankAccountInformation, dataType: "string", isRequiredValue: true },
+            { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Headquarter Address", fieldValue: headquarterAddress, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Tax Number", fieldValue: taxNumber, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Owner Full Name", fieldValue: ownerFullName, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Phone Number", fieldValue: phoneNumber, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Owner Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Bank Account Information", fieldValue: bankAccountInformation, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateName(req.body.ownerFullName, res, next),
@@ -98,8 +98,8 @@ storesRouter.post("/approve-store/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Password", fieldValue: req.query.password, dataType: "string", isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Password", fieldValue: req.query.password, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validatePassword(req.query.password, res, next),
@@ -110,7 +110,7 @@ storesRouter.post("/follow-store-by-user/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     storesController.postFollowStoreByUser
@@ -120,7 +120,7 @@ storesRouter.put("/update-store-info/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: false },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: false },
         ], res, next);
     },
     storesController.putStoreInfo
@@ -130,8 +130,8 @@ storesRouter.put("/blocking-store/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Blocking Reason", fieldValue: req.query.blockingReason, dataType: "string", isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Blocking Reason", fieldValue: req.query.blockingReason, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     storesController.putBlockingStore
@@ -141,7 +141,7 @@ storesRouter.put("/cancel-blocking/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     storesController.putCancelBlockingStore
@@ -151,7 +151,7 @@ storesRouter.put("/change-store-image/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     multer({
@@ -180,7 +180,7 @@ storesRouter.delete("/delete-store/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: false },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: false },
         ], res, next);
     },
     storesController.deleteStore
@@ -190,7 +190,7 @@ storesRouter.delete("/reject-store/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     storesController.deleteRejectStore

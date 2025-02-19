@@ -11,8 +11,8 @@ cartRouter.post("/add-new-product",
     (req, res, next) => {
         const { productId, quantity } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Product Id", fieldValue: productId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "Quantity", fieldValue: Number(quantity), dataType: "number", isRequiredValue: true },
+            { fieldName: "Product Id", fieldValue: productId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Quantity", fieldValue: Number(quantity), dataTypes: ["number"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([Object.assign({}, req.body).quantity], res, next, ["Sorry, Please Send Valid Quantity( Number Must Be Greater Than Zero ) !!"]),
@@ -28,7 +28,7 @@ cartRouter.delete("/:cartId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Cart Id", fieldValue: req.params.cartId, dataType: "ObjectId", isRequiredValue: true },
+            { fieldName: "Cart Id", fieldValue: req.params.cartId, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     cartController.deleteProduct
@@ -38,8 +38,8 @@ cartRouter.put("/:cartId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Cart Id", fieldValue: req.params.cartId, dataType: "ObjectId", isRequiredValue: true },
-            { fieldName: "New Quantity", fieldValue: req.body.quantity, dataType: "number", isRequiredValue: true },
+            { fieldName: "Cart Id", fieldValue: req.params.cartId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "New Quantity", fieldValue: req.body.quantity, dataTypes: ["number"], isRequiredValue: true },
         ], res, next);
     },
     cartController.putProduct

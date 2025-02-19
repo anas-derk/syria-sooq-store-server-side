@@ -10,9 +10,9 @@ usersRouter.get("/login",
     (req, res, next) => {
         const { email, mobilePhone, password } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
-            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
-            { fieldName: "Password", fieldValue: password, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: email ? false : true },
+            { fieldName: "Password", fieldValue: password, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
@@ -45,8 +45,8 @@ usersRouter.get("/all-users-inside-the-page",
     (req, res, next) => {
         const { pageNumber, pageSize } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "page Number", fieldValue: Number(pageNumber), dataType: "number", isRequiredValue: true },
-            { fieldName: "page Size", fieldValue: Number(pageSize), dataType: "number", isRequiredValue: true },
+            { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
         ], res, next);
     },
     usersController.getAllUsersInsideThePage
@@ -56,8 +56,8 @@ usersRouter.get("/forget-password",
     (req, res, next) => {
         const { email, mobilePhone } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
-            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: email ? false : true },
         ], res, next);
     },
     (req, res, next) => {
@@ -83,11 +83,11 @@ usersRouter.post("/create-new-user",
     (req, res, next) => {
         const { city, fullName, email, mobilePhone, password } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "City", fieldValue: city, dataType: "string", isRequiredValue: true },
-            { fieldName: "Full Name", fieldValue: fullName, dataType: "string", isRequiredValue: true },
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
-            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
-            { fieldName: "Password", fieldValue: password, dataType: "string", isRequiredValue: true },
+            { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: email ? false : true },
+            { fieldName: "Password", fieldValue: password, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateCity(req.body.city, res, next),
@@ -114,12 +114,12 @@ usersRouter.post("/add-new-interests",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Interests", fieldValue: req.body.interests, dataType: "array", isRequiredValue: true }
+            { fieldName: "Interests", fieldValue: req.body.interests, dataTypes: ["array"], isRequiredValue: true }
         ],
             res, next);
     },
     (req, res, next) => {
-        validateIsExistValueForFieldsAndDataTypes(req.body.interests.map((category) => ({ fieldName: "Category", fieldValue: category, dataType: "ObjectId", isRequiredValue: true })), res, next);
+        validateIsExistValueForFieldsAndDataTypes(req.body.interests.map((category) => ({ fieldName: "Category", fieldValue: category, dataTypes: ["ObjectId"], isRequiredValue: true })), res, next);
     },
     usersController.postAddNewInterests
 );
@@ -129,8 +129,8 @@ usersRouter.post("/send-account-verification-code",
     (req, res, next) => {
         const { email, typeOfUse } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: true },
-            { fieldName: "Type Of Use", fieldValue: typeOfUse, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Type Of Use", fieldValue: typeOfUse, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
@@ -149,11 +149,11 @@ usersRouter.put("/update-user-info",
     (req, res, next) => {
         const { fullName, address, email, mobilePhone, city } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Full Name", fieldValue: fullName, dataType: "string", isRequiredValue: false },
-            { fieldName: "Address", fieldValue: address, dataType: "string", isRequiredValue: false },
-            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: false },
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: false },
-            { fieldName: "City", fieldValue: city, dataType: "string", isRequiredValue: false },
+            { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Address", fieldValue: address, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => {
@@ -191,8 +191,8 @@ usersRouter.put("/update-verification-status",
     (req, res, next) => {
         const { email, code } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: true },
-            { fieldName: "Code", fieldValue: code, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Code", fieldValue: code, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateEmail(req.query.email, res, next),
@@ -203,10 +203,10 @@ usersRouter.put("/reset-password",
     (req, res, next) => {
         const { email, mobilePhone, code, newPassword } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Email", fieldValue: email, dataType: "string", isRequiredValue: mobilePhone ? false : true },
-            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataType: "string", isRequiredValue: email ? false : true },
-            { fieldName: "Code", fieldValue: code, dataType: "string", isRequiredValue: true },
-            { fieldName: "New Password", fieldValue: newPassword, dataType: "string", isRequiredValue: true },
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: mobilePhone ? false : true },
+            { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: email ? false : true },
+            { fieldName: "Code", fieldValue: code, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "New Password", fieldValue: newPassword, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
@@ -231,7 +231,7 @@ usersRouter.delete("/:userId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "User Id", fieldValue: req.params.userId, dataType: "ObjectId", isRequiredValue: false },
+            { fieldName: "User Id", fieldValue: req.params.userId, dataTypes: ["ObjectId"], isRequiredValue: false },
         ], res, next);
     },
     usersController.deleteUser
