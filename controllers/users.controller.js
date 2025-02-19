@@ -100,6 +100,7 @@ async function getForgetPassword(req, res) {
                 return res.json(result);
             }
             result = await sendVerificationCodeToUserEmail(email);
+            console.log(result)
             if (!result.error) {
                 return res.json(await addNewAccountVerificationCode(email, mobilePhone, result.data, "to reset password", language));
             }
