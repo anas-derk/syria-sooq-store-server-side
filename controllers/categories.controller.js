@@ -8,6 +8,7 @@ function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
         if (objectKey === "storeId") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "name") filtersObject[objectKey] = { $regex: new RegExp(filters[objectKey], 'i') };
         if (objectKey === "categoryId") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "parent") {
             if (filters[objectKey] === "null") {
