@@ -63,14 +63,7 @@ categoriesRouter.get("/all-categories",
 
 categoriesRouter.get("/all-categories-with-hierarechy", categoriesController.getAllCategoriesWithHierarechy);
 
-categoriesRouter.get("/categories-count",
-    (req, res, next) => {
-        validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.query.storeId, dataTypes: ["ObjectId"], isRequiredValue: false },
-        ], res, next);
-    },
-    categoriesController.getCategoriesCount
-);
+categoriesRouter.get("/categories-count", validateJWT, categoriesController.getCategoriesCount);
 
 categoriesRouter.get("/all-categories-inside-the-page",
     validateJWT,

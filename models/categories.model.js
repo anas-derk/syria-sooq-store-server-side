@@ -133,8 +133,17 @@ async function getCategoryInfo(categoryId, language) {
     }
 }
 
-async function getCategoriesCount(filters, language) {
+async function getCategoriesCount(authorizationId, filters, language) {
     try {
+        const admin = await adminModel.findById(authorizationId);
+        if (!admin) {
+            return {
+                msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        filters.storeId = admin.storeId;
         return {
             msg: getSuitableTranslations("Get Categories Count Process Has Been Successfully !!", language),
             error: false,
