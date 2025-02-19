@@ -251,6 +251,7 @@ productsRouter.get("/all-products-by-category-inside-the-page/:categoryId",
 );
 
 productsRouter.get("/sample-from-related-products-in-the-product/:productId",
+    validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },

@@ -347,21 +347,29 @@ async function getAllFlashProductsInsideThePage(authorizationId, pageNumber, pag
     }
 }
 
-async function getRelatedProductsInTheProduct(productId, language) {
+async function getRelatedProductsInTheProduct(authorizationId, productId, language) {
     try {
-        const productInfo = await productModel.findById(productId).populate("categories");
-        if (productInfo) {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            const productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
+            if (productInfo) {
+                return {
+                    msg: getSuitableTranslations("Get Sample From Related Products In This Product Process Has Been Successfuly !!", language),
+                    error: false,
+                    data: await productModel.aggregate([
+                        { $match: { categories: productInfo.categories, _id: { $ne: new mongoose.Types.ObjectId(productId) } } },
+                        { $sample: { size: 10 } }
+                    ]),
+                }
+            }
             return {
-                msg: getSuitableTranslations("Get Sample From Related Products In This Product Process Has Been Successfuly !!", language),
-                error: false,
-                data: await productModel.aggregate([
-                    { $match: { categories: productInfo.categories, _id: { $ne: new mongoose.Types.ObjectId(productId) } } },
-                    { $sample: { size: 10 } }
-                ]),
+                msg: getSuitableTranslations("Sorry, This Product Is Not Exist !!", language),
+                error: true,
+                data: {},
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Product Is Not Exist !!", language),
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }
