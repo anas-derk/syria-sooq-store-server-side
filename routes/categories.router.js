@@ -106,7 +106,7 @@ categoriesRouter.put("/:categoryId",
             { fieldName: "Category Id", fieldValue: req.params.categoryId, dataTypes: ["ObjectId"], isRequiredValue: true },
             { fieldName: "New Category Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "New Category Color", fieldValue: color, dataTypes: ["string"], isRequiredValue: true },
-            { fieldName: "Category Parent Id", fieldValue: parent, dataTypes: ["ObjectId"], isRequiredValue: false },
+            { fieldName: "Category Parent Id", fieldValue: parent, dataTypes: ["ObjectId", "null"], isRequiredValue: false },
         ], res, next);
     },
     categoriesController.putCategory
