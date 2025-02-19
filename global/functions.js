@@ -393,13 +393,13 @@ function checkIsExistValueForFieldsAndDataTypes(fieldNamesAndValuesAndDataTypes)
                     isExistTruthDataType = true;
                     break;
                 }
-                if (dataType !== typeof fieldnameAndValueAndDataType.fieldValue && dataType !== "ObjectId" && dataType !== "array") {
-                    isExistTruthDataType = false;
+                if (dataType === typeof fieldnameAndValueAndDataType.fieldValue) {
+                    isExistTruthDataType = true;
                 }
             }
             if (!isExistTruthDataType) {
                 return getResponseObject(
-                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${getDataTypesAsText(dataTypes)} ) !!`,
+                    `Invalid Request, Please Fix Type Of ${fieldnameAndValueAndDataType.fieldName} ( Required: ${getDataTypesAsText(fieldnameAndValueAndDataType.dataTypes)} ) !!`,
                     true,
                     {}
                 );
