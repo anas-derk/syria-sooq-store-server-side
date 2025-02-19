@@ -133,7 +133,15 @@ productsRouter.get("/product-info/:productId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "User Type", fieldValue: req.query.userType, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
+    },
+    (req, res, next) => {
+        const { userType } = req.query;
+        if (userType) {
+            return validateUserType(userType, res, next);
+        }
+        next();
     },
     productsController.getProductInfo
 );

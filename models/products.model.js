@@ -160,11 +160,11 @@ async function getProductsByIdsAndStoreId(storeId, productsIds, language) {
     }
 }
 
-async function getProductInfo(authorizationId, productId, language) {
+async function getProductInfo(authorizationId, productId, userType = "user", language) {
     try {
-        const user = await userModel.findById(authorizationId);
+        const user = userType === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
-            let productInfo = await productModel.findById(productId);
+            let productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
             if (productInfo) {
                 productInfo._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId, userId: authorizationId }) ? true : false;
                 return {
@@ -183,7 +183,7 @@ async function getProductInfo(authorizationId, productId, language) {
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+            msg: getSuitableTranslations(`Sorry, This ${userType.replace(userType[0], userType[0].toUpperCase())} Is Not Exist !!`, language),
             error: true,
             data: {},
         }
