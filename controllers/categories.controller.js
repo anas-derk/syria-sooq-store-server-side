@@ -106,7 +106,7 @@ async function deleteCategory(req, res) {
 
 async function putCategory(req, res) {
     try {
-        const result = await categoriesManagmentFunctions.updateCategory(req.data._id, req.params.categoryId, { name, parent } = req.body, req.query.language);
+        const result = await categoriesManagmentFunctions.updateCategory(req.data._id, req.params.categoryId, { name, color, parent } = req.body, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Category Is Not Exist !!" || result.msg !== "Sorry, This Parent Cateogry Is Not Exist !!") {
                 return res.status(401).json(result);
