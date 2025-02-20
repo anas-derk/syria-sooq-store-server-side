@@ -11,7 +11,11 @@ async function getAllWalletOperationsInsideThePage(authorizationId, pageNumber, 
             return {
                 msg: getSuitableTranslations("Get All Card Operations For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
                 error: false,
-                data: await walletOperationsModel.find({ userId: authorizationId }).skip((pageNumber - 1) * pageSize).limit(pageSize),
+                data: {
+                    walletOperations: await walletOperationsModel.find({ userId: authorizationId }).skip((pageNumber - 1) * pageSize).limit(pageSize),
+                    walletOperationsCount: await walletOperationsModel.countDocuments({ userId: authorizationId }),
+                    walletInfo: user.wallet
+                },
             }
         }
         return {
