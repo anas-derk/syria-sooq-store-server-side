@@ -201,7 +201,8 @@ async function createNewOrder(userId, orderDetails, language) {
                 data: {},
             }
         }
-        user.wallet.remainingAmount -= totalPrices.totalPriceAfterDiscount;
+        user.wallet.fullWithdrawAmount += totalPrices.totalPriceAfterDiscount;
+        user.wallet.remainingAmount = user.wallet.fullDepositAmount - totalPrices.totalPriceAfterDiscount;
         await user.save();
         const newOrder = await (
             new orderModel({
@@ -422,6 +423,58 @@ async function updateOrderProduct(authorizationId, orderId, productId, newOrderP
     }
 }
 
+async function cancelOrder(userId, orderId, language) {
+    try {
+        const user = await userModel.findById(userId);
+        if (user) {
+            const order = await orderModel.findById(orderId);
+            if (order) {
+                if (order.status === "cancelled") {
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Request Cannot Be Canceled Because It Has Already Been Canceled !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                if (order.status !== "pending") {
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Request Cannot Be Canceled Because It Is Not In Pending Status !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                await orderModel.updateOne({ _id: orderId }, { status: "cancelled" });
+                user.wallet.fullDepositAmount += order.totalPriceAfterDiscount;
+                user.wallet.remainingAmount = user.wallet.fullDepositAmount - order.totalPriceAfterDiscount;
+                await user.save();
+                await (new walletOperationsModel({
+                    type: "deposit",
+                    userId,
+                    amount: order.totalPriceAfterDiscount,
+                    operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
+                })).save();
+                return {
+                    msg: getSuitableTranslations("Canceling Order Process For This User Has Been Successfully !!", language),
+                    error: false,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Order Is Not Found !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function deleteOrder(authorizationId, orderId, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -533,6 +586,7 @@ module.exports = {
     updateOrder,
     changeCheckoutStatusToSuccessfull,
     updateOrderProduct,
+    cancelOrder,
     deleteOrder,
     deleteProductFromOrder,
 }

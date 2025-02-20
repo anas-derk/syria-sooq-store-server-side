@@ -175,6 +175,16 @@ ordersRouter.put("/products/update-product/:orderId/:productId",
     ordersController.putOrderProduct
 );
 
+ordersRouter.put("/cancel-order/:orderId",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
+        ], res, next);
+    },
+    ordersController.putCancelOrder
+);
+
 ordersRouter.delete("/delete-order/:orderId",
     validateJWT,
     (req, res, next) => {

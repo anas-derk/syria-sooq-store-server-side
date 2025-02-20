@@ -137,6 +137,21 @@ async function putOrderProduct(req, res) {
     }
 }
 
+async function putCancelOrder(req, res) {
+    try {
+        const result = await ordersManagmentFunctions.cancelOrder(req.data._id, req.params.orderId, req.query.language);
+        if (result.error) {
+            if (result.msg === "Sorry, This User Is Not Exist !!") {
+                return res.status(401).json(result);
+            }
+        }
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function deleteOrder(req, res) {
     try {
         const result = await ordersManagmentFunctions.deleteOrder(req.data._id, req.params.orderId, req.query.language);
@@ -177,6 +192,7 @@ module.exports = {
     postCheckoutComplete,
     putOrder,
     putOrderProduct,
+    putCancelOrder,
     deleteOrder,
     deleteProductFromOrder,
 }

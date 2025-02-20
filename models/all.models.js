@@ -433,7 +433,8 @@ const orderSchema = new mongoose.Schema({
         enum: [
             "pending",
             "shipping",
-            "completed"
+            "completed",
+            "cancelled"
         ]
     },
     products: [{
