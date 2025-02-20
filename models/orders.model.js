@@ -212,7 +212,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
                 orderAmount: totalPrices.totalPriceAfterDiscount,
                 checkoutStatus: orderDetails.paymentGateway === "Wallet" ? "Checkout Successfull" : orderDetails.checkoutStatus,
-                userId: userId,
+                userId,
                 paymentGateway: orderDetails.paymentGateway,
                 city: orderDetails.city,
                 address: orderDetails.address,
@@ -229,7 +229,8 @@ async function createNewOrder(userId, orderDetails, language) {
         await (new walletOperationsModel({
             type: "withdraw",
             userId,
-            amount: totalPrices.totalPriceAfterDiscount
+            amount: totalPrices.totalPriceAfterDiscount,
+            operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
         })).save();
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),

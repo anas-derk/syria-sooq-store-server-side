@@ -728,6 +728,10 @@ const walletOperationsSchema = new mongoose.Schema({
         required: true,
         enum: ["deposit", "withdraw"]
     },
+    operationNumber: {
+        type: Number,
+        required: true,
+    },
     amount: {
         type: Number,
         required: true,
