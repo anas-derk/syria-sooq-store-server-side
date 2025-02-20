@@ -23,6 +23,8 @@ function validateCity(city, res, nextFunc) {
         "daraa",
         "suwayda",
         "deer-alzoor",
+        "raqqa",
+        "hasakah",
         "damascus",
         "rif-damascus",
         "aleppo",
