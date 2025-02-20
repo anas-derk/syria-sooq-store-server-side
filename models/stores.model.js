@@ -65,9 +65,9 @@ async function getAllStoresInsideThePage(authorizationId, pageNumber, pageSize, 
     }
 }
 
-async function getStoreDetails(authorizationId, storeId, language) {
+async function getStoreDetails(authorizationId, storeId, userType = "user", language) {
     try {
-        const user = await userModel.findById(authorizationId);
+        const user = userType === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
             const store = await storeModel.findById(storeId);
             if (store) {

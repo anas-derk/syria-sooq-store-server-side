@@ -56,7 +56,7 @@ async function getAllStoresInsideThePage(req, res) {
 
 async function getStoreDetails(req, res) {
     try {
-        res.json(await storesOPerationsManagmentFunctions.getStoreDetails(req.data._id, req.params.storeId, req.query.language));
+        res.json(await storesOPerationsManagmentFunctions.getStoreDetails(req.data._id, req.params.storeId, req.query.userType, req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));

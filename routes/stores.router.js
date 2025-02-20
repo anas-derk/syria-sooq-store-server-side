@@ -2,7 +2,7 @@ const storesRouter = require("express").Router();
 
 const storesController = require("../controllers/stores.controller");
 
-const { validateJWT, validatePassword, validateEmail, validateName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+const { validateJWT, validatePassword, validateEmail, validateName, validateIsExistErrorInFiles, validateUserType } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -28,7 +28,15 @@ storesRouter.get("/store-details/:storeId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "User Type", fieldValue: req.query.userType, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
+    },
+    (req, res, next) => {
+        const { userType } = req.query;
+        if (userType) {
+            return validateUserType(req.query.userType, res, next);
+        }
+        next();
     },
     storesController.getStoreDetails
 );
