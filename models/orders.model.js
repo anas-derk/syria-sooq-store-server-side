@@ -369,7 +369,7 @@ async function updateOrderProduct(authorizationId, orderId, productId, newOrderP
             if (!admin.isBlocked) {
                 const order = await orderModel.findOne({ _id: orderId });
                 if (order) {
-                    if (order.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         const productIndex = order.products.findIndex((order_product) => order_product.productId == productId);
                         if (productIndex >= 0) {
                             order.products[productIndex].quantity = newOrderProductDetails.quantity;

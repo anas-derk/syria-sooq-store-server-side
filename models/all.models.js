@@ -382,7 +382,7 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 const orderSchema = new mongoose.Schema({
     userId: {
         type: String,
-        default: "",
+        required: true,
     },
     storeId: {
         type: mongoose.Types.ObjectId,
