@@ -369,6 +369,27 @@ async function resetUserPassword(email, mobilePhone, newPassword, language) {
     }
 }
 
+async function changeUserImage(authorizationId, newUserImagePath, language) {
+    try {
+        const user = await userModel.findOneAndUpdate({ _id: authorizationId }, { imagePath: newUserImagePath });
+        if (user) {
+            return {
+                msg: getSuitableTranslations("Updating User Image Process Has Been Successfully !!", language),
+                error: false,
+                data: { deletedUserImagePath: user.imagePath }
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 async function deleteUser(authorizationId, userId, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -420,5 +441,6 @@ module.exports = {
     updateUserInfo,
     updateVerificationStatus,
     resetUserPassword,
+    changeUserImage,
     deleteUser
 }

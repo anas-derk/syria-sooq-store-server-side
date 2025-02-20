@@ -300,6 +300,10 @@ const userSchema = new mongoose.Schema({
             default: 0
         },
     },
+    imagePath: {
+        type: String,
+        default: "",
+    },
     dateOfCreation: {
         type: Date,
         default: Date.now

@@ -182,5 +182,6 @@
     "Sorry, This Store Is Already Followed By This User !!": "عذراً ، هذا المتجر مُتابع فعلاً من قبل هذا المستخدم !!",
     "Adding New Store To The Followed Stores List By This User Process Has Been Successfully !!": "عملية إضافة متجر جديد إلى قائمة المتاجر المتابعة من قبل هذا المستخدم تمت بنجاح !!",
     "Sorry, There Is Not Enough Balance In This User's Wallet To Complete The Purchase": "عذراً ، لا يوجد مبلغ كافي في محفظة هذا المستخدم من أجل إكمال عملية الشراء",
-    "Get All Card Operations For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل عمليات المحفظة لهذا المستخدم بداخل الصفحة {{pageNumber}} تمت بنجاح !!"
+    "Get All Card Operations For This User Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل عمليات المحفظة لهذا المستخدم بداخل الصفحة {{pageNumber}} تمت بنجاح !!",
+    "Updating User Image Process Has Been Successfully !!": "عملية تحديث صورة المستخدم تمت بنجاح !!"
 }

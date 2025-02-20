@@ -4,7 +4,9 @@ const usersController = require("../controllers/users.controller");
 
 const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, getResponseObject } = require("../global/functions");
 
-const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName } = require("../middlewares/global.middlewares");
+const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+
+const multer = require("multer");
 
 usersRouter.get("/login",
     (req, res, next) => {
@@ -225,6 +227,30 @@ usersRouter.put("/reset-password",
     },
     (req, res, next) => validatePassword(req.query.newPassword, res, next),
     usersController.putResetPassword
+);
+
+usersRouter.put("/change-user-image",
+    validateJWT,
+    multer({
+        storage: multer.memoryStorage(),
+        fileFilter: (req, file, cb) => {
+            if (!file) {
+                req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
+                return cb(null, false);
+            }
+            if (
+                file.mimetype !== "image/jpeg" &&
+                file.mimetype !== "image/png" &&
+                file.mimetype !== "image/webp"
+            ) {
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
+                return cb(null, false);
+            }
+            cb(null, true);
+        }
+    }).single("userImage"),
+    validateIsExistErrorInFiles,
+    usersController.putUserImage
 );
 
 usersRouter.delete("/:userId",
