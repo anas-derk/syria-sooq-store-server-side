@@ -11,7 +11,7 @@ async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse
         const accountVerificationCode = await accountVerificationCodesModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
         if (accountVerificationCode) {
             const newRequestTimeCount = accountVerificationCode.requestTimeCount + 1;
-            await accountVerificationCodesModel.updateOne(email ? { email } : { mobilePhone },
+            await accountVerificationCodesModel.updateOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse },
                 {
                     code: await hash(code, 10),
                     requestTimeCount: newRequestTimeCount,
@@ -49,13 +49,7 @@ async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse
 
 async function isAccountVerificationCodeValid(email, mobilePhone, code, typeOfUse, language) {
     try {
-        const accountVerificationCode = await accountVerificationCodesModel.findOne({
-            $or:
-                [
-                    { email },
-                    { mobilePhone }
-                ], typeOfUse
-        });
+        const accountVerificationCode = await accountVerificationCodesModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
         if (accountVerificationCode) {
             if (await compare(code, accountVerificationCode.code)) {
                 return {

@@ -343,27 +343,15 @@ async function updateVerificationStatus(text, language) {
 
 async function resetUserPassword(email, mobilePhone, newPassword, language) {
     try {
-        const user = await userModel.findOneAndUpdate({
-            $or:
-                [
-                    { email },
-                    { mobilePhone }
-                ]
-        }, { password: await hash(newPassword, 10) });
+        const user = await userModel.findOneAndUpdate(email ? { email } : { mobilePhone }, { password: await hash(newPassword, 10) });
         if (user) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),
                 error: false,
-                data: { language: "ar" },
+                data: {},
             };
         }
-        const admin = await adminModel.findOneAndUpdate({
-            $or:
-                [
-                    { email },
-                    { mobilePhone }
-                ]
-        }, { password: await hash(newPassword, 10) });
+        const admin = await adminModel.findOneAndUpdate(email ? { email } : { mobilePhone }, { password: await hash(newPassword, 10) });
         if (admin) {
             return {
                 msg: getSuitableTranslations("Reseting Password Process Has Been Successfully !!", language),

@@ -100,7 +100,6 @@ async function getForgetPassword(req, res) {
                 return res.json(result);
             }
             result = await sendVerificationCodeToUserEmail(email);
-            console.log(result)
             if (!result.error) {
                 return res.json(await addNewAccountVerificationCode(email, mobilePhone, result.data, "to reset password", language));
             }
@@ -108,7 +107,6 @@ async function getForgetPassword(req, res) {
         res.json(result);
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
