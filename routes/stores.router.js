@@ -8,7 +8,7 @@ const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functio
 
 const multer = require("multer");
 
-storesRouter.get("/stores-count", storesController.getStoresCount);
+storesRouter.get("/stores-count", validateJWT, storesController.getStoresCount);
 
 storesRouter.get("/all-stores-inside-the-page",
     validateJWT,

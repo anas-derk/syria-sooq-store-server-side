@@ -8,12 +8,27 @@ const { hash } = require("bcryptjs");
 
 const { getSuitableTranslations } = require("../global/functions");
 
-async function getStoresCount(filters, language) {
+async function getStoresCount(authorizationId, filters, language) {
     try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (admin.isWebsiteOwner) {
+                return {
+                    msg: getSuitableTranslations("Get Stores Count Process Has Been Successfully !!", language),
+                    error: false,
+                    data: await storeModel.countDocuments(filters),
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
+                error: true,
+                data: {},
+            }
+        }
         return {
-            msg: getSuitableTranslations("Get Stores Count Process Has Been Successfully !!", language),
-            error: false,
-            data: await storeModel.countDocuments(filters),
+            msg: getSuitableTranslations("Sorry, This User Is Not Found !!", language),
+            error: true,
+            data: {},
         }
     } catch (err) {
         throw Error(err);
@@ -28,7 +43,10 @@ async function getAllStoresInsideThePage(authorizationId, pageNumber, pageSize, 
                 return {
                     msg: getSuitableTranslations("Get All Stores Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
                     error: false,
-                    data: await storeModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ creatingOrderDate: -1 }),
+                    data: {
+                        stores: await storeModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ creatingOrderDate: -1 }),
+                        storesCount: await storeModel.countDocuments(filters)
+                    },
                 }
             }
             return {
@@ -36,6 +54,11 @@ async function getAllStoresInsideThePage(authorizationId, pageNumber, pageSize, 
                 error: true,
                 data: {},
             }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Found !!", language),
+            error: true,
+            data: {},
         }
     } catch (err) {
         throw Error(err);

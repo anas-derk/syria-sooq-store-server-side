@@ -381,7 +381,8 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 
 const orderSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: mongoose.Types.ObjectId,
+        ref: "user",
         required: true,
     },
     storeId: {
