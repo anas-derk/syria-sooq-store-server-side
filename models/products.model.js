@@ -226,38 +226,72 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
     try {
         if (userType === "user") {
             const user = await userModel.findById(authorizationId);
-            if (user) {
+            if (!user) {
                 return {
-                    msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
-                    error: false,
-                    data: {
-                        products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
-                        currentDate: new Date()
-                    },
+                    msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                    error: true,
+                    data: {},
                 }
             }
-            return {
-                msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
-                error: true,
-                data: {},
-            }
+
         } else {
             const admin = await adminModel.findById(authorizationId);
-            if (admin) {
+            if (!admin) {
                 return {
-                    msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
-                    error: false,
-                    data: {
-                        products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
-                        currentDate: new Date()
-                    },
+                    msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                    error: true,
+                    data: {},
                 }
             }
+        }
+        if (filters.category) {
+            let category = filters.category;
+            delete filters.category;
+            const result = await productModel.aggregate([
+                {
+                    $lookup: {
+                        from: "categories",
+                        localField: "categories",
+                        foreignField: "_id",
+                        as: "categoryDetails"
+                    }
+                },
+                {
+                    $match: {
+                        "categoryDetails.name": { $regex: new RegExp(category, 'i') },
+                        ...filters
+                    }
+                },
+                {
+                    $facet: {
+                        products: [
+                            { $skip: (pageNumber - 1) * pageSize },
+                            { $limit: pageSize }
+                        ],
+                        productsCount: [
+                            { $count: "total" }
+                        ]
+                    }
+                }
+            ]);
             return {
-                msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
-                error: true,
-                data: {},
+                msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+                error: false,
+                data: {
+                    products: await productModel.populate(result[0].products, "categories"),
+                    productsCount: result[0].productsCount.length > 0 ? result[0].productsCount[0].total : 0,
+                    currentDate: new Date()
+                },
             }
+        }
+        return {
+            msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+            error: false,
+            data: {
+                products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
+                productsCount: await productModel.countDocuments(filters),
+                currentDate: new Date()
+            },
         }
     }
     catch (err) {
