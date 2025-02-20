@@ -131,11 +131,10 @@ async function createNewStore(storeDetails, language) {
                 data: {},
             }
         }
-        const newStoreDetails = await (new storeModel(storeDetails)).save();
         return {
             msg: getSuitableTranslations("Creating Licence Request New Store Process Has Been Successfully !!", language),
             error: false,
-            data: newStoreDetails,
+            data: await (new storeModel(storeDetails)).save(),
         }
     }
     catch (err) {
