@@ -69,8 +69,10 @@ ordersRouter.get("/order-details/:orderId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Order Destination", fieldValue: req.query.destination, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validateOrderDestination(req.query.destination, res, next),
     ordersController.getOrderDetails
 );
 

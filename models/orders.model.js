@@ -61,23 +61,26 @@ async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, 
     }
 }
 
-async function getOrderDetails(orderId, language) {
+async function getOrderDetails(authorizationId, orderId, destination, language) {
     try {
-        const user = filters.destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
+        const user = destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
-            filters.userId = authorizationId;
-        }
-        delete filters.destination;
-        const order = await orderModel.findById(orderId);
-        if (order) {
+            const order = await orderModel.findById(orderId).populate("storeId");
+            if (order) {
+                return {
+                    msg: getSuitableTranslations("Get Order Details Process Has Been Successfully !!", language),
+                    error: false,
+                    data: order,
+                }
+            }
             return {
-                msg: getSuitableTranslations("Get Order Details Process Has Been Successfully !!", language),
-                error: false,
-                data: order,
+                msg: getSuitableTranslations("Sorry, This Order Is Not Found !!", language),
+                error: true,
+                data: {},
             }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Order Is Not Found !!", language),
+            msg: getSuitableTranslations(`Sorry, This ${user.distination.replace(user.distination[0], user.distination[0].toUpperCase())} Is Not Exist !!`, language),
             error: true,
             data: {},
         }
@@ -257,7 +260,7 @@ async function updateOrder(authorizationId, orderId, newOrderDetails, language) 
             if (!admin.isBlocked) {
                 const order = await orderModel.findById(orderId);
                 if (order) {
-                    if (order.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         if (order.checkoutStatus === "Checkout Successfull") {
                             await orderModel.updateOne({ _id: orderId }, { ...newOrderDetails });
                             return {
@@ -425,7 +428,7 @@ async function deleteOrder(authorizationId, orderId, language) {
             if (!admin.isBlocked) {
                 const order = await orderModel.findOne({ _id: orderId });
                 if (order) {
-                    if (order.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         await orderModel.updateOne({ _id: orderId }, { isDeleted: true });
                         return {
                             msg: getSuitableTranslations("Deleting Order Has Been Successfuly !!", language),

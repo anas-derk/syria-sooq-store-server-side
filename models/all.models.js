@@ -385,7 +385,8 @@ const orderSchema = new mongoose.Schema({
         default: "",
     },
     storeId: {
-        type: String,
+        type: mongoose.Types.ObjectId,
+        ref: "store",
         required: true,
     },
     totalPriceBeforeDiscount: {

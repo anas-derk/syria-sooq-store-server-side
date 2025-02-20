@@ -60,9 +60,10 @@ async function getAllOrdersInsideThePage(req, res) {
 
 async function getOrderDetails(req, res) {
     try {
-        res.json(await ordersManagmentFunctions.getOrderDetails(req.data._id, req.params.orderId, req.query.language));
+        res.json(await ordersManagmentFunctions.getOrderDetails(req.data._id, req.params.orderId, req.query.destination, req.query.language));
     }
     catch (err) {
+        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
