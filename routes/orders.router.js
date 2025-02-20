@@ -65,6 +65,7 @@ ordersRouter.get("/all-orders-inside-the-page",
 );
 
 ordersRouter.get("/order-details/:orderId",
+    validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },

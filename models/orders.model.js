@@ -63,6 +63,11 @@ async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, 
 
 async function getOrderDetails(orderId, language) {
     try {
+        const user = filters.destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
+        if (user) {
+            filters.userId = authorizationId;
+        }
+        delete filters.destination;
         const order = await orderModel.findById(orderId);
         if (order) {
             return {
