@@ -50,7 +50,6 @@ productsRouter.post("/add-new-product",
     },
     (req, res, next) => {
         const { categories } = req.body;
-        console.log(categories)
         validateIsExistValueForFieldsAndDataTypes(
             categories.map((categoryId, index) => (
                 { fieldName: `Id In Category ${index + 1}`, fieldValue: categoryId, dataTypes: ["ObjectId"], isRequiredValue: true }

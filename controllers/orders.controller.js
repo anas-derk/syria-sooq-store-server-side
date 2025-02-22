@@ -87,6 +87,26 @@ async function postNewOrder(req, res) {
     }
 }
 
+async function postNewRequestToReturnOrderProducts(req, res) {
+    try {
+        const { isReturnAllProducts, language } = req.query;
+        const result = await ordersManagmentFunctions.createNewRequestToReturnOrderProducts(req.data._id, req.params.orderId, req.body.products, isReturnAllProducts, language);
+        if (!result.error) {
+            return res.json({
+                ...result,
+                data: {
+                    orderId: result.data.orderId,
+                    orderNumber: result.data.orderNumber
+                }
+            });
+        }
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function postCheckoutComplete(req, res) {
     try {
         const result = await ordersManagmentFunctions.changeCheckoutStatusToSuccessfull(req.params.orderId, req.query.language);
@@ -189,6 +209,7 @@ module.exports = {
     getOrdersCount,
     getOrderDetails,
     postNewOrder,
+    postNewRequestToReturnOrderProducts,
     postCheckoutComplete,
     putOrder,
     putOrderProduct,

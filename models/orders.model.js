@@ -255,6 +255,44 @@ async function createNewOrder(userId, orderDetails, language) {
     }
 }
 
+async function createNewRequestToReturnOrderProducts(authorizationId, orderId, products, isReturnAllProducts, language) {
+    try {
+        const result = await getOrderDetails(authorizationId, orderId, "user", language)
+        if (result.error) {
+            return result;
+        }
+        const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
+        await (new returnedOrderModel({
+            returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
+            orderNumber: orderDetails.orderNumber,
+            orderId,
+            order_amount: orderDetails.order_amount,
+            customer: {
+                first_name: orderDetails.billing_address.given_name,
+                last_name: orderDetails.billing_address.family_name,
+                email: orderDetails.billing_address.email,
+                phone: orderDetails.billing_address.phone,
+            },
+            order_lines: orderDetails.order_lines,
+        })).save();
+        await orderModel.updateOne({ _id: orderId }, { isReturned: true });
+        return {
+            msg: "Creating New Returned Order Process Has Been Successfuly !!",
+            error: false,
+            data: {},
+        }
+        const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
+        const { _id } = await ((new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 }))).save();
+        return {
+            msg: "Creating New Order Process Has Been Successfuly !!",
+            error: false,
+            data: _id,
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function updateOrder(authorizationId, orderId, newOrderDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -583,6 +621,7 @@ module.exports = {
     getOrdersCount,
     getOrderDetails,
     createNewOrder,
+    createNewRequestToReturnOrderProducts,
     updateOrder,
     changeCheckoutStatusToSuccessfull,
     updateOrderProduct,

@@ -2,19 +2,19 @@ const ordersRouter = require("express").Router();
 
 const ordersController = require("../controllers/orders.controller");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsNotExistDublicateProductId, validateCheckoutStatus, validateShippingMethod, validateOrderDestination, validatePaymentGateway, validateOrderStatus, validateLanguage } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsNotExistDublicateProductId, validateCheckoutStatus, validateOrderDestination, validatePaymentGateway, validateOrderStatus, validateMobilePhone, validateOrdersType } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
 ordersRouter.get("/orders-count",
     validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, destination } = req.query;
+        const { pageNumber, pageSize, destination, ordersType } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: false },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: false },
             { fieldName: "Order Destination", fieldValue: destination, dataTypes: ["string"], isRequiredValue: true },
-            { fieldName: "Orders Type", fieldValue: ordersType, dataType: "string", isRequiredValue: false },
+            { fieldName: "Orders Type", fieldValue: ordersType, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => {
@@ -59,29 +59,45 @@ ordersRouter.get("/orders-count",
 ordersRouter.get("/all-orders-inside-the-page",
     validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, destination } = req.query;
+        const { pageNumber, pageSize, destination, ordersType } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Order Destination", fieldValue: destination, dataTypes: ["string"], isRequiredValue: true },
-            { fieldName: "Orders Type", fieldValue: ordersType, dataType: "string", isRequiredValue: false },
+            { fieldName: "Orders Type", fieldValue: ordersType, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     (req, res, next) => validateOrderDestination(req.query.destination, res, next),
+    (req, res, next) => {
+        const { ordersType } = req.query;
+        if (ordersType) {
+            return validateOrdersType(ordersType, res, next);
+        }
+        next();
+    },
     ordersController.getAllOrdersInsideThePage
 );
 
 ordersRouter.get("/order-details/:orderId",
     validateJWT,
     (req, res, next) => {
+        const { destination, ordersType } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
-            { fieldName: "Order Destination", fieldValue: req.query.destination, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Order Destination", fieldValue: destination, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Orders Type", fieldValue: ordersType, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateOrderDestination(req.query.destination, res, next),
+    (req, res, next) => {
+        const { ordersType } = req.query;
+        if (ordersType) {
+            return validateOrdersType(ordersType, res, next);
+        }
+        next();
+    },
     ordersController.getOrderDetails
 );
 
@@ -133,7 +149,45 @@ ordersRouter.post("/create-new-order",
         }
         validateNumbersIsGreaterThanZero(productsQuantity, res, next, errorMsgs);
     },
+    (req, res, next) => validateMobilePhone(req.body.mobilePhone, res, next),
+    (req, res, next) => validateMobilePhone(req.body.backupMobilePhone, res, next),
+    (req, res, next) => validatePaymentGateway(req.body.paymentGateway, res, next),
     ordersController.postNewOrder
+);
+
+ordersRouter.post("/create-new-request-to-return-order-products/:orderId",
+    validateJWT,
+    (req, res, next) => {
+        const { products } = req.body;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Is Return All Products", fieldValue: Boolean(req.query.isReturnAllProducts), dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Order Products", fieldValue: products, dataTypes: ["array"], isRequiredValue: req.query.isReturnAllProducts ? false : true },
+        ], res, next);
+    },
+    (req, res, next) => {
+        const { products } = req.body;
+        if (products) {
+            return validateIsExistValueForFieldsAndDataTypes(
+                products.flatMap((product, index) => ([
+                    { fieldName: `Id In Product ${index + 1}`, fieldValue: product?.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
+                    { fieldName: `Quantity In Product ${index + 1}`, fieldValue: product?.quantity, dataTypes: ["number"], isRequiredValue: true },
+                ]))
+                , res, next);
+        }
+        next();
+    },
+    (req, res, next) => validateIsNotExistDublicateProductId(req.body.products, res, next),
+    (req, res, next) => {
+        const { products } = req.body;
+        let productsQuantity = [], errorMsgs = [];
+        for (let i = 0; i < products.length; i++) {
+            productsQuantity.push(products[i].quantity);
+            errorMsgs.push(`Sorry, Please Send Valid Quantity For Product ${i + 1} ( Number Must Be Greater Than Zero ) !!`);
+        }
+        validateNumbersIsGreaterThanZero(productsQuantity, res, next, errorMsgs);
+    },
+    ordersController.postNewRequestToReturnOrderProducts
 );
 
 ordersRouter.post("/handle-checkout-complete/:orderId",

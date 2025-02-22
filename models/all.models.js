@@ -384,6 +384,14 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 // Create Order Schema
 
 const orderSchema = new mongoose.Schema({
+    orderType: {
+        type: String,
+        default: "normal",
+        enum: [
+            "normal",
+            "returned"
+        ],
+    },
     userId: {
         type: mongoose.Types.ObjectId,
         ref: "user",
@@ -412,7 +420,7 @@ const orderSchema = new mongoose.Schema({
     },
     checkoutStatus: {
         type: String,
-        default: "Checkout Incomplete",
+        default: this.orderType === "normal" ? "Checkout Incomplete" : "Checkout Successfull",
         enum: [
             "Checkout Incomplete",
             "Checkout Successfull"

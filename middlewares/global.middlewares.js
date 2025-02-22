@@ -187,7 +187,7 @@ function validateOrderDestination(orderDestination, res, nextFunc) {
 }
 
 function validatePaymentGateway(paymentGate, res, nextFunc) {
-    if (!["tap", "tabby", "binance"].includes(paymentGate)) {
+    if (!["Wallet", "Credit Card", "Upon Receipt"].includes(paymentGate)) {
         res.status(400).json(getResponseObject("Please Send Valid Payment Gateway !!", true, {}));
         return;
     }
@@ -197,6 +197,14 @@ function validatePaymentGateway(paymentGate, res, nextFunc) {
 function validateOrderStatus(status, res, nextFunc) {
     if (!["pending", "shipping", "completed"].includes(status)) {
         res.status(400).json(getResponseObject("Please Send Valid Order Status !!", true, {}));
+        return;
+    }
+    nextFunc();
+}
+
+function validateOrdersType(ordersType, res, nextFunc) {
+    if (!["normal", "returned"].includes(ordersType)) {
+        res.status(400).json(getResponseObject("Please Send Valid Orders Type !!", true, {}));
         return;
     }
     nextFunc();
@@ -253,6 +261,7 @@ module.exports = {
     validateOrderDestination,
     validatePaymentGateway,
     validateOrderStatus,
+    validateOrdersType,
     validateIsPriceGreaterThanDiscount,
     validateUserType,
     validateAdvertismentType,
