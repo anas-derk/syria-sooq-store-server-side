@@ -14,6 +14,7 @@ ordersRouter.get("/orders-count",
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: false },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: false },
             { fieldName: "Order Destination", fieldValue: destination, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Orders Type", fieldValue: ordersType, dataType: "string", isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => {
@@ -45,6 +46,13 @@ ordersRouter.get("/orders-count",
         next();
     },
     (req, res, next) => validateOrderDestination(req.query.destination, res, next),
+    (req, res, next) => {
+        const { ordersType } = req.query;
+        if (ordersType) {
+            return validateOrdersType(ordersType, res, next);
+        }
+        next();
+    },
     ordersController.getOrdersCount
 );
 
@@ -56,6 +64,7 @@ ordersRouter.get("/all-orders-inside-the-page",
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Order Destination", fieldValue: destination, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Orders Type", fieldValue: ordersType, dataType: "string", isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
