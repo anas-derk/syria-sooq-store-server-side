@@ -26,25 +26,21 @@
             عنوان التوصيل:
         </p>
         <ul>
-            <li>الاسم الكامل: <%= newOrderDetails.shippingAddress.firstName %> <%= newOrderDetails.shippingAddress.lastName %></li>
-            <li>الدولة: <%= newOrderDetails.shippingAddress.country %></li>
-            <li>المدينة: <%= newOrderDetails.shippingAddress.city %></li>
-            <li>عنوان الشارع / الحي: <%= newOrderDetails.shippingAddress.streetAddress %></li>
-            <% if (newOrderDetails.shippingAddress.apartmentNumber) { %>
-                <li>رقم الشقة: <%= newOrderDetails.shippingAddress.apartmentNumber %></li>
+            <li>الاسم الكامل: <%= newOrderDetails.fullName %></li>
+            <li>العنوان: <%= newOrderDetails.address %></li>
+            <li>تفاصيل العنوان: <%= newOrderDetails.addressDetails %></li>
+            <% if (newOrderDetails.closestPoint) { %>
+                <li>أقرب نقطة: <%= newOrderDetails.closestPoint %></li>
             <% } %>
-        </ul>
-        <p>
-            عنوان الدفع:
-        </p>
-        <ul>
-            <li>الاسم الكامل: <%= newOrderDetails.billingAddress.firstName %> <%= newOrderDetails.billingAddress.lastName %></li>
-            <li>الدولة: <%= newOrderDetails.billingAddress.country %></li>
-            <li>المدينة: <%= newOrderDetails.billingAddress.city %></li>
-            <li>عنوان الشارع / الحي: <%= newOrderDetails.billingAddress.streetAddress %></li>
-            <% if (newOrderDetails.billingAddress.apartmentNumber) { %>
-                <li>رقم الشقة: <%= newOrderDetails.billingAddress.apartmentNumber %></li>
+            <% if (newOrderDetails.additionalAddressDetails) { %>
+                <li>تفاصيل العنوان الإضافية: <%= newOrderDetails.additionalAddressDetails %></li>
             <% } %>
+            <li>رقم الشقة: <%= newOrderDetails.floorNumber %></li>
+            <% if (newOrderDetails.additionalNotes) { %>
+                <li>ملاحظات إضافية: <%= newOrderDetails.additionalNotes %></li>
+            <% } %>
+            <li>رقم الهاتف : <%= newOrderDetails.mobilePhone %></li>
+            <li>رقم الهاتف الاحتياطي: <%= newOrderDetails.backupMobilePhone %></li>
         </ul>
         <p>
             تفاصيل الدفع:
@@ -61,7 +57,7 @@
                 <% for( let i = 0; i < newOrderDetails.products.length; i++ ) { %>
                     <tr>
                         <td style="padding: 10px 0;">
-                            <img src="https://api.ubuyblues.com/<%= newOrderDetails.products[i].imagePath %>" alt="<%= newOrderDetails.products[i].name %> Image" style="width: 100px; height: 100px;" />
+                            <img src="<%= process.env.BASE_API_URL %>/<%= newOrderDetails.products[i].imagePath %>" alt="<%= newOrderDetails.products[i].name %> Image" style="width: 100px; height: 100px;" />
                         </td>
                         <td style="padding: 10px 0;">
                             <%= newOrderDetails.products[i].name %>
@@ -83,7 +79,7 @@
             المبلغ الإجمالي: <%= newOrderDetails.totalPriceBeforeDiscount %>
         </p>
         <p>
-            رسوم الشحن: <%= newOrderDetails.shippingCost.forLocalProducts + newOrderDetails.shippingCost.forInternationalProducts %>
+            رسوم الشحن: <%= newOrderDetails.shippingCost %>
         </p>
         <p>
             الخصم الإجمالي: <%= newOrderDetails.totalDiscount %>
