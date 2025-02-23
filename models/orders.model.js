@@ -387,16 +387,13 @@ async function updateOrder(authorizationId, orderId, newOrderDetails, language) 
                                     totalDiscount: order.totalDiscount,
                                     totalPriceAfterDiscount: order.totalPriceAfterDiscount,
                                     orderAmount: order.orderAmount,
-                                    billingAddress: order.billingAddress,
-                                    shippingAddress: order.shippingAddress,
                                     products: order.products,
                                     addedDate: order.addedDate,
+                                    orderId: order._id,
                                     orderNumber: order.orderNumber,
                                     shippingCost: order.shippingCost,
-                                    shippingMethod: order.shippingMethod,
                                     storeId: order.storeId,
-                                    language: order.language,
-                                    _id: order._id
+                                    _id: newOrder._id
                                 },
                             }
                         }
