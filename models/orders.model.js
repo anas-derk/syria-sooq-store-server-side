@@ -227,6 +227,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 products: orderProductsDetails,
                 ...user.email && { email: user.email },
                 ...user.mobilePhone && { mobilePhone: user.mobilePhone },
+                fullName: user.fullName,
             })
         ).save();
         await (new walletOperationsModel({
