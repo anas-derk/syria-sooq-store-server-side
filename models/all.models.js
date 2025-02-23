@@ -384,14 +384,6 @@ const categoryModel = mongoose.model("categorie", categorySchema);
 // Create Order Schema
 
 const orderSchema = new mongoose.Schema({
-    orderType: {
-        type: String,
-        default: "normal",
-        enum: [
-            "normal",
-            "returned"
-        ],
-    },
     userId: {
         type: mongoose.Types.ObjectId,
         ref: "user",
@@ -548,6 +540,85 @@ const orderSchema = new mongoose.Schema({
 // Create Order Model From Order Schema
 
 const orderModel = mongoose.model("order", orderSchema);
+
+// Create Return Order Schema
+
+const returnOrderSchema = new mongoose.Schema({
+    order: {
+        type: mongoose.Types.ObjectId,
+        ref: "order",
+        required: true,
+    },
+    totalPriceBeforeDiscount: {
+        type: Number,
+        default: 0,
+    },
+    totalDiscount: {
+        type: Number,
+        default: 0,
+    },
+    totalPriceAfterDiscount: {
+        type: Number,
+        default: 0,
+    },
+    orderAmount: {
+        type: Number,
+        default: 0,
+    },
+    status: {
+        type: String,
+        default: "pending",
+        enum: [
+            "awaiting products",
+            "received products",
+            "checking products",
+            "returned products"
+        ]
+    },
+    products: [{
+        productId: {
+            type: String,
+            required: true,
+        },
+        quantity: {
+            type: Number,
+            default: 0,
+        },
+        name: {
+            type: String,
+            default: "none",
+        },
+        unitPrice: {
+            type: Number,
+            default: 0,
+        },
+        discount: {
+            type: Number,
+            default: 0,
+        },
+        totalAmount: {
+            type: Number,
+            default: 0,
+        },
+        imagePath: {
+            type: String,
+            default: "none",
+        },
+    }],
+    addedDate: {
+        type: Date,
+        default: Date.now,
+    },
+    orderNumber: Number,
+    isDeleted: {
+        default: false,
+        type: Boolean,
+    },
+});
+
+// Create Return Order Model From Return Order Schema
+
+const returnOrderModel = mongoose.model("return_order", returnOrderSchema);
 
 // Create Global Password Schema
 
@@ -764,6 +835,7 @@ module.exports = {
     accountVerificationCodesModel,
     categoryModel,
     orderModel,
+    returnOrderModel,
     globalPasswordModel,
     referalModel,
     favoriteProductModel,
