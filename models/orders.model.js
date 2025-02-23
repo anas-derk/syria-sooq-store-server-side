@@ -369,23 +369,11 @@ async function updateOrder(authorizationId, orderId, newOrderDetails, language) 
                 if (order) {
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         if (order.checkoutStatus === "Checkout Successfull") {
-                            await orderModel.updateOne({ _id: orderId }, { ...newOrderDetails });
+                            await orderModel.updateOne({ _id: orderId }, newOrderDetails);
                             return {
                                 msg: getSuitableTranslations("Updating Order Details Process Has Been Successfully !!", language),
                                 error: false,
-                                data: {
-                                    totalPriceBeforeDiscount: order.totalPriceBeforeDiscount,
-                                    totalDiscount: order.totalDiscount,
-                                    totalPriceAfterDiscount: order.totalPriceAfterDiscount,
-                                    orderAmount: order.orderAmount,
-                                    products: order.products,
-                                    addedDate: order.addedDate,
-                                    orderId: order._id,
-                                    orderNumber: order.orderNumber,
-                                    shippingCost: order.shippingCost,
-                                    storeId: order.storeId,
-                                    _id: newOrder._id
-                                },
+                                data: order,
                             }
                         }
                         return {

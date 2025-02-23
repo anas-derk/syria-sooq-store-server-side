@@ -131,10 +131,10 @@ async function putOrder(req, res) {
                 return res.status(401).json(result);
             }
         }
-        if (req.query.isSendEmailToTheCustomer) {
+        if (req.query.isSendEmailToTheCustomer && result.data.email) {
             if (status === "shipping" || status === "completed") {
                 result.data.status = status;
-                await sendUpdateOrderEmail(result.data.billingAddress.email, result.data, result.data.language);
+                await sendUpdateOrderEmail(result.data.email, result.data, "ar");
             }
         }
         res.json(result);
