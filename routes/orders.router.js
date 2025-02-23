@@ -202,10 +202,9 @@ ordersRouter.post("/handle-checkout-complete/:orderId",
 ordersRouter.post("/update-order/:orderId",
     validateJWT,
     (req, res, next) => {
-        const { status, orderAmount } = req.body;
+        const { status } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
-            { fieldName: "Order Amount", fieldValue: orderAmount, dataTypes: ["number"], isRequiredValue: false },
             { fieldName: "Is Send Email To The Customer", fieldValue: Boolean(req.query.isSendEmailToTheCustomer), dataTypes: ["boolean"], isRequiredValue: false },
             { fieldName: "Status", fieldValue: status, dataTypes: ["string"], isRequiredValue: req.query.isSendEmailToTheCustomer ? true : false },
         ], res, next);
@@ -214,13 +213,6 @@ ordersRouter.post("/update-order/:orderId",
         const { status } = req.body;
         if (status) {
             return validateOrderStatus(status, res, next);
-        }
-        next();
-    },
-    (req, res, next) => {
-        const { orderAmount } = req.body;
-        if (orderAmount) {
-            return validateNumbersIsGreaterThanZero([orderAmount], res, next, [], "Sorry, Please Send Valid Order Amount ( Number Must Be Greater Than Zero ) !!");
         }
         next();
     },

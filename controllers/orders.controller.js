@@ -34,7 +34,6 @@ function getFiltersObject(filters) {
 function getFiltersObjectForUpdateOrder(acceptableData) {
     let filterdData = {};
     if (acceptableData.status) filterdData.status = acceptableData.status;
-    if (acceptableData.orderAmount) filterdData.orderAmount = acceptableData.orderAmount;
     return filterdData;
 
 }
@@ -122,8 +121,8 @@ async function postCheckoutComplete(req, res) {
 
 async function putOrder(req, res) {
     try {
-        const { status, orderAmount } = req.body;
-        const result = await ordersManagmentFunctions.updateOrder(req.data._id, req.params.orderId, getFiltersObjectForUpdateOrder({ status, orderAmount }), req.query.language);
+        const { status } = req.body;
+        const result = await ordersManagmentFunctions.updateOrder(req.data._id, req.params.orderId, getFiltersObjectForUpdateOrder({ status }), req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Order Is Not Found !!") {
                 return res.status(401).json(result);
