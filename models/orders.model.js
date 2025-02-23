@@ -225,6 +225,8 @@ async function createNewOrder(userId, orderDetails, language) {
                 mobilePhone: orderDetails.mobilePhone,
                 backupMobilePhone: orderDetails.backupMobilePhone,
                 products: orderProductsDetails,
+                ...user.email && { email: user.email },
+                ...user.mobilePhone && { mobilePhone: user.mobilePhone },
             })
         ).save();
         await (new walletOperationsModel({
@@ -236,19 +238,7 @@ async function createNewOrder(userId, orderDetails, language) {
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
             error: false,
-            data: {
-                totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
-                totalDiscount: totalPrices.totalDiscount,
-                totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
-                orderAmount: newOrder.orderAmount,
-                products: newOrder.products,
-                addedDate: newOrder.addedDate,
-                orderId: newOrder._id,
-                orderNumber: newOrder.orderNumber,
-                shippingCost: newOrder.shippingCost,
-                storeId: newOrder.storeId,
-                _id: newOrder._id
-            },
+            data: newOrder,
         }
     } catch (err) {
         throw Error(err);

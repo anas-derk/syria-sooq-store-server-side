@@ -1,6 +1,6 @@
 <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
     <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
-        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.webp" alt="<%= process.env.WEBSITE_NAME %> Image"
+        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %> Image"
             style="width: 100px; height: 100px;">
     </section>
     <section class="content"
@@ -27,24 +27,21 @@
             عنوان التوصيل:
         </p>
         <ul>
-            <li>الاسم الكامل: <%= orderDetails.shippingAddress.firstName %> <%= orderDetails.shippingAddress.lastName %></li>
-            <li>المدينة: <%= orderDetails.shippingAddress.city %></li>
-            <li>عنوان الشارع / الحي: <%= orderDetails.shippingAddress.streetAddress %></li>
-            <% if (orderDetails.shippingAddress.apartmentNumber) { %>
-                <li>رقم الشقة: <%= orderDetails.shippingAddress.apartmentNumber %></li>
+            <li>الاسم الكامل: <%= orderDetails.fullName %></li>
+            <li>العنوان: <%= orderDetails.address %></li>
+            <li>تفاصيل العنوان: <%= orderDetails.addressDetails %></li>
+            <% if (orderDetails.closestPoint) { %>
+                <li>أقرب نقطة: <%= orderDetails.closestPoint %></li>
             <% } %>
-        </ul>
-        <p>
-            عنوان الدفع:
-        </p>
-        <ul>
-            <li>الاسم الكامل: <%= orderDetails.billingAddress.firstName %> <%= orderDetails.billingAddress.lastName %></li>
-            <li>الدولة: <%= orderDetails.billingAddress.country %></li>
-            <li>المدينة: <%= orderDetails.billingAddress.city %></li>
-            <li>عنوان الشارع / الحي: <%= orderDetails.billingAddress.streetAddress %></li>
-            <% if (orderDetails.billingAddress.apartmentNumber) { %>
-                <li>رقم الشقة: <%= orderDetails.billingAddress.apartmentNumber %></li>
+            <% if (orderDetails.additionalAddressDetails) { %>
+                <li>تفاصيل العنوان الإضافية: <%= orderDetails.additionalAddressDetails %></li>
             <% } %>
+            <li>رقم الشقة: <%= orderDetails.floorNumber %></li>
+            <% if (orderDetails.additionalNotes) { %>
+                <li>ملاحظات إضافية: <%= orderDetails.additionalNotes %></li>
+            <% } %>
+            <li>رقم الهاتف : <%= orderDetails.mobilePhone %></li>
+            <li>رقم الهاتف الاحتياطي: <%= orderDetails.backupMobilePhone %></li>
         </ul>
         <p>
             تفاصيل الدفع:
@@ -83,7 +80,7 @@
             المبلغ الإجمالي: <%= orderDetails.totalPriceBeforeDiscount %>
         </p>
         <p>
-            رسوم الشحن: <%= orderDetails.shippingCost.forLocalProducts + orderDetails.shippingCost.forInternationalProducts %>
+            رسوم الشحن: <%= orderDetails.shippingCost %>
         </p>
         <p>
             الخصم الإجمالي: <%= orderDetails.totalDiscount %>
@@ -97,7 +94,7 @@
         <p>
             فريق خدمة الزبائن جاهز لمساعدتك على الإيميل:
         </p>
-        <a href="mailto:support@ubuyblues.com">support@ubuyblues.com</a>
+        <a href="mailto:<%= process.env.SUPPORT_EMAIL %>"></a>
         <div class="notes" style="text-align: center; border: 1px solid #000;">
             <h3>تم إرسال هذا البريد الالكتروني بشكل تلقائي .</h3>
             <h3>يرجى عدم الدم على هذه الرسالة .</h3>

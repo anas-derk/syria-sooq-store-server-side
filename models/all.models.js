@@ -535,6 +535,11 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    email: String,
+    fullName: {
+        type: String,
+        required: true,
+    },
 });
 
 // Create Order Model From Order Schema
