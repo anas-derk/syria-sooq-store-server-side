@@ -10,6 +10,8 @@ const {
     isAccountVerificationCodeValid
 } = require("../models/account_codes.model");
 
+const { unlinkSync } = require("fs");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -248,7 +250,6 @@ async function putUserImage(req, res) {
         }
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
