@@ -257,10 +257,86 @@ async function createNewOrder(userId, orderDetails, language) {
 
 async function createNewRequestToReturnOrderProducts(authorizationId, orderId, products, isReturnAllProducts, language) {
     try {
-        const result = await getOrderDetails(authorizationId, orderId, "user", language)
+        const result = await getOrderDetails(authorizationId, orderId, "user", language);
         if (result.error) {
             return result;
         }
+        if (result.data.checkoutStatus === "Checkout Incomplete") {
+            return {
+                msg: "Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!",
+                error: true,
+                data: {},
+            }
+        }
+        if (result.data.status === "cancelled") {
+            return {
+                msg: "Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!",
+                error: true,
+                data: {},
+            }
+        }
+        if (result.data.status !== "completed") {
+            return {
+                msg: "Sorry, A Return Request Cannot Be Created Because The Order Has Not Reached You ( Status: Pending Or Shipping ) !!",
+                error: true,
+                data: {},
+            }
+        }
+        if (isReturnAllProducts) {
+
+        }
+        if (existOrderProducts.length < orderDetails.products.length) {
+            for (let product of orderDetails.products) {
+                let isExistProduct = false;
+                for (let existProduct of existOrderProducts) {
+                    if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)) {
+                        isExistProduct = true;
+                        break;
+                    }
+                }
+                if (!isExistProduct) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Product Id: {{productId}} Is Not Exist !!", language, { productId: product.productId }),
+                        error: true,
+                        data: {},
+                    }
+                }
+            }
+        }
+        const orderedProducts = orderDetails.products.map((product) => existOrderProducts.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
+        for (let i = 0; i < orderedProducts.length; i++) {
+            if ((new mongoose.Types.ObjectId(orderDetails.products[i].productId)).equals(orderedProducts[i]._id)) {
+                if (orderedProducts[i].quantity === 0) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: orderedProducts[i]._id }),
+                        error: true,
+                        data: {},
+                    }
+                }
+                if (orderDetails.products[i].quantity > orderedProducts[i].quantity) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i]._id, quantity: orderedProducts[i].quantity }),
+                        error: true,
+                        data: {},
+                    }
+                }
+            }
+        }
+        let orderProductsDetails = [];
+        for (let i = 0; i < orderedProducts.length; i++) {
+            orderProductsDetails.push({
+                productId: orderedProducts[i]._id,
+                name: orderedProducts[i].name,
+                unitPrice: orderedProducts[i].price,
+                discount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
+                totalAmount: orderedProducts[i].price * orderDetails.products[i].quantity,
+                quantity: orderDetails.products[i].quantity,
+                imagePath: orderedProducts[i].imagePath,
+            });
+        }
+
+
+
         const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
         await (new returnedOrderModel({
             returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
