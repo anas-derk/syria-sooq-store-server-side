@@ -1,48 +1,23 @@
-<% if (language === "en") { %>
-    <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0;">
-        <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
-            <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %> Image"
-                style="width: 100px; height: 100px;">
-        </section>
-        <section class="content"
-            style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;">
-            <h2 style="text-align: center;">Confirmation of store addition request at <%= process.env.WEBSITE_NAME %></h2>
-            <p>
-                We are pleased to inform you that your request to add your store to our website has been accepted.
-            </p>
-            <p>
-                We will start processing and reviewing your request as soon as possible.
-            </p>
-            </p>
-            <p>
-                Thank you for choosing to work with us.
-            </p>
-            <h4>Best regards,</h4>
-            <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">The <%= process.env.WEBSITE_NAME %> Team</h4>
-        </section>
-    </div>
-<% } else if (language === "ar") { %>
-    <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
-        <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
-            <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %> Image"
-                style="width: 100px; height: 100px;">
-        </section>
-        <section class="content"
-            style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;"
-        >
-            <h2 style="text-align: center;">تأكيد وصول طلب إضافة متجر لدى <%= process.env.WEBSITE_NAME %></h2>
-            <p>
-                نحن سعداء بالإعلام بقبول طلبكم لإضافة متجرك الخاص في موقعنا الإلكتروني .
-            </p>
-            <p>
-                سنقوم بالبدء في عملية المعالجة والتدقيق في طلبكم في أقرب وقت ممكن .
-            </p>
-            </p>
-            <p>
-                شكرًا لكم على اختياركم للتعامل معنا .
-            </p>
-            <h4>أطيب التحيات,</h4>
-            <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">فريق عمل <%= process.env.WEBSITE_NAME %></h4> 
-        </section>
-    </div>
-<% } %>
+<div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
+    <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
+        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %> Image"
+            style="width: 100px; height: 100px;">
+    </section>
+    <section class="content"
+        style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;"
+    >
+        <h2 style="text-align: center;">تأكيد وصول طلب إضافة متجر لدى <%= process.env.WEBSITE_NAME %></h2>
+        <p>
+            نحن سعداء بالإعلام بقبول طلبكم لإضافة متجرك الخاص في موقعنا الإلكتروني .
+        </p>
+        <p>
+            سنقوم بالبدء في عملية المعالجة والتدقيق في طلبكم في أقرب وقت ممكن .
+        </p>
+        </p>
+        <p>
+            شكرًا لكم على اختياركم للتعامل معنا .
+        </p>
+        <h4>أطيب التحيات,</h4>
+        <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">فريق عمل <%= process.env.WEBSITE_NAME %></h4> 
+    </section>
+</div>

@@ -1,59 +1,28 @@
-<% if (language === "en") { %>
-    <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0;">
-        <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
-            <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %>  Image"
-                style="width: 100px; height: 100px;">
-        </section>
-        <section class="content"
-            style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;">
-            <h2 style="text-align: center;">Welcome Message</h2>
-            <p>
-                welcome to you in the <%= process.env.WEBSITE_NAME %>  website !
-            </p>
-            <p>
-                We are delighted to have you join us and would like to welcome you to our online store community .
-            </p>
-            <p>
-                As a new subscriber, you will have the opportunity to explore a wide variety of products at excellent prices
-            </p>
-            <p>
-                We also invite you to take advantage of the exclusive offers and discounts available on our website. Don't
-                miss the opportunity to browse our products and explore everything we have to offer .
-            </p>
-            <p>
-                Thank you for trusting us, and we look forward to serving you always .
-            </p>
-            <h4>Best regards,</h4>
-            <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">The <%= process.env.WEBSITE_NAME %>  Team</h4>
-        </section>
-    </div>
-<% } else if (language === "ar") { %>
-    <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
-        <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
-            <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %>  Image"
-                style="width: 100px; height: 100px;">
-        </section>
-        <section class="content"
-            style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;"
-        >
-            <h2 style="text-align: center;">رسالة ترحيب</h2>
-            <p>
-                مرحباً بك في موقع <%= process.env.WEBSITE_NAME %> 
-            </p>
-            <p>
-                نحن سعداء بانضمامك إلينا، ونود أن نرحب بك معنا في مجتمع متجرنا الإلكتروني .</p>
-            </p>
-            <p>
-                كمشترك جديد، ستكون لديك فرصة لاستكشاف مجموعة متنوعة من المنتجات المتنوعة وبأسعار ممتازة .
-            </p>
-            <p>
-                كما ندعوك للاستفادة من العروض الحصرية والتخفيضات التي ستحصل عليها  في موقعنا. لا تفوت الفرصة لتصفح منتجاتنا واستكشاف كل ما نقدمه
-            </p>
-            <p>
-                شكرا لثقتك فينا، ونتطلع إلى خدمتك دائما .
-            </p>
-            <h4>أطيب التحيات,</h4>
-            <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">فريق عمل <%= process.env.WEBSITE_NAME %> </h4> 
-        </section>
-    </div>
-<% } %>
+<div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
+    <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
+        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %>  Image"
+            style="width: 100px; height: 100px;">
+    </section>
+    <section class="content"
+        style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;"
+    >
+        <h2 style="text-align: center;">رسالة ترحيب</h2>
+        <p>
+            مرحباً بك في موقع <%= process.env.WEBSITE_NAME %> 
+        </p>
+        <p>
+            نحن سعداء بانضمامك إلينا، ونود أن نرحب بك معنا في مجتمع متجرنا الإلكتروني .</p>
+        </p>
+        <p>
+            كمشترك جديد، ستكون لديك فرصة لاستكشاف مجموعة متنوعة من المنتجات المتنوعة وبأسعار ممتازة .
+        </p>
+        <p>
+            كما ندعوك للاستفادة من العروض الحصرية والتخفيضات التي ستحصل عليها  في موقعنا. لا تفوت الفرصة لتصفح منتجاتنا واستكشاف كل ما نقدمه
+        </p>
+        <p>
+            شكرا لثقتك فينا، ونتطلع إلى خدمتك دائما .
+        </p>
+        <h4>أطيب التحيات,</h4>
+        <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">فريق عمل <%= process.env.WEBSITE_NAME %> </h4> 
+    </section>
+</div>

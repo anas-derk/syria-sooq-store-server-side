@@ -1,33 +1,15 @@
-<% if (language === "en") { %>
-    <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0;">
-        <section class="begin" style="text-align: center; color: #6A017A; margin-bottom: 20px;">
-            <img src="https://api.ubuyblues.com/assets/images/stores/UbuyBlues_Logo_merged_Purple.webp" alt="Ubuyblues Image"
-                style="width: 100px; height: 100px;">
-        </section>
-        <section class="content"
-            style="width: 80%; border: 1px solid #6A017A; margin: auto; padding: 20px; line-height: 2;">
-            <h2 style="text-align: center;">Reject The Store Addition Request At Ubuyblues</h2>
-            <h3>Dear <span style="font-weight: bold; color: #6A017A">Merchant</span>,</h3>
-            <p>We regret to inform you that your merchant account application has not been approved at this time .</p>
-            <p>We appreciate your interest in joining our site and wish you success in the future .</p>
-            <h4>Best regards,</h4>
-            <h4 style="line-height: 0; color: #6A017A;">The Ubuyblues Team</h4>
-        </section>
-    </div>
-<% } else if (language === "ar") { %>
-    <div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
-        <section class="begin" style="text-align: center; color: #6A017A; margin-bottom: 20px;">
-            <img src="https://api.syriasooq.com/assets/images/stores/StoreLogo.png" alt="Syria Sooq Image"
-                style="width: 100px; height: 100px;">
-        </section>
-        <section class="content"
-            style="width: 80%; border: 1px solid #6A017A; margin: auto; padding: 20px; line-height: 2;">
-            <h2 style="text-align: center;">رفض طلب إضافة متجر لدى Syria Sooq</h2>
-            <h3>عزيزي <span style="font-weight: bold; color: #6A017A">التاجر</span>,</h3>
-            <p>نأسف أن نخبركم بأن طلب فتح حساب تاجر لم يتم الموافقة عليه حالياً .</p>
-            <p>نحن نقدر اهتمامكم بالانضمام إلى موقعنا ونتمنى لكم النجاح في المستقبل .</p>
-            <h4>أطيب التحيات,</h4>
-            <h4 style="line-height: 0; color: #6A017A;">فريق عمل Syria Sooq</h4>
-        </section>
-    </div>
-<% } %>
+<div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
+    <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
+        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.webp" alt="<%= process.env.WEBSITE_NAME %> Image"
+            style="width: 100px; height: 100px;">
+    </section>
+    <section class="content"
+        style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;">
+        <h2 style="text-align: center;">رفض طلب إضافة متجر لدى <%= process.env.WEBSITE_NAME %></h2>
+        <h3>عزيزي <span style="font-weight: bold; color: <%= process.env.WEBSITE_COLOR %>">التاجر</span>,</h3>
+        <p>نأسف أن نخبركم بأن طلب فتح حساب تاجر لم يتم الموافقة عليه حالياً .</p>
+        <p>نحن نقدر اهتمامكم بالانضمام إلى موقعنا ونتمنى لكم النجاح في المستقبل .</p>
+        <h4>أطيب التحيات,</h4>
+        <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">فريق عمل <%= process.env.WEBSITE_NAME %></h4>
+    </section>
+</div>
