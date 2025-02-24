@@ -123,18 +123,26 @@ async function getMainStoreDetails(authorizationId, language) {
 
 async function createNewStore(storeDetails, language) {
     try {
-        const store = await storeModel.findOne({ email: storeDetails.email });
-        if (store) {
+        const user = await userModel.findById(storeDetails.adminId);
+        if (user) {
+            const store = await storeModel.findOne({ email: storeDetails.email });
+            if (store) {
+                return {
+                    msg: getSuitableTranslations("Sorry, This Email Is Already Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
             return {
-                msg: getSuitableTranslations("Sorry, This Email Is Already Exist !!", language),
-                error: true,
-                data: {},
+                msg: getSuitableTranslations("Creating Licence Request New Store Process Has Been Successfully !!", language),
+                error: false,
+                data: await (new storeModel(storeDetails)).save(),
             }
         }
         return {
-            msg: getSuitableTranslations("Creating Licence Request New Store Process Has Been Successfully !!", language),
-            error: false,
-            data: await (new storeModel(storeDetails)).save(),
+            msg: getSuitableTranslations("Sorry, This User Is Not Found !!", language),
+            error: true,
+            data: {},
         }
     }
     catch (err) {
@@ -181,7 +189,6 @@ async function approveStore(authorizationId, storeId, password, language) {
                         data: {
                             adminId: newMerchant._id,
                             email: store.email,
-                            language: store.language
                         },
                     }
                 }

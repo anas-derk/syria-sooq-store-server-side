@@ -7,7 +7,7 @@ require("dotenv").config({
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
-    userId: {
+    adminId: {
         type: String,
         required: true,
     },
@@ -95,7 +95,7 @@ const storeSchema = new mongoose.Schema({
 const storeModel = mongoose.model("store", storeSchema);
 
 const storeInfo = {
-    userId: "674f61fc74fbe8e7d7355c07",
+    adminId: "674f61fc74fbe8e7d7355c07",
     name: "Syria Sooq",
     headquarterAddress: "Lattakia, Alzeraa",
     taxNumber: "1234",

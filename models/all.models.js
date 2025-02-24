@@ -85,11 +85,6 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    storeId: {
-        type: mongoose.Types.ObjectId,
-        ref: "store",
-        required: true,
-    },
     coverImagePath: {
         type: String,
         required: true,
