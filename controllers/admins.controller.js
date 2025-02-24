@@ -38,8 +38,7 @@ function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
         if (objectKey === "_id") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "firstName") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "lastName") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "fullName") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "email") filtersObject[objectKey] = filters[objectKey];
     }
     return filtersObject;

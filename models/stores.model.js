@@ -492,6 +492,7 @@ async function deleteStore(authorizationId, storeId, language) {
         }
     }
     catch (err) {
+        console.log(err);
         throw Error(err);
     }
 }

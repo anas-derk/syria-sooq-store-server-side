@@ -81,8 +81,13 @@ const adminModel = mongoose.model("admin", adminSchema);
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
-    userId: {
+    adminId: {
         type: String,
+        required: true,
+    },
+    storeId: {
+        type: mongoose.Types.ObjectId,
+        ref: "store",
         required: true,
     },
     coverImagePath: {

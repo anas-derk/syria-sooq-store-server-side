@@ -20,9 +20,8 @@ function getFiltersObject(filters) {
         if (objectKey === "_id") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "name") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "status") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "ownerFirstName") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "ownerLastName") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "ownerEmail") filtersObject[`ownerEmail`] = filters[objectKey];
+        if (objectKey === "ownerFullName") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "email") filtersObject[objectKey] = filters[objectKey];
     }
     return filtersObject;
 }
@@ -239,7 +238,6 @@ async function deleteStore(req, res) {
         res.json(await sendDeleteStoreEmail(result.data.email, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
