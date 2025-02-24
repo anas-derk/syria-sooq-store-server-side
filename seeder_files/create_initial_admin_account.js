@@ -7,11 +7,7 @@ require("dotenv").config({
 // create Admin User Schema For Admin User Model
 
 const adminSchema = mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
+    fullName: {
         type: String,
         required: true,
     },
@@ -38,37 +34,37 @@ const adminSchema = mongoose.Schema({
     permissions: {
         type: [
             {
-            name: {
-                type: String,
-                required: true,
-                enum: [
-                    "Add New Brand",
-                    "Update Brand Info",
-                    "Delete Brand",
-                    "Update Order Info",
-                    "Delete Order",
-                    "Update Order Info",
-                    "Update Order Product Info",
-                    "Delete Order Product",
-                    "Add New Category",
-                    "Update Category Info",
-                    "Delete Category",
-                    "Add New Product",
-                    "Update Product Info",
-                    "Delete Product",
-                    "Show And Hide Sections",
-                    "Change Bussiness Email Password",
-                    "Add New Admin",
-                    "Add New Ad",
-                    "Update Ad Info",
-                    "Delete Ad"
-                ],
+                name: {
+                    type: String,
+                    required: true,
+                    enum: [
+                        "Add New Brand",
+                        "Update Brand Info",
+                        "Delete Brand",
+                        "Update Order Info",
+                        "Delete Order",
+                        "Update Order Info",
+                        "Update Order Product Info",
+                        "Delete Order Product",
+                        "Add New Category",
+                        "Update Category Info",
+                        "Delete Category",
+                        "Add New Product",
+                        "Update Product Info",
+                        "Delete Product",
+                        "Show And Hide Sections",
+                        "Change Bussiness Email Password",
+                        "Add New Admin",
+                        "Add New Ad",
+                        "Update Ad Info",
+                        "Delete Ad"
+                    ],
+                },
+                value: {
+                    type: Boolean,
+                    required: true,
+                }
             },
-            value: {
-                type: Boolean,
-                required: true,
-            }
-        },
         ],
         required: true,
     },
@@ -94,8 +90,7 @@ const adminModel = mongoose.model("admin", adminSchema);
 const { hash } = require("bcryptjs");
 
 const userInfo = {
-    firstName: "Ahmad",
-    lastName: "Hussein",
+    fullName: "Ahmad Hussein",
     email: process.env.MAIN_ADMIN_EMAIL,
     password: process.env.MAIN_ADMIN_PASSWORD,
     isWebsiteOwner: true,
@@ -147,7 +142,6 @@ const userInfo = {
             value: true,
         },
     ],
-    
 }
 
 async function create_initial_admin_user_account() {
@@ -164,7 +158,7 @@ async function create_initial_admin_user_account() {
         await new_admin_user.save();
         await mongoose.disconnect();
         return "Ok !!, Create Initial Admin Account Process Has Been Successfuly !!";
-    } catch(err) {
+    } catch (err) {
         await mongoose.disconnect();
         throw Error(err);
     }
