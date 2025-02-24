@@ -124,15 +124,7 @@ storesRouter.post("/follow-store-by-user/:storeId",
     storesController.postFollowStoreByUser
 );
 
-storesRouter.put("/update-store-info/:storeId",
-    validateJWT,
-    (req, res, next) => {
-        validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: false },
-        ], res, next);
-    },
-    storesController.putStoreInfo
-);
+storesRouter.put("/update-store-info/:storeId", validateJWT, storesController.putStoreInfo);
 
 storesRouter.put("/blocking-store/:storeId",
     validateJWT,
