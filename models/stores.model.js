@@ -452,30 +452,37 @@ async function deleteStore(authorizationId, storeId, language) {
             if (admin.isWebsiteOwner) {
                 const store = await storeModel.findOne({ _id: storeId });
                 if (store) {
-                    if (!store.isMainStore) {
-                        await storeModel.deleteOne({ _id: storeId });
-                        await categoryModel.deleteMany({ storeId });
-                        await productModel.deleteMany({ storeId });
-                        const merchant = await adminModel.findOne({ storeId, isMerchant: true });
-                        await adminModel.deleteMany({ storeId });
+                    if (store.status !== "pending") {
+                        if (!store.isMainStore) {
+                            await storeModel.deleteOne({ _id: storeId });
+                            await categoryModel.deleteMany({ storeId });
+                            await productModel.deleteMany({ storeId });
+                            const merchant = await adminModel.findOne({ storeId, isMerchant: true });
+                            await adminModel.deleteMany({ storeId });
+                            return {
+                                msg: getSuitableTranslations("Deleting Store Process Has Been Successfully !!", language),
+                                error: false,
+                                data: {
+                                    filePaths: [
+                                        store.coverImagePath,
+                                        store.profileImagePath,
+                                        store.commercialRegisterFilePath,
+                                        store.taxCardFilePath,
+                                        store.addressProofFilePath,
+                                    ],
+                                    adminId: merchant._id,
+                                    email: merchant.email,
+                                },
+                            }
+                        }
                         return {
-                            msg: getSuitableTranslations("Deleting Store Process Has Been Successfully !!", language),
-                            error: false,
-                            data: {
-                                filePaths: [
-                                    store.coverImagePath,
-                                    store.profileImagePath,
-                                    store.commercialRegisterFilePath,
-                                    store.taxCardFilePath,
-                                    store.addressProofFilePath,
-                                ],
-                                adminId: merchant._id,
-                                email: merchant.email,
-                            },
+                            msg: getSuitableTranslations("Sorry, Permission Denied Because This Store Is Main Store !!", language),
+                            error: true,
+                            data: {},
                         }
                     }
                     return {
-                        msg: getSuitableTranslations("Sorry, Permission Denied Because This Store Is Main Store !!", language),
+                        msg: getSuitableTranslations("Sorry, Permission Denied Because This Store In Status: ( pending ) !!", language),
                         error: true,
                         data: {},
                     }
