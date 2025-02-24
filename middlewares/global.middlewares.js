@@ -17,6 +17,7 @@ function validateJWT(req, res, next) {
 function validateCity(city, res, nextFunc) {
     if (![
         "lattakia",
+        "tartus",
         "homs",
         "hama",
         "idleb",

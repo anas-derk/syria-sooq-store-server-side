@@ -250,6 +250,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         enum: [
             "lattakia",
+            "tartus",
             "homs",
             "hama",
             "idleb",
@@ -477,6 +478,7 @@ const orderSchema = new mongoose.Schema({
         default: "",
         enum: [
             "lattakia",
+            "tartus",
             "homs",
             "hama",
             "idleb",
