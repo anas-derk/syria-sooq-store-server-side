@@ -68,18 +68,16 @@ adminsRouter.get("/all-admins-inside-the-page",
 adminsRouter.post("/add-new-admin",
     validateJWT,
     (req, res, next) => {
-        const { firstName, lastName, email, password } = req.body;
+        const { fullName, email, password } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "First Name", fieldValue: firstName, dataTypes: ["string"], isRequiredValue: true },
-            { fieldName: "Last Name", fieldValue: lastName, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Password", fieldValue: password, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateEmail(req.body.email, res, next),
     (req, res, next) => validatePassword(req.body.password, res, next),
-    (req, res, next) => validateName(req.body.firstName, res, next),
-    (req, res, next) => validateName(req.body.lastName, res, next),
+    (req, res, next) => validateName(req.body.fullName, res, next),
     adminsController.postAddNewAdmin
 );
 
