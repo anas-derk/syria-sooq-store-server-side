@@ -124,7 +124,7 @@ async function sendCongratulationsOnCreatingNewAccountEmail(email, language) {
             transporterObj(result.data).sendMail({
                 from: `${process.env.WEBSITE_NAME} <${process.env.BUSSINESS_EMAIL}>`,
                 to: email,
-                subject: "مرحباً بك في ${process.env.WEBSITE_NAME}",
+                subject: `مرحباً بك في ${process.env.WEBSITE_NAME}`,
                 html: htmlContentAfterCompilingEjsTemplateFile,
             }, function (error, info) {
                 if (error) reject(error);
