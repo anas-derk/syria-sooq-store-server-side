@@ -497,18 +497,30 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    closestPoint: String,
-    additionalAddressDetails: String,
+    closestPoint: {
+        type: String,
+        default: "",
+    },
+    additionalAddressDetails: {
+        type: String,
+        default: "",
+    },
     floorNumber: {
         type: Number,
         required: true,
     },
-    additionalNotes: String,
+    additionalNotes: {
+        type: String,
+        default: "",
+    },
     mobilePhone: {
         type: String,
         required: true,
     },
-    backupMobilePhone: String,
+    backupMobilePhone: {
+        type: String,
+        default: "",
+    },
     isReturned: {
         type: Boolean,
         default: false,
