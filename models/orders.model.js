@@ -638,10 +638,20 @@ async function deleteProductFromOrder(authorizationId, orderId, productId, langu
             if (!admin.isBlocked) {
                 const order = await orderModel.findOne({ _id: orderId });
                 if (order) {
-                    if (order.storeId === admin.storeId) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         const newOrderProducts = order.products.filter((order_product) => order_product.productId !== productId);
-                        if (newOrderProducts.length < order.products.length) {
-                            await orderModel.updateOne({ _id: orderId }, { products: newOrderProducts });
+                        const newOrderProductsLength = newOrderProducts.length;
+                        if (newOrderProductsLength === 0) {
+                            return {
+                                msg: getSuitableTranslations("Sorry, This Product For This Order Is Not Found !!", language),
+                                error: true,
+                                data: {},
+                            }
+                        }
+                        if (newOrderProductsLength < order.products.length) {
+                            order.products = newOrderProducts;
+                            order = editOrderPrices(order);
+                            await order.save();
                             return {
                                 msg: getSuitableTranslations("Deleting Product From Order Has Been Successfuly !!", language),
                                 error: false,
