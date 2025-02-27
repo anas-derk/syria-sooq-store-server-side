@@ -460,8 +460,7 @@ function editOrderPrices(order) {
     order.totalPriceBeforeDiscount = result.totalPriceBeforeDiscount;
     order.totalDiscount = result.totalDiscount;
     order.totalPriceAfterDiscount = result.totalPriceAfterDiscount;
-    order.totalAmountBeforeApplyCoupon = order.totalPriceAfterDiscount + order.shippingCost.forLocalProducts + order.shippingCost.forInternationalProducts;
-    order.orderAmount = order?.couponDetails && Object.keys(order?.couponDetails) > 0 ? order.totalAmountBeforeApplyCoupon - (order.totalAmountBeforeApplyCoupon * order.couponDetails.discountPercentage) / 100 : order.totalAmountBeforeApplyCoupon;
+    order.orderAmount = order.totalPriceAfterDiscount + order.shippingCost;
     return order;
 }
 
