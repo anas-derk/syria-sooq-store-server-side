@@ -223,6 +223,20 @@ async function getMainPageData(authorizationId, language) {
     try {
         const user = await userModel.findById(authorizationId);
         const currentDate = new Date();
+        let products = await productModel
+            .find({})
+            .limit(10)
+            .populate("categories").populate("storeId"),
+            offers = await productModel
+                .find({ startDiscountPeriod: { $lte: currentDate }, endDiscountPeriod: { $gte: currentDate } })
+                .limit(10)
+                .populate("categories").populate("storeId");
+        for (let product of products) {
+            product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+        }
+        for (let product of offers) {
+            product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+        }
         if (user) {
             return {
                 msg: getSuitableTranslations("Get Main Page Data Process Has Been Successfully !!", language),
@@ -231,14 +245,8 @@ async function getMainPageData(authorizationId, language) {
                     categories: await categoryModel.find({ parent: null }).limit(10),
                     ads: await adsModel.find({}),
                     mostPopularCategories: await categoryModel.find({ parent: null }).limit(10),
-                    products: await productModel
-                        .find({})
-                        .limit(10)
-                        .populate("categories").populate("storeId"),
-                    offers: await productModel
-                        .find({ startDiscountPeriod: { $lte: currentDate }, endDiscountPeriod: { $gte: currentDate } })
-                        .limit(10)
-                        .populate("categories").populate("storeId"),
+                    products,
+                    offers,
                 },
             }
         }
