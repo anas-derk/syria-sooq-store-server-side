@@ -97,6 +97,7 @@ async function login(email, mobilePhone, password, language) {
                     data: {
                         _id: user._id,
                         isVerified: user.isVerified,
+                        city: user.city,
                     },
                 };
             }
