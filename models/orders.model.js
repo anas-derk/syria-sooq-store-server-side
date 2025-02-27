@@ -183,6 +183,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 imagePath: orderedProducts[i].imagePath,
             });
         }
+        console.log(orderProductsDetails)
         const totalPrices = {
             totalPriceBeforeDiscount: 0,
             totalDiscount: 0,
