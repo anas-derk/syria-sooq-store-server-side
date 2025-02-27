@@ -470,7 +470,7 @@ async function updateOrderProduct(authorizationId, orderId, productId, newOrderP
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (!admin.isBlocked) {
-                const order = await orderModel.findOne({ _id: orderId });
+                let order = await orderModel.findOne({ _id: orderId });
                 if (order) {
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         const productIndex = order.products.findIndex((order_product) => order_product.productId == productId);
@@ -636,7 +636,7 @@ async function deleteProductFromOrder(authorizationId, orderId, productId, langu
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (!admin.isBlocked) {
-                const order = await orderModel.findOne({ _id: orderId });
+                let order = await orderModel.findOne({ _id: orderId });
                 if (order) {
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         const newOrderProducts = order.products.filter((order_product) => order_product.productId !== productId);
