@@ -114,7 +114,7 @@ ordersRouter.post("/create-new-order",
             { fieldName: "Floor Number", fieldValue: floorNumber, dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Additional Notes", fieldValue: additionalNotes, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: true },
-            { fieldName: "Backup Mobile Phones", fieldValue: backupMobilePhone, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Backup Mobile Phones", fieldValue: backupMobilePhone, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Payment Gateway", fieldValue: paymentGateway, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Checkout Status", fieldValue: checkoutStatus, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Order Products", fieldValue: products, dataTypes: ["array"], isRequiredValue: true },
@@ -132,8 +132,7 @@ ordersRouter.post("/create-new-order",
     (req, res, next) => {
         const { checkoutStatus } = req.body;
         if (checkoutStatus) {
-            validateCheckoutStatus(checkoutStatus, res, next);
-            return;
+            return validateCheckoutStatus(checkoutStatus, res, next);
         }
         next();
     },
@@ -150,7 +149,13 @@ ordersRouter.post("/create-new-order",
         validateNumbersIsGreaterThanZero(productsQuantity, res, next, errorMsgs);
     },
     (req, res, next) => validateMobilePhone(req.body.mobilePhone, res, next),
-    (req, res, next) => validateMobilePhone(req.body.backupMobilePhone, res, next),
+    (req, res, next) => {
+        const { checkoutStatus } = req.body;
+        if (checkoutStatus) {
+            return validateMobilePhone(req.body.backupMobilePhone, res, next);
+        }
+        next();
+    },
     (req, res, next) => validatePaymentGateway(req.body.paymentGateway, res, next),
     ordersController.postNewOrder
 );

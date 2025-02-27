@@ -190,7 +190,7 @@ async function createNewOrder(userId, orderDetails, language) {
         }
         for (let product of orderProductsDetails) {
             totalPrices.totalPriceBeforeDiscount += product.unitPrice * product.quantity;
-            totalPrices.totalDiscount += product.unitPrice * product.quantity;
+            totalPrices.totalDiscount += product.unitDiscount * product.quantity;
         }
         totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
         if (user.wallet.remainingAmount < totalPrices.totalPriceAfterDiscount) {
