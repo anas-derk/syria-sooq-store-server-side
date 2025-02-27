@@ -178,8 +178,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 productId: orderedProducts[i]._id,
                 name: orderedProducts[i].name,
                 unitPrice: orderedProducts[i].price,
-                discount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
-                totalAmount: orderedProducts[i].price * orderDetails.products[i].quantity,
+                unitDiscount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
                 quantity: orderDetails.products[i].quantity,
                 imagePath: orderedProducts[i].imagePath,
             });
@@ -190,8 +189,8 @@ async function createNewOrder(userId, orderDetails, language) {
             totalPriceAfterDiscount: 0
         }
         for (let product of orderProductsDetails) {
-            totalPrices.totalPriceBeforeDiscount += product.totalAmount;
-            totalPrices.totalDiscount += product.discount * product.quantity;
+            totalPrices.totalPriceBeforeDiscount += product.unitPrice * product.quantity;
+            totalPrices.totalDiscount += product.unitPrice * product.quantity;
         }
         totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
         if (user.wallet.remainingAmount < totalPrices.totalPriceAfterDiscount) {

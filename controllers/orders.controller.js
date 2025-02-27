@@ -146,7 +146,7 @@ async function putOrder(req, res) {
 
 async function putOrderProduct(req, res) {
     try {
-        const result = await ordersManagmentFunctions.updateOrderProduct(req.data._id, req.params.orderId, req.params.productId, req.body, req.query.language);
+        const result = await ordersManagmentFunctions.updateOrderProduct(req.data._id, req.params.orderId, req.params.productId, { quantity, name, unitPrice } = req.body, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Order Is Not Found !!" || result.msg !== "Sorry, This Product For This Order Is Not Found !!") {
                 return res.status(401).json(result);
