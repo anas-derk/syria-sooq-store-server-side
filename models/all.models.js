@@ -517,10 +517,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    backupMobilePhone: {
-        type: String,
-        required: true,
-    },
+    backupMobilePhone: String,
     isReturned: {
         type: Boolean,
         default: false,
