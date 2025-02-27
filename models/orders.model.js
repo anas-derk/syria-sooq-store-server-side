@@ -454,6 +454,17 @@ async function changeCheckoutStatusToSuccessfull(orderId, language) {
     }
 }
 
+function editOrderPrices(order) {
+    const { calcOrderTotalPrices } = require("../global/functions");
+    const result = calcOrderTotalPrices(order.products);
+    order.totalPriceBeforeDiscount = result.totalPriceBeforeDiscount;
+    order.totalDiscount = result.totalDiscount;
+    order.totalPriceAfterDiscount = result.totalPriceAfterDiscount;
+    order.totalAmountBeforeApplyCoupon = order.totalPriceAfterDiscount + order.shippingCost.forLocalProducts + order.shippingCost.forInternationalProducts;
+    order.orderAmount = order?.couponDetails && Object.keys(order?.couponDetails) > 0 ? order.totalAmountBeforeApplyCoupon - (order.totalAmountBeforeApplyCoupon * order.couponDetails.discountPercentage) / 100 : order.totalAmountBeforeApplyCoupon;
+    return order;
+}
+
 async function updateOrderProduct(authorizationId, orderId, productId, newOrderProductDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -464,12 +475,20 @@ async function updateOrderProduct(authorizationId, orderId, productId, newOrderP
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         const productIndex = order.products.findIndex((order_product) => order_product.productId == productId);
                         if (productIndex >= 0) {
-                            order.products[productIndex].quantity = newOrderProductDetails.quantity;
-                            order.products[productIndex].name = newOrderProductDetails.name;
-                            order.products[productIndex].unitPrice = newOrderProductDetails.unitPrice;
-                            order.products[productIndex].totalAmount = newOrderProductDetails.totalAmount;
-                            const { calcOrderAmount } = require("../global/functions");
-                            await orderModel.updateOne({ _id: orderId }, { products: order.products, orderAmount: calcOrderAmount(order.products) });
+                            if (newOrderProductDetails.quantity && newOrderProductDetails.unitPrice) {
+                                order.products[productIndex].quantity = newOrderProductDetails.quantity;
+                                order.products[productIndex].unitPrice = newOrderProductDetails.unitPrice;
+                                order = editOrderPrices(order);
+                            } else if (newOrderProductDetails.quantity) {
+                                order.products[productIndex].quantity = newOrderProductDetails.quantity;
+                            } else if (newOrderProductDetails.unitPrice) {
+                                order.products[productIndex].unitPrice = newOrderProductDetails.unitPrice;
+                                order = editOrderPrices(order);
+                            }
+                            if (newOrderProductDetails.name) {
+                                order.products[productIndex].name = newOrderProductDetails.name;
+                            }
+                            await order.save();
                             return {
                                 msg: getSuitableTranslations("Updating Order Details Process Has Been Successfuly !!", language),
                                 error: false,
