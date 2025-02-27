@@ -36,12 +36,18 @@ function isValidLanguage(language) {
     return ["ar", "en"].includes(language);
 }
 
-function calcOrderAmount(products) {
-    let newOrderAmount = 0;
-    for (let i = 0; i < products.length; i++) {
-        newOrderAmount += products[i].totalAmount;
+function calcOrderTotalPrices(products) {
+    const totalPrices = {
+        totalPriceBeforeDiscount: 0,
+        totalDiscount: 0,
+        totalPriceAfterDiscount: 0
     }
-    return newOrderAmount;
+    for (let product of products) {
+        totalPrices.totalPriceBeforeDiscount += product.unitPrice * product.quantity;
+        totalPrices.totalDiscount += product.unitDiscount * product.quantity;
+    }
+    totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
+    return totalPrices;
 }
 
 function transporterObj(bussinessEmailPassword) {
@@ -468,7 +474,7 @@ module.exports = {
     isValidName,
     isValidMobilePhone,
     isValidLanguage,
-    calcOrderAmount,
+    calcOrderTotalPrices,
     sendVerificationCodeToUserEmail,
     sendCongratulationsOnCreatingNewAccountEmail,
     sendApproveStoreEmail,
