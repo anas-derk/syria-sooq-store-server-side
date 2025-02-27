@@ -471,7 +471,7 @@ const orderSchema = new mongoose.Schema({
     orderNumber: Number,
     city: {
         type: String,
-        default: "",
+        required: true,
         enum: [
             "lattakia",
             "tartus",
@@ -497,22 +497,13 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    closestPoint: {
-        type: String,
-        default: "",
-    },
-    additionalAddressDetails: {
-        type: String,
-        default: "",
-    },
+    closestPoint: String,
+    additionalAddressDetails: String,
     floorNumber: {
         type: Number,
         required: true,
     },
-    additionalNotes: {
-        type: String,
-        default: "",
-    },
+    additionalNotes: String,
     mobilePhone: {
         type: String,
         required: true,
