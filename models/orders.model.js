@@ -201,7 +201,7 @@ async function createNewOrder(userId, orderDetails, language) {
             }
         }
         user.wallet.fullWithdrawAmount += totalPrices.totalPriceAfterDiscount;
-        user.wallet.remainingAmount = user.wallet.fullDepositAmount - totalPrices.totalPriceAfterDiscount;
+        user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
         await user.save();
         const newOrder = await (
             new orderModel({
@@ -553,7 +553,7 @@ async function cancelOrder(userId, orderId, language) {
                 }
                 await orderModel.updateOne({ _id: orderId }, { status: "cancelled" });
                 user.wallet.fullDepositAmount += order.totalPriceAfterDiscount;
-                user.wallet.remainingAmount = user.wallet.fullDepositAmount - order.totalPriceAfterDiscount;
+                user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
                 await user.save();
                 await (new walletOperationsModel({
                     type: "deposit",
