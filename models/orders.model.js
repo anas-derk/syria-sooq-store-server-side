@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { orderModel, userModel, adminModel, productModel, walletOperationsModel, mongoose } = require("../models/all.models");
+const { orderModel, userModel, adminModel, productModel, walletOperationsModel, cartModel, mongoose } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -235,6 +235,7 @@ async function createNewOrder(userId, orderDetails, language) {
             amount: totalPrices.totalPriceAfterDiscount,
             operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
         })).save();
+        await cartModel.deleteMany({ userId, product: { $in: newOrder.products.map((product) => product.productId) } });
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
             error: false,
