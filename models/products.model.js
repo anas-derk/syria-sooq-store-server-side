@@ -274,21 +274,29 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
                     }
                 }
             ]);
+            let products = await productModel.populate(result[0].products, "categories");
+            for (let product of products) {
+                product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+            }
             return {
                 msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
                 error: false,
                 data: {
-                    products: await productModel.populate(result[0].products, "categories"),
+                    products,
                     productsCount: result[0].productsCount.length > 0 ? result[0].productsCount[0].total : 0,
                     currentDate: new Date()
                 },
             }
         }
+        let products = await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories");
+        for (let product of products) {
+            product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+        }
         return {
             msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
             error: false,
             data: {
-                products: await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories"),
+                products,
                 productsCount: await productModel.countDocuments(filters),
                 currentDate: new Date()
             },
@@ -333,16 +341,20 @@ async function getAllFlashProductsInsideThePage(authorizationId, pageNumber, pag
         if (userType === "user") {
             const user = await userModel.findById(authorizationId);
             if (user) {
+                let products = await productModel
+                    .find(filters)
+                    .sort(sortDetailsObject)
+                    .skip((pageNumber - 1) * pageSize)
+                    .limit(pageSize)
+                    .populate("categories");
+                for (let product of products) {
+                    product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+                }
                 return {
                     msg: getSuitableTranslations("Get All Flash Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
                     error: false,
                     data: {
-                        products: await productModel
-                            .find(filters)
-                            .sort(sortDetailsObject)
-                            .skip((pageNumber - 1) * pageSize)
-                            .limit(pageSize)
-                            .populate("categories"),
+                        products,
                         currentDate: new Date(),
                     },
                 }
@@ -387,13 +399,17 @@ async function getRelatedProductsInTheProduct(authorizationId, productId, langua
         if (user) {
             const productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
             if (productInfo) {
+                let products = await productModel.aggregate([
+                    { $match: { categories: productInfo.categories, _id: { $ne: new mongoose.Types.ObjectId(productId) } } },
+                    { $sample: { size: 10 } }
+                ]);
+                for (let product of products) {
+                    product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+                }
                 return {
                     msg: getSuitableTranslations("Get Sample From Related Products In This Product Process Has Been Successfuly !!", language),
                     error: false,
-                    data: await productModel.aggregate([
-                        { $match: { categories: productInfo.categories, _id: { $ne: new mongoose.Types.ObjectId(productId) } } },
-                        { $sample: { size: 10 } }
-                    ]),
+                    data: products,
                 }
             }
             return {
