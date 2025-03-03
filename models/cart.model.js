@@ -18,7 +18,9 @@ async function addNewProduct(authorizationId, productInfo, language) {
                 return {
                     msg: getSuitableTranslations("Adding New Product To Cart For This User Process Has Been Successfuly !!", language),
                     error: false,
-                    data: {},
+                    data: {
+                        cartLength: await cartModel.countDocuments({ userId: authorizationId }),
+                    },
                 }
             }
             return {
