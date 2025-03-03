@@ -28,6 +28,15 @@ async function getAllProducts(req, res) {
     }
 }
 
+async function getCartLength(req, res) {
+    try {
+        res.json(await cartOperationsManagmentFunctions.getCartLength(req.data._id, req.query.language));
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function deleteAllProducts(req, res) {
     try {
         const result = await cartOperationsManagmentFunctions.deleteAllProducts(req.data._id, req.query.language);
@@ -76,6 +85,7 @@ async function putProduct(req, res) {
 module.exports = {
     postNewProduct,
     getAllProducts,
+    getCartLength,
     deleteProduct,
     deleteAllProducts,
     putProduct,

@@ -61,6 +61,27 @@ async function getAllProducts(authorizationId, language) {
     }
 }
 
+async function getCartLength(authorizationId, language) {
+    try {
+        const userInfo = await userModel.findById(authorizationId);
+        if (userInfo) {
+            return {
+                msg: getSuitableTranslations("Get Cart Length For This User Process Has Been Successfully !!", language),
+                error: false,
+                data: await cartModel.countDocuments({ userId: authorizationId }),
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 async function deleteAllProducts(authorizationId, language) {
     try {
         const userInfo = await userModel.findById(authorizationId);
@@ -151,6 +172,7 @@ async function updateProduct(authorizationId, cartId, newData, language) {
 module.exports = {
     addNewProduct,
     getAllProducts,
+    getCartLength,
     deleteAllProducts,
     deleteProduct,
     updateProduct,
