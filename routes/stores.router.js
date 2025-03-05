@@ -8,6 +8,8 @@ const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functio
 
 const multer = require("multer");
 
+const { validateStoreCategory } = require("../middlewares/stores.middlewares");
+
 storesRouter.get("/stores-count", validateJWT, storesController.getStoresCount);
 
 storesRouter.get("/all-stores-inside-the-page",
@@ -86,9 +88,10 @@ storesRouter.post("/create-new-store",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation } = req.body;
+        const { name, category, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Category", fieldValue: category, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Headquarter Address", fieldValue: headquarterAddress, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Tax Number", fieldValue: taxNumber, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Owner Full Name", fieldValue: ownerFullName, dataTypes: ["string"], isRequiredValue: true },
@@ -98,6 +101,7 @@ storesRouter.post("/create-new-store",
         ], res, next);
     },
     (req, res, next) => validateName(req.body.ownerFullName, res, next),
+    (req, res, next) => validateStoreCategory(req.body.category, res, next),
     (req, res, next) => validateEmail(req.body.email, res, next),
     storesController.postNewStore
 );
