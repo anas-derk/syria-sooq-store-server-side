@@ -23,6 +23,10 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    category: {
+        type: String,
+        required: true,
+    },
     headquarterAddress: {
         type: String,
         required: true,
@@ -97,6 +101,7 @@ const storeModel = mongoose.model("store", storeSchema);
 const storeInfo = {
     adminId: "674f61fc74fbe8e7d7355c07",
     name: "Syria Sooq",
+    category: "any",
     headquarterAddress: "Lattakia, Alzeraa",
     taxNumber: "1234",
     ownerFullName: "Ahmad Hussein",

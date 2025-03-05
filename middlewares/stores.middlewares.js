@@ -1,3 +1,5 @@
+const { getResponseObject } = require("../global/functions");
+
 function validateStoreCategory(category, res, nextFunc, errorMsg = "Sorry, Please Send Valid Store Category !!") {
     const storeCategories = [
         "الإلكترونيات والتقنية",
