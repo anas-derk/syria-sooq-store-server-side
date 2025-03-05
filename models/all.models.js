@@ -97,6 +97,10 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    category: {
+        type: String,
+        required: true,
+    },
     headquarterAddress: {
         type: String,
         required: true,
