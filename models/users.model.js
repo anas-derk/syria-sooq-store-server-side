@@ -245,7 +245,7 @@ async function getMainPageData(authorizationId, language) {
                     categories: await categoryModel.find({ parent: null }).limit(10),
                     ads: {
                         elite: await adsModel.find({ type: "elite" }),
-                        panner: await adsModel.find({ city: user.city })
+                        panner: await adsModel.find({ type: "panner", city: user.city })
                     },
                     mostPopularCategories: await categoryModel.find({ parent: null }).limit(10),
                     products,
