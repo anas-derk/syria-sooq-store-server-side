@@ -97,6 +97,26 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    city: {
+        type: String,
+        required: true,
+        enum: [
+            "lattakia",
+            "tartus",
+            "homs",
+            "hama",
+            "idleb",
+            "daraa",
+            "suwayda",
+            "deer-alzoor",
+            "raqqa",
+            "hasakah",
+            "damascus",
+            "rif-damascus",
+            "aleppo",
+            "quneitra"
+        ],
+    },
     category: {
         type: String,
         required: true,
