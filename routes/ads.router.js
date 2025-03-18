@@ -4,7 +4,7 @@ const adsController = require("../controllers/ads.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateIsExistErrorInFiles, validateAdvertismentType } = require("../middlewares/global.middlewares");
+const { validateJWT, validateIsExistErrorInFiles, validateAdvertismentType, validateCity } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
@@ -30,13 +30,21 @@ adsRouter.post("/add-new-ad",
     }).single("adImage"),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { content, type } = Object.assign({}, req.body);
+        const { content, type, city } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Type", fieldValue: type, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Content", fieldValue: content, dataTypes: ["string"], isRequiredValue: type === "elite" },
+            { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: type === "panner" },
         ], res, next);
     },
     (req, res, next) => validateAdvertismentType((Object.assign({}, req.body)).type, res, next),
+    (req, res, next) => {
+        const { city } = req.body;
+        if (city) {
+            return validateCity((Object.assign({}, req.body)).city, res, next);
+        }
+        next();
+    },
     adsController.postNewAd
 );
 
@@ -81,15 +89,24 @@ adsRouter.put("/change-ad-image/:adId",
     adsController.putAdImage
 );
 
-adsRouter.put("/update-ad-content/:adId",
+adsRouter.put("/update-ad/:adId",
     validateJWT,
     (req, res, next) => {
+        const { content, city } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Ad Id", fieldValue: req.params.adId, dataTypes: ["ObjectId"], isRequiredValue: true },
-            { fieldName: "New Ad Content", fieldValue: req.body.content, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "New Ad Content", fieldValue: content, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "New Ad City", fieldValue: city, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
-    adsController.putTextAdContent
+    (req, res, next) => {
+        const { city } = req.body;
+        if (city) {
+            return validateCity((Object.assign({}, req.body)).city, res, next);
+        }
+        next();
+    },
+    adsController.putAd
 );
 
 module.exports = adsRouter;

@@ -7,7 +7,7 @@ const { getSuitableTranslations } = require("../global/functions");
 async function addNewAd(authorizationId, adsInfo, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 if (await adsModel.countDocuments({}) >= 10) {
                     return {
@@ -45,14 +45,14 @@ async function addNewAd(authorizationId, adsInfo, language) {
 }
 
 async function getAllAds(filters, language) {
-    try{
+    try {
         return {
             msg: getSuitableTranslations("Get All Ads Process Has Been Successfully !!", language),
             error: false,
             data: await adsModel.find(filters),
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
@@ -60,7 +60,7 @@ async function getAllAds(filters, language) {
 async function deleteAd(authorizationId, adId, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const adInfo = await adsModel.findById(adId);
                 if (adInfo) {
@@ -109,9 +109,9 @@ async function deleteAd(authorizationId, adId, language) {
 }
 
 async function updateAdImage(authorizationId, adId, newAdImagePath, language) {
-    try{
+    try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const adInfo = await adsModel.findById(adId);
                 if (adInfo) {
@@ -156,20 +156,20 @@ async function updateAdImage(authorizationId, adId, newAdImagePath, language) {
             data: {},
         }
     }
-    catch(err) {
+    catch (err) {
         throw Error(err);
     }
 }
 
-async function updateTextAdContent(authorizationId, adId, newTextAdContent, language) {
+async function updateAd(authorizationId, adId, newAdInfo, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (!admin.isBlocked) {
                 const adInfo = await adsModel.findById(adId);
                 if (adInfo) {
                     if (adInfo.storeId === admin.storeId) {
-                        await adsModel.updateOne( { _id: adId } , { content: newTextAdContent });
+                        await adsModel.updateOne({ _id: adId }, newAdInfo);
                         return {
                             msg: getSuitableTranslations("Updating Text Ad Content Process Has Been Successfuly !!", language),
                             error: false,
@@ -213,5 +213,5 @@ module.exports = {
     getAllAds,
     deleteAd,
     updateAdImage,
-    updateTextAdContent
+    updateAd
 }

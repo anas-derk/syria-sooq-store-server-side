@@ -786,6 +786,26 @@ const adsSchema = new mongoose.Schema({
         type: String,
         required: () => this.type === "elite",
     },
+    city: {
+        type: String,
+        required: () => this.type === "panner",
+        enum: [
+            "lattakia",
+            "tartus",
+            "homs",
+            "hama",
+            "idleb",
+            "daraa",
+            "suwayda",
+            "deer-alzoor",
+            "raqqa",
+            "hasakah",
+            "damascus",
+            "rif-damascus",
+            "aleppo",
+            "quneitra"
+        ],
+    },
     imagePath: {
         type: String,
         required: true,

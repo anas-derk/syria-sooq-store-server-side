@@ -16,10 +16,11 @@ async function postNewAd(req, res) {
     try {
         const outputImageFilePath = `assets/images/ads/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
-        const adInfo = {
-            ...{ content } = Object.assign({}, req.body),
-            imagePath: outputImageFilePath,
-        };
+        const bodyData = Object.assign({}, req.body);
+        const adInfo = {};
+        adInfo.imagePath = outputImageFilePath;
+        adInfo.content = bodyData.content;
+        if (bodyData.city) adInfo.city = bodyData.city;
         const result = await adsOPerationsManagmentFunctions.addNewAd(req.data._id, adInfo, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, Can't Add New Ad Because Arrive To Max Limits For Ads Count ( Limits: 10 ) !!") {
@@ -85,9 +86,9 @@ async function putAdImage(req, res) {
     }
 }
 
-async function putTextAdContent(req, res) {
+async function putAd(req, res) {
     try {
-        const result = await adsOPerationsManagmentFunctions.updateTextAdContent(req.data._id, req.params.adId, req.body.content, req.query.language);
+        const result = await adsOPerationsManagmentFunctions.updateAd(req.data._id, req.params.adId, { content, city } = req.body, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Ad Is Not Exist !!") {
                 return res.status(401).json(result);
@@ -105,5 +106,5 @@ module.exports = {
     getAllAds,
     deleteAd,
     putAdImage,
-    putTextAdContent
+    putAd
 }
