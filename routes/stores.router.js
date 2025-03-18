@@ -2,7 +2,7 @@ const storesRouter = require("express").Router();
 
 const storesController = require("../controllers/stores.controller");
 
-const { validateJWT, validatePassword, validateEmail, validateName, validateIsExistErrorInFiles, validateUserType } = require("../middlewares/global.middlewares");
+const { validateJWT, validatePassword, validateEmail, validateName, validateIsExistErrorInFiles, validateUserType, validateCity } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
 
