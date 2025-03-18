@@ -243,7 +243,10 @@ async function getMainPageData(authorizationId, language) {
                 error: true,
                 data: {
                     categories: await categoryModel.find({ parent: null }).limit(10),
-                    ads: await adsModel.find({}),
+                    ads: {
+                        elite: await adsModel.find({ type: "elite" }),
+                        panner: await adsModel.find({ city: user.city })
+                    },
                     mostPopularCategories: await categoryModel.find({ parent: null }).limit(10),
                     products,
                     offers,
