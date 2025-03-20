@@ -183,7 +183,6 @@ async function createNewOrder(userId, orderDetails, language) {
                 imagePath: orderedProducts[i].imagePath,
             });
         }
-        console.log(orderProductsDetails)
         const totalPrices = {
             totalPriceBeforeDiscount: 0,
             totalDiscount: 0,
@@ -194,16 +193,18 @@ async function createNewOrder(userId, orderDetails, language) {
             totalPrices.totalDiscount += product.unitDiscount * product.quantity;
         }
         totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
-        if (user.wallet.remainingAmount < totalPrices.totalPriceAfterDiscount) {
-            return {
-                msg: getSuitableTranslations("Sorry, There Is Not Enough Balance In This User's Wallet To Complete The Purchase", language),
-                error: true,
-                data: {},
+        if (orderDetails.paymentGateway === "Wallet") {
+            if (user.wallet.remainingAmount < totalPrices.totalPriceAfterDiscount) {
+                return {
+                    msg: getSuitableTranslations("Sorry, There Is Not Enough Balance In This User's Wallet To Complete The Purchase", language),
+                    error: true,
+                    data: {},
+                }
             }
+            user.wallet.fullWithdrawAmount += totalPrices.totalPriceAfterDiscount;
+            user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
+            await user.save();
         }
-        user.wallet.fullWithdrawAmount += totalPrices.totalPriceAfterDiscount;
-        user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
-        await user.save();
         const newOrder = await (
             new orderModel({
                 storeId: existOrderProducts[0].storeId,
@@ -230,12 +231,14 @@ async function createNewOrder(userId, orderDetails, language) {
                 fullName: user.fullName,
             })
         ).save();
-        await (new walletOperationsModel({
-            type: "withdraw",
-            userId,
-            amount: totalPrices.totalPriceAfterDiscount,
-            operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
-        })).save();
+        if (orderDetails.paymentGateway === "Wallet") {
+            await (new walletOperationsModel({
+                type: "withdraw",
+                userId,
+                amount: totalPrices.totalPriceAfterDiscount,
+                operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
+            })).save();
+        }
         await cartModel.deleteMany({ userId, product: { $in: newOrder.products.map((product) => product.productId) } });
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
