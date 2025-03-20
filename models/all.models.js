@@ -300,6 +300,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    addresses: {
+        type: Array,
+        default: [],
+    },
     interests: {
         type: Array,
         default: [],
