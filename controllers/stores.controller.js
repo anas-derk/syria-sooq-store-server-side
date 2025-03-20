@@ -74,6 +74,7 @@ async function getMainStoreDetails(req, res) {
 async function postNewStore(req, res) {
     try {
         const storeFiles = Object.assign({}, req.files);
+        console.log(storeFiles);
         let bufferFiles = [
             storeFiles.coverImage[0].buffer,
             storeFiles.profileImage[0].buffer,
