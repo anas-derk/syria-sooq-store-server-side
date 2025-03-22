@@ -277,46 +277,35 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
                 data: {},
             }
         }
-        // if (isReturnAllProducts) {
-
-        // }
-        // if (existOrderProducts.length < orderDetails.products.length) {
-        //     for (let product of orderDetails.products) {
-        //         let isExistProduct = false;
-        //         for (let existProduct of existOrderProducts) {
-        //             if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)) {
-        //                 isExistProduct = true;
-        //                 break;
-        //             }
-        //         }
-        //         if (!isExistProduct) {
-        //             return {
-        //                 msg: getSuitableTranslations("Sorry, Product Id: {{productId}} Is Not Exist !!", language, { productId: product.productId }),
-        //                 error: true,
-        //                 data: {},
-        //             }
-        //         }
-        //     }
-        // }
-        // const orderedProducts = orderDetails.products.map((product) => existOrderProducts.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
-        // for (let i = 0; i < orderedProducts.length; i++) {
-        //     if ((new mongoose.Types.ObjectId(orderDetails.products[i].productId)).equals(orderedProducts[i]._id)) {
-        //         if (orderedProducts[i].quantity === 0) {
-        //             return {
-        //                 msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: orderedProducts[i]._id }),
-        //                 error: true,
-        //                 data: {},
-        //             }
-        //         }
-        //         if (orderDetails.products[i].quantity > orderedProducts[i].quantity) {
-        //             return {
-        //                 msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i]._id, quantity: orderedProducts[i].quantity }),
-        //                 error: true,
-        //                 data: {},
-        //             }
-        //         }
-        //     }
-        // }
+        for (let product of products) {
+            let isExistProduct = false;
+            for (let existProduct of result.data.products) {
+                if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct.productId)) {
+                    isExistProduct = true;
+                    break;
+                }
+            }
+            if (!isExistProduct) {
+                return {
+                    msg: getSuitableTranslations("Sorry, Product Id: {{productId}} Is Not Exist !!", language, { productId: product.productId }),
+                    error: true,
+                    data: {},
+                }
+            }
+        }
+        const orderedProducts = products.map((product) => result.data.products.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct.productId)));
+        console.log(orderedProducts)
+        for (let i = 0; i < orderedProducts.length; i++) {
+            if ((new mongoose.Types.ObjectId(products[i].productId)).equals(orderedProducts[i].productId)) {
+                if (products[i].quantity > orderedProducts[i].quantity) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i].productId, quantity: orderedProducts[i].quantity }),
+                        error: true,
+                        data: {},
+                    }
+                }
+            }
+        }
         // let orderProductsDetails = [];
         // for (let i = 0; i < orderedProducts.length; i++) {
         //     orderProductsDetails.push({
