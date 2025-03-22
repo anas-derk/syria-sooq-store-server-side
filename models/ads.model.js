@@ -57,7 +57,7 @@ async function getAllAds(filters, language) {
         return {
             msg: getSuitableTranslations("Get All Ads Process Has Been Successfully !!", language),
             error: false,
-            data: await adsModel.find(filters),
+            data: await adsModel.find(filters).populate("product"),
         }
     }
     catch (err) {
