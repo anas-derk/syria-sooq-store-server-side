@@ -16,6 +16,14 @@ async function addNewAd(authorizationId, adsInfo, language) {
                         data: {},
                     }
                 }
+                const product = await productModel.findById(adsInfo.product);
+                if (!product) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Product Is Not Exist !!", language),
+                        error: false,
+                        data: {},
+                    }
+                }
                 adsInfo.storeId = admin.storeId;
                 await (new adsModel(adsInfo)).save();
                 return {

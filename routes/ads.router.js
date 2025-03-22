@@ -30,11 +30,12 @@ adsRouter.post("/add-new-ad",
     }).single("adImage"),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { content, type, city } = Object.assign({}, req.body);
+        const { content, type, city, product } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Type", fieldValue: type, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Content", fieldValue: content, dataTypes: ["string"], isRequiredValue: type === "elite" },
             { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: type === "panner" },
+            { fieldName: "Product", fieldValue: product, dataTypes: ["ObjectId"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateAdvertismentType((Object.assign({}, req.body)).type, res, next),
