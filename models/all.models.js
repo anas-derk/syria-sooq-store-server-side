@@ -819,6 +819,11 @@ const adsSchema = new mongoose.Schema({
         default: "panner",
         enum: ["panner", "elite"],
     },
+    product: {
+        type: mongoose.Types.ObjectId,
+        ref: "product",
+        required: true,
+    },
     dateOfPost: {
         type: Date,
         default: Date.now,
