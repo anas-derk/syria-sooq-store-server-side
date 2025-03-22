@@ -95,13 +95,7 @@ async function postNewRequestToReturnOrderProducts(req, res) {
         const { isReturnAllProducts, language } = req.query;
         const result = await ordersManagmentFunctions.createNewRequestToReturnOrderProducts(req.data._id, req.params.orderId, req.body.products, isReturnAllProducts, language);
         if (!result.error) {
-            return res.json({
-                ...result,
-                data: {
-                    orderId: result.data.orderId,
-                    orderNumber: result.data.orderNumber
-                }
-            });
+            return res.json(result);
         }
         res.json(result);
     }

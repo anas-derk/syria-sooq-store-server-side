@@ -190,5 +190,6 @@
     "Sorry, This Request Cannot Be Canceled Because It Is Not In Pending Status !!": "عذراً، هذا الطلب لا يمكن إلغاؤه لأنه ليس في حالة الانتظار !!",
     "Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!": "عذراً ، لا يمكن إنشاء طلب لإرجاع المنتجات بسبب أنّ الطلب الأساسي لم يتم إكمال عملية الدفع فيه !!",
     "Sorry, The Order Cannot Be Returned Because It Has Already Been Canceled !!": "عذراً ، لا يمكن إرجاع الطلبية لأنه تم إلغاؤها مسبقاً !!",
-    "Sorry, A Return Request Cannot Be Created Because The Order Has Not Reached You ( Status: Pending Or Shipping ) !!": "عذراً ، لا يمكن إنشاء طلب لإرجاع منتجات لأنّ الطلبية لم تصل لك ( الحالة: الانتظار أو قيد التوصيل ) !!"
+    "Sorry, A Return Request Cannot Be Created Because The Order Has Not Reached You ( Status: Pending Or Shipping ) !!": "عذراً ، لا يمكن إنشاء طلب لإرجاع منتجات لأنّ الطلبية لم تصل لك ( الحالة: الانتظار أو قيد التوصيل ) !!",
+    "Creating New Request To Return Order Products Process Has Been Successfuly !!": "عملية إنشاء طلب جديد لإعادة منتجات طلبية تمت بنجاح !!"
 }

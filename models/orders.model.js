@@ -258,106 +258,106 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
         }
         if (result.data.checkoutStatus === "Checkout Incomplete") {
             return {
-                msg: "Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!",
+                msg: getSuitableTranslations("Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!", language),
                 error: true,
                 data: {},
             }
         }
         if (result.data.status === "cancelled") {
             return {
-                msg: "Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!",
+                msg: getSuitableTranslations("Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!", language),
                 error: true,
                 data: {},
             }
         }
         if (result.data.status !== "completed") {
             return {
-                msg: "Sorry, A Return Request Cannot Be Created Because The Order Has Not Reached You ( Status: Pending Or Shipping ) !!",
+                msg: getSuitableTranslations("Sorry, A Return Request Cannot Be Created Because The Order Has Not Reached You ( Status: Pending Or Shipping ) !!", language),
                 error: true,
                 data: {},
             }
         }
-        if (isReturnAllProducts) {
+        // if (isReturnAllProducts) {
 
-        }
-        if (existOrderProducts.length < orderDetails.products.length) {
-            for (let product of orderDetails.products) {
-                let isExistProduct = false;
-                for (let existProduct of existOrderProducts) {
-                    if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)) {
-                        isExistProduct = true;
-                        break;
-                    }
-                }
-                if (!isExistProduct) {
-                    return {
-                        msg: getSuitableTranslations("Sorry, Product Id: {{productId}} Is Not Exist !!", language, { productId: product.productId }),
-                        error: true,
-                        data: {},
-                    }
-                }
-            }
-        }
-        const orderedProducts = orderDetails.products.map((product) => existOrderProducts.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
-        for (let i = 0; i < orderedProducts.length; i++) {
-            if ((new mongoose.Types.ObjectId(orderDetails.products[i].productId)).equals(orderedProducts[i]._id)) {
-                if (orderedProducts[i].quantity === 0) {
-                    return {
-                        msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: orderedProducts[i]._id }),
-                        error: true,
-                        data: {},
-                    }
-                }
-                if (orderDetails.products[i].quantity > orderedProducts[i].quantity) {
-                    return {
-                        msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i]._id, quantity: orderedProducts[i].quantity }),
-                        error: true,
-                        data: {},
-                    }
-                }
-            }
-        }
-        let orderProductsDetails = [];
-        for (let i = 0; i < orderedProducts.length; i++) {
-            orderProductsDetails.push({
-                productId: orderedProducts[i]._id,
-                name: orderedProducts[i].name,
-                unitPrice: orderedProducts[i].price,
-                discount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
-                totalAmount: orderedProducts[i].price * orderDetails.products[i].quantity,
-                quantity: orderDetails.products[i].quantity,
-                imagePath: orderedProducts[i].imagePath,
-            });
-        }
+        // }
+        // if (existOrderProducts.length < orderDetails.products.length) {
+        //     for (let product of orderDetails.products) {
+        //         let isExistProduct = false;
+        //         for (let existProduct of existOrderProducts) {
+        //             if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)) {
+        //                 isExistProduct = true;
+        //                 break;
+        //             }
+        //         }
+        //         if (!isExistProduct) {
+        //             return {
+        //                 msg: getSuitableTranslations("Sorry, Product Id: {{productId}} Is Not Exist !!", language, { productId: product.productId }),
+        //                 error: true,
+        //                 data: {},
+        //             }
+        //         }
+        //     }
+        // }
+        // const orderedProducts = orderDetails.products.map((product) => existOrderProducts.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
+        // for (let i = 0; i < orderedProducts.length; i++) {
+        //     if ((new mongoose.Types.ObjectId(orderDetails.products[i].productId)).equals(orderedProducts[i]._id)) {
+        //         if (orderedProducts[i].quantity === 0) {
+        //             return {
+        //                 msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: orderedProducts[i]._id }),
+        //                 error: true,
+        //                 data: {},
+        //             }
+        //         }
+        //         if (orderDetails.products[i].quantity > orderedProducts[i].quantity) {
+        //             return {
+        //                 msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i]._id, quantity: orderedProducts[i].quantity }),
+        //                 error: true,
+        //                 data: {},
+        //             }
+        //         }
+        //     }
+        // }
+        // let orderProductsDetails = [];
+        // for (let i = 0; i < orderedProducts.length; i++) {
+        //     orderProductsDetails.push({
+        //         productId: orderedProducts[i]._id,
+        //         name: orderedProducts[i].name,
+        //         unitPrice: orderedProducts[i].price,
+        //         discount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
+        //         totalAmount: orderedProducts[i].price * orderDetails.products[i].quantity,
+        //         quantity: orderDetails.products[i].quantity,
+        //         imagePath: orderedProducts[i].imagePath,
+        //     });
+        // }
 
 
 
-        const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
-        await (new returnedOrderModel({
-            returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
-            orderNumber: orderDetails.orderNumber,
-            orderId,
-            order_amount: orderDetails.order_amount,
-            customer: {
-                first_name: orderDetails.billing_address.given_name,
-                last_name: orderDetails.billing_address.family_name,
-                email: orderDetails.billing_address.email,
-                phone: orderDetails.billing_address.phone,
-            },
-            order_lines: orderDetails.order_lines,
-        })).save();
-        await orderModel.updateOne({ _id: orderId }, { isReturned: true });
+        // const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
+        // await (new returnedOrderModel({
+        //     returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
+        //     orderNumber: orderDetails.orderNumber,
+        //     orderId,
+        //     order_amount: orderDetails.order_amount,
+        //     customer: {
+        //         first_name: orderDetails.billing_address.given_name,
+        //         last_name: orderDetails.billing_address.family_name,
+        //         email: orderDetails.billing_address.email,
+        //         phone: orderDetails.billing_address.phone,
+        //     },
+        //     order_lines: orderDetails.order_lines,
+        // })).save();
+        // await orderModel.updateOne({ _id: orderId }, { isReturned: true });
+        // return {
+        //     msg: "Creating New Returned Order Process Has Been Successfuly !!",
+        //     error: false,
+        //     data: {},
+        // }
+        // const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
+        // const { _id } = await ((new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 }))).save();
         return {
-            msg: "Creating New Returned Order Process Has Been Successfuly !!",
+            msg: getSuitableTranslations("Creating New Request To Return Order Products Process Has Been Successfuly !!", language),
             error: false,
             data: {},
-        }
-        const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
-        const { _id } = await ((new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 }))).save();
-        return {
-            msg: "Creating New Order Process Has Been Successfuly !!",
-            error: false,
-            data: _id,
         }
     } catch (err) {
         throw Error(err);
