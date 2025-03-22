@@ -575,7 +575,7 @@ const orderModel = mongoose.model("order", orderSchema);
 // Create Return Order Schema
 
 const returnOrderSchema = new mongoose.Schema({
-    order: {
+    originalOrder: {
         type: mongoose.Types.ObjectId,
         ref: "order",
         required: true,
@@ -598,7 +598,7 @@ const returnOrderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "pending",
+        default: "awaiting products",
         enum: [
             "awaiting products",
             "received products",
@@ -613,27 +613,23 @@ const returnOrderSchema = new mongoose.Schema({
         },
         quantity: {
             type: Number,
-            default: 0,
+            required: true,
         },
         name: {
             type: String,
-            default: "none",
+            required: true,
         },
         unitPrice: {
             type: Number,
-            default: 0,
+            required: true,
         },
-        discount: {
-            type: Number,
-            default: 0,
-        },
-        totalAmount: {
+        unitDiscount: {
             type: Number,
             default: 0,
         },
         imagePath: {
             type: String,
-            default: "none",
+            required: true,
         },
     }],
     addedDate: {

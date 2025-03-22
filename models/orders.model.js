@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { orderModel, userModel, adminModel, productModel, walletOperationsModel, cartModel, mongoose } = require("../models/all.models");
+const { orderModel, userModel, adminModel, productModel, walletOperationsModel, cartModel, returnOrderModel, mongoose } = require("../models/all.models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
@@ -256,6 +256,14 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
         if (result.error) {
             return result;
         }
+        const returnOrder = await returnOrderModel.findOne({ originalOrder: orderId });
+        if (returnOrder) {
+            return {
+                msg: getSuitableTranslations("Sorry, The Return Request For This Order's Products Already Exists !!", language),
+                error: true,
+                data: {},
+            }
+        }
         if (result.data.checkoutStatus === "Checkout Incomplete") {
             return {
                 msg: getSuitableTranslations("Sorry, A Return Request Cannot Be Created Because The Original Order Has Not Completed The Payment Process !!", language),
@@ -277,6 +285,25 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
                 data: {},
             }
         }
+        if (isReturnAllProducts) {
+            await (new returnOrderModel({
+                originalOrder: orderId,
+                products: result.data.products.map((product) => ({
+                    productId: product.productId,
+                    quantity: product.quantity,
+                    name: product.name,
+                    unitPrice: product.unitPrice,
+                    unitDiscount: product.unitDiscount,
+                    imagePath: product.imagePath,
+                })),
+                orderNumber: await returnOrderModel.countDocuments() + 1,
+            })).save();
+            return {
+                msg: getSuitableTranslations("Creating New Request To Return Order Products Process Has Been Successfuly !!", language),
+                error: false,
+                data: {},
+            }
+        }
         for (let product of products) {
             let isExistProduct = false;
             for (let existProduct of result.data.products) {
@@ -294,7 +321,6 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
             }
         }
         const orderedProducts = products.map((product) => result.data.products.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct.productId)));
-        console.log(orderedProducts)
         for (let i = 0; i < orderedProducts.length; i++) {
             if ((new mongoose.Types.ObjectId(products[i].productId)).equals(orderedProducts[i].productId)) {
                 if (products[i].quantity > orderedProducts[i].quantity) {
@@ -306,43 +332,23 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
                 }
             }
         }
-        // let orderProductsDetails = [];
-        // for (let i = 0; i < orderedProducts.length; i++) {
-        //     orderProductsDetails.push({
-        //         productId: orderedProducts[i]._id,
-        //         name: orderedProducts[i].name,
-        //         unitPrice: orderedProducts[i].price,
-        //         discount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
-        //         totalAmount: orderedProducts[i].price * orderDetails.products[i].quantity,
-        //         quantity: orderDetails.products[i].quantity,
-        //         imagePath: orderedProducts[i].imagePath,
-        //     });
-        // }
-
-
-
-        // const returnedOrder = await returnedOrderModel.findOne().sort({ orderNumber: -1 });
-        // await (new returnedOrderModel({
-        //     returnedOrderNumber: returnedOrder ? returnedOrder.returnedOrderNumber + 1 : 1,
-        //     orderNumber: orderDetails.orderNumber,
-        //     orderId,
-        //     order_amount: orderDetails.order_amount,
-        //     customer: {
-        //         first_name: orderDetails.billing_address.given_name,
-        //         last_name: orderDetails.billing_address.family_name,
-        //         email: orderDetails.billing_address.email,
-        //         phone: orderDetails.billing_address.phone,
-        //     },
-        //     order_lines: orderDetails.order_lines,
-        // })).save();
-        // await orderModel.updateOne({ _id: orderId }, { isReturned: true });
-        // return {
-        //     msg: "Creating New Returned Order Process Has Been Successfuly !!",
-        //     error: false,
-        //     data: {},
-        // }
-        // const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
-        // const { _id } = await ((new orderModel({ orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000 }))).save();
+        let orderProductsDetails = [];
+        for (let i = 0; i < orderedProducts.length; i++) {
+            orderProductsDetails.push({
+                productId: orderedProducts[i].productId,
+                name: orderedProducts[i].name,
+                unitPrice: orderedProducts[i].unitPrice,
+                unitDiscount: orderedProducts[i].unitDiscount,
+                totalAmount: orderedProducts[i].unitPrice * products[i].quantity,
+                quantity: products[i].quantity,
+                imagePath: orderedProducts[i].imagePath,
+            });
+        }
+        await (new returnOrderModel({
+            originalOrder: orderId,
+            products: orderProductsDetails,
+            orderNumber: await returnOrderModel.countDocuments() + 1,
+        })).save();
         return {
             msg: getSuitableTranslations("Creating New Request To Return Order Products Process Has Been Successfuly !!", language),
             error: false,
