@@ -40,7 +40,8 @@ function getFiltersObjectForUpdateOrder(acceptableData) {
 
 async function getOrdersCount(req, res) {
     try {
-        res.json(await ordersManagmentFunctions.getOrdersCount(req.data._id, getFiltersObject(req.query), req.query.language));
+        const filters = req.query;
+        res.json(await ordersManagmentFunctions.getOrdersCount(req.data._id, filters.ordersType, getFiltersObject(filters), req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -50,7 +51,7 @@ async function getOrdersCount(req, res) {
 async function getAllOrdersInsideThePage(req, res) {
     try {
         const filters = req.query;
-        res.json(await ordersManagmentFunctions.getAllOrdersInsideThePage(req.data._id, filters.pageNumber, filters.pageSize, getFiltersObject(filters), filters.language));
+        res.json(await ordersManagmentFunctions.getAllOrdersInsideThePage(req.data._id, filters.pageNumber, filters.pageSize, filters.ordersType, getFiltersObject(filters), filters.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -59,10 +60,10 @@ async function getAllOrdersInsideThePage(req, res) {
 
 async function getOrderDetails(req, res) {
     try {
-        res.json(await ordersManagmentFunctions.getOrderDetails(req.data._id, req.params.orderId, req.query.destination, req.query.language));
+        const { destination, ordersType } = req.query;
+        res.json(await ordersManagmentFunctions.getOrderDetails(req.data._id, req.params.orderId, destination, ordersType, req.query.language));
     }
     catch (err) {
-        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }

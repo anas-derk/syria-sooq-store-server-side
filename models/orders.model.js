@@ -4,13 +4,15 @@ const { orderModel, userModel, adminModel, productModel, walletOperationsModel, 
 
 const { getSuitableTranslations } = require("../global/functions");
 
-async function getOrdersCount(authorizationId, filters, language) {
+async function getOrdersCount(authorizationId, ordersType = "normal", filters, language) {
     try {
         const user = filters.destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
             if (filters.destination === "user") {
                 filters.userId = authorizationId;
-                filters.checkoutStatus = "Checkout Successfull";
+                if (ordersType === "normal") {
+                    filters.checkoutStatus = "Checkout Successfull";
+                }
             } else {
                 filters.storeId = user.storeId;
             }
@@ -18,7 +20,7 @@ async function getOrdersCount(authorizationId, filters, language) {
             return {
                 msg: getSuitableTranslations("Get Orders Count Process Has Been Successfully !!", language),
                 error: false,
-                data: await orderModel.countDocuments(filters),
+                data: ordersType === "normal" ? await orderModel.countDocuments(filters) : await returnOrderModel.countDocuments(filters),
             }
         }
         return {
@@ -31,23 +33,25 @@ async function getOrdersCount(authorizationId, filters, language) {
     }
 }
 
-async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, filters, language) {
+async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, ordersType = "normal", filters, language) {
     try {
         const user = filters.destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
             if (filters.destination === "user") {
                 filters.userId = authorizationId;
-                filters.checkoutStatus = "Checkout Successfull";
+                if (ordersType === "normal") {
+                    filters.checkoutStatus = "Checkout Successfull";
+                }
             } else {
                 filters.storeId = user.storeId;
             }
             delete filters.destination;
             return {
-                msg: getSuitableTranslations("Get All Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+                msg: getSuitableTranslations(`Get All ${ordersType.replace(ordersType[0], ordersType[0].toUpperCase())} Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!`, language, { pageNumber }),
                 error: false,
                 data: {
-                    orders: await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
-                    ordersCount: await orderModel.countDocuments(filters)
+                    orders: ordersType === "normal" ? await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }) : await returnOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
+                    ordersCount: ordersType === "normal" ? await orderModel.countDocuments(filters) : await returnOrderModel.countDocuments(filters),
                 },
             }
         }
@@ -61,11 +65,11 @@ async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, 
     }
 }
 
-async function getOrderDetails(authorizationId, orderId, destination, language) {
+async function getOrderDetails(authorizationId, orderId, destination, ordersType = "normal", language) {
     try {
         const user = destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
-            const order = await orderModel.findById(orderId).populate("storeId");
+            const order = ordersType === "normal" ? await orderModel.findById(orderId).populate("storeId") : await returnOrderModel.findById(orderId).populate("storeId");
             if (order) {
                 return {
                     msg: getSuitableTranslations("Get Order Details Process Has Been Successfully !!", language),

@@ -554,8 +554,8 @@ const orderSchema = new mongoose.Schema({
         default: false,
     },
     isDeleted: {
-        default: false,
         type: Boolean,
+        default: false,
     },
     shippingCost: {
         type: Number,
@@ -575,6 +575,11 @@ const orderModel = mongoose.model("order", orderSchema);
 // Create Return Order Schema
 
 const returnOrderSchema = new mongoose.Schema({
+    storeId: {
+        type: mongoose.Types.ObjectId,
+        ref: "store",
+        required: true,
+    },
     originalOrder: {
         type: mongoose.Types.ObjectId,
         ref: "order",
@@ -638,8 +643,8 @@ const returnOrderSchema = new mongoose.Schema({
     },
     orderNumber: Number,
     isDeleted: {
-        default: false,
         type: Boolean,
+        default: false,
     },
 });
 
