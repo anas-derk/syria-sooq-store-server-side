@@ -69,7 +69,7 @@ async function getOrderDetails(authorizationId, orderId, destination, ordersType
     try {
         const user = destination === "user" ? await userModel.findById(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
-            const order = ordersType === "normal" ? await orderModel.findById(orderId).populate("storeId") : await returnOrderModel.findById(orderId).populate("storeId");
+            const order = ordersType === "normal" ? await orderModel.findById(orderId).populate("storeId") : await returnOrderModel.findById(orderId).populate("storeId").populate("originalOrder");
             if (order) {
                 return {
                     msg: getSuitableTranslations("Get Order Details Process Has Been Successfully !!", language),
