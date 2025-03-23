@@ -207,17 +207,26 @@ ordersRouter.post("/handle-checkout-complete/:orderId",
 ordersRouter.post("/update-order/:orderId",
     validateJWT,
     (req, res, next) => {
+        const { ordersType, isSendEmailToTheCustomer } = req.query;
         const { status } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
-            { fieldName: "Is Send Email To The Customer", fieldValue: Boolean(req.query.isSendEmailToTheCustomer), dataTypes: ["boolean"], isRequiredValue: false },
-            { fieldName: "Status", fieldValue: status, dataTypes: ["string"], isRequiredValue: req.query.isSendEmailToTheCustomer ? true : false },
+            { fieldName: "Orders Type", fieldValue: ordersType, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Is Send Email To The Customer", fieldValue: Boolean(isSendEmailToTheCustomer), dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Status", fieldValue: status, dataTypes: ["string"], isRequiredValue: isSendEmailToTheCustomer ? true : false },
         ], res, next);
+    },
+    (req, res, next) => {
+        const { ordersType } = req.query;
+        if (ordersType) {
+            return validateOrdersType(ordersType, res, next);
+        }
+        next();
     },
     (req, res, next) => {
         const { status } = req.body;
         if (status) {
-            return validateOrderStatus(status, res, next);
+            return validateOrderStatus(req.query.ordersType, status, res, next);
         }
         next();
     },

@@ -195,8 +195,9 @@ function validatePaymentGateway(paymentGate, res, nextFunc) {
     nextFunc();
 }
 
-function validateOrderStatus(status, res, nextFunc) {
-    if (!["pending", "shipping", "completed"].includes(status)) {
+function validateOrderStatus(ordersType, status, res, nextFunc) {
+    const validNormalOrderStatus = ["pending", "shipping", "completed"], validReturnOrderStatus = ["awaiting products", "received products", "checking products", "returned products"];
+    if (ordersType === "normal" ? !validNormalOrderStatus.includes(status) : !validReturnOrderStatus.includes(status)) {
         res.status(400).json(getResponseObject("Please Send Valid Order Status !!", true, {}));
         return;
     }
@@ -204,8 +205,8 @@ function validateOrderStatus(status, res, nextFunc) {
 }
 
 function validateOrdersType(ordersType, res, nextFunc) {
-    if (!["normal", "returned"].includes(ordersType)) {
-        res.status(400).json(getResponseObject("Please Send Valid Orders Type !!", true, {}));
+    if (!["normal", "return"].includes(ordersType)) {
+        res.status(400).json(getResponseObject("Please Send Valid Orders Type ( 'normal' or 'return' ) !!", true, {}));
         return;
     }
     nextFunc();

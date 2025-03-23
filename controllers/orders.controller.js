@@ -86,7 +86,6 @@ async function postNewOrder(req, res) {
         res.json(result);
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -120,14 +119,15 @@ async function postCheckoutComplete(req, res) {
 
 async function putOrder(req, res) {
     try {
+        const { ordersType, isSendEmailToTheCustomer } = req.query;
         const { status } = req.body;
-        const result = await ordersManagmentFunctions.updateOrder(req.data._id, req.params.orderId, getFiltersObjectForUpdateOrder({ status }), req.query.language);
+        const result = await ordersManagmentFunctions.updateOrder(req.data._id, req.params.orderId, ordersType, getFiltersObjectForUpdateOrder({ status }), req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Order Is Not Found !!") {
                 return res.status(401).json(result);
             }
         }
-        if (req.query.isSendEmailToTheCustomer && result.data.email) {
+        if (isSendEmailToTheCustomer && result.data.email) {
             if (status === "shipping" || status === "completed") {
                 result.data.status = status;
                 await sendUpdateOrderEmail(result.data.email, result.data, "ar");

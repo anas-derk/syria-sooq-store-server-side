@@ -256,7 +256,7 @@ async function createNewOrder(userId, orderDetails, language) {
 
 async function createNewRequestToReturnOrderProducts(authorizationId, orderId, products, isReturnAllProducts, language) {
     try {
-        const result = await getOrderDetails(authorizationId, orderId, "user", language);
+        const result = await getOrderDetails(authorizationId, orderId, "user", "normal", language);
         if (result.error) {
             return result;
         }
@@ -291,6 +291,7 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
         }
         if (isReturnAllProducts) {
             await (new returnOrderModel({
+                storeId: result.data.storeId,
                 originalOrder: orderId,
                 products: result.data.products.map((product) => ({
                     productId: product.productId,
@@ -363,26 +364,35 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
     }
 }
 
-async function updateOrder(authorizationId, orderId, newOrderDetails, language) {
+async function updateOrder(authorizationId, orderId, ordersType = "normal", newOrderDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (!admin.isBlocked) {
-                const order = await orderModel.findById(orderId);
+                const order = ordersType === "normal" ? await orderModel.findById(orderId) : await returnOrderModel.findById(orderId);
                 if (order) {
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
-                        if (order.checkoutStatus === "Checkout Successfull") {
-                            await orderModel.updateOne({ _id: orderId }, newOrderDetails);
+                        if (ordersType === "normal") {
+                            if (order.checkoutStatus === "Checkout Successfull") {
+                                await orderModel.updateOne({ _id: orderId }, newOrderDetails);
+                                return {
+                                    msg: getSuitableTranslations("Updating Order Details Process Has Been Successfully !!", language),
+                                    error: false,
+                                    data: order,
+                                }
+                            }
+                            return {
+                                msg: getSuitableTranslations("Sorry, Permission Denied Because This Order Is Not Completed ( Not Payment ) !!", language),
+                                error: true,
+                                data: {},
+                            }
+                        } else {
+                            await returnOrderModel.updateOne({ _id: orderId }, newOrderDetails);
                             return {
                                 msg: getSuitableTranslations("Updating Order Details Process Has Been Successfully !!", language),
                                 error: false,
                                 data: order,
                             }
-                        }
-                        return {
-                            msg: getSuitableTranslations("Sorry, Permission Denied Because This Order Is Not Completed ( Not Payment ) !!", language),
-                            error: true,
-                            data: {},
                         }
                     }
                     return {
@@ -586,15 +596,15 @@ async function cancelOrder(userId, orderId, language) {
     }
 }
 
-async function deleteOrder(authorizationId, orderId, language) {
+async function deleteOrder(authorizationId, orderId, ordersType, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (!admin.isBlocked) {
-                const order = await orderModel.findOne({ _id: orderId });
+                const order = ordersType === "normal" ? await orderModel.findById(orderId) : await returnOrderModel.findById(orderId);
                 if (order) {
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
-                        await orderModel.updateOne({ _id: orderId }, { isDeleted: true });
+                        ordersType === "normal" ? await orderModel.updateOne({ _id: orderId }, { isDeleted: true }) : await returnOrderModel.updateOne({ _id: orderId }, { isDeleted: true });
                         return {
                             msg: getSuitableTranslations("Deleting Order Has Been Successfuly !!", language),
                             error: false,
