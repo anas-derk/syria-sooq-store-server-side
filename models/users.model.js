@@ -239,16 +239,39 @@ async function getMainPageData(authorizationId, language) {
     try {
         const user = await userModel.findById(authorizationId);
         const currentDate = new Date();
-        let products = await productModel
-            .find({ categories: user.interests })
-            .limit(10)
-            .populate("categories").populate("storeId"),
+        let products = await productModel.aggregate([
+            {
+                $addFields: {
+                    sortOrder: {
+                        $indexOfArray: [user.interests, { $first: "$categories" }]
+                    }
+                }
+            },
+            { $sort: { sortOrder: 1 } },
+            { $limit: 10 },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "categories",
+                    foreignField: "_id",
+                    as: "categories"
+                }
+            },
+            {
+                $lookup: {
+                    from: "stores",
+                    localField: "storeId",
+                    foreignField: "_id",
+                    as: "store"
+                }
+            }
+        ]),
             offers = await productModel
                 .find({ startDiscountPeriod: { $lte: currentDate }, endDiscountPeriod: { $gte: currentDate } })
                 .limit(10)
                 .populate("categories").populate("storeId");
         for (let product of products) {
-            product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+            product.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
         }
         for (let product of offers) {
             product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
