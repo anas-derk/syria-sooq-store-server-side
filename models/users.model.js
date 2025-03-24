@@ -240,9 +240,7 @@ async function getMainPageData(authorizationId, language) {
         const user = await userModel.findById(authorizationId);
         const currentDate = new Date();
         let products = await productModel
-            .find({
-                categories: user.interests,
-            })
+            .find({ categories: user.interests })
             .limit(10)
             .populate("categories").populate("storeId"),
             offers = await productModel

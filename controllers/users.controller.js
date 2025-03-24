@@ -117,6 +117,7 @@ async function getMainPageData(req, res) {
         res.json(await usersOPerationsManagmentFunctions.getMainPageData(req.data._id, req.query.language));
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
