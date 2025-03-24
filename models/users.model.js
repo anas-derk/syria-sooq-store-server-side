@@ -38,11 +38,11 @@ async function createNewUser(city, fullName, email, mobilePhone, password, langu
     }
 }
 
-async function addNewInterests(userId, interests, language) {
+async function addNewInterests(userId, newInterests, language) {
     try {
         const user = await userModel.findById(userId);
         if (user) {
-            const existsCategories = await categoryModel.find({ _id: { $in: interests } });
+            const existsCategories = await categoryModel.find({ _id: { $in: newInterests } });
             if (existsCategories.length === 0) {
                 return {
                     msg: getSuitableTranslations("Sorry, Please Send At Least One Interest Category !!", language),
@@ -50,25 +50,41 @@ async function addNewInterests(userId, interests, language) {
                     data: {},
                 }
             }
-            if (existsCategories.length < interests.length) {
-                for (let category of interests) {
+            if (existsCategories.length < newInterests.length) {
+                for (let newCategory of newInterests) {
                     let isExistCategory = false;
                     for (let existCategory of existsCategories) {
-                        if ((new mongoose.Types.ObjectId(category)).equals(existCategory._id)) {
+                        if ((new mongoose.Types.ObjectId(newCategory)).equals(existCategory._id)) {
                             isExistCategory = true;
                             break;
                         }
                     }
                     if (!isExistCategory) {
                         return {
-                            msg: getSuitableTranslations("Sorry, Category Id: {{categoryId}} Is Not Exist !!", language, { categoryId: category }),
+                            msg: getSuitableTranslations("Sorry, Category Id: {{categoryId}} Is Not Exist !!", language, { categoryId: newCategory }),
                             error: true,
                             data: {},
                         }
                     }
                 }
             }
-            await userModel.updateOne({ _id: userId }, { $push: { existsCategories } });
+            for (let newCategory of newInterests) {
+                let isDublicateCategory = false;
+                for (let existCategory of user.interests) {
+                    if (newCategory === existCategory) {
+                        isDublicateCategory = true;
+                        break;
+                    }
+                }
+                if (isDublicateCategory) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Category Id: {{categoryId}} Is Already Exist In This User Interests List !!", language, { categoryId: newCategory }),
+                        error: true,
+                        data: {},
+                    }
+                }
+            }
+            await userModel.updateOne({ _id: userId }, { $push: { interests: { $each: newInterests } } });
             return {
                 msg: getSuitableTranslations("Adding New Interests Process Has Been Successfully !!", language),
                 error: true,
