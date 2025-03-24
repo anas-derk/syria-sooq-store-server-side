@@ -46,13 +46,52 @@ async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, 
                 filters.storeId = user.storeId;
             }
             delete filters.destination;
-            return {
-                msg: getSuitableTranslations(`Get All ${ordersType.replace(ordersType[0], ordersType[0].toUpperCase())} Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!`, language, { pageNumber }),
-                error: false,
-                data: {
-                    orders: ordersType === "normal" ? await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }) : await returnOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }),
-                    ordersCount: ordersType === "normal" ? await orderModel.countDocuments(filters) : await returnOrderModel.countDocuments(filters),
-                },
+            if (ordersType === "normal") {
+                return {
+                    msg: getSuitableTranslations(`Get All ${ordersType.replace(ordersType[0], ordersType[0].toUpperCase())} Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!`, language, { pageNumber }),
+                    error: false,
+                    data: {
+                        orders: ordersType === "normal" ? await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }).populate("storeId") : await returnOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }).populate("storeId").populate("originalOrder"),
+                        ordersCount: ordersType === "normal" ? await orderModel.countDocuments(filters) : await returnOrderModel.countDocuments(filters),
+                    },
+                }
+            } else if (ordersType === "return" && !filters.email && !filters.fullName) {
+                return {
+                    msg: getSuitableTranslations(`Get All ${ordersType.replace(ordersType[0], ordersType[0].toUpperCase())} Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!`, language, { pageNumber }),
+                    error: false,
+                    data: {
+                        orders: ordersType === "normal" ? await orderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }).populate("storeId") : await returnOrderModel.find(filters).skip((pageNumber - 1) * pageSize).limit(pageSize).sort({ orderNumber: -1 }).populate("storeId").populate("originalOrder"),
+                        ordersCount: ordersType === "normal" ? await orderModel.countDocuments(filters) : await returnOrderModel.countDocuments(filters),
+                    },
+                }
+            }
+            else {
+                const email = filters.email;
+                const fullName = filters.fullName;
+                delete filters.email;
+                delete filters.fullName;
+                let orders = await returnOrderModel.find(filters).populate("storeId").populate("originalOrder");
+                orders = orders.filter((order) => {
+                    if (order?.originalOrder) {
+                        if (email && fullName) {
+                            return order.originalOrder.email === email && order.originalOrder.fullName === fullName;
+                        } else if (email) {
+                            return order.originalOrder.email === email;
+                        } else {
+                            return order.originalOrder.fullName === fullName;
+                        }
+                    }
+                });
+                return {
+                    msg: getSuitableTranslations(`Get All ${ordersType.replace(ordersType[0], ordersType[0].toUpperCase())} Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!`, language, { pageNumber }),
+                    error: false,
+                    data: {
+                        orders: orders
+                            .slice((pageNumber - 1) * pageSize, (pageNumber - 1) * pageSize + pageSize)
+                            .sort((a, b) => b.orderNumber - a.orderNumber),
+                        ordersCount: orders.length,
+                    },
+                }
             }
         }
         return {
