@@ -54,7 +54,6 @@ async function getAllOrdersInsideThePage(req, res) {
         res.json(await ordersManagmentFunctions.getAllOrdersInsideThePage(req.data._id, filters.pageNumber, filters.pageSize, filters.ordersType, getFiltersObject(filters), filters.language));
     }
     catch (err) {
-        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -94,7 +93,7 @@ async function postNewOrder(req, res) {
 async function postNewRequestToReturnOrderProducts(req, res) {
     try {
         const { isReturnAllProducts, language } = req.query;
-        const result = await ordersManagmentFunctions.createNewRequestToReturnOrderProducts(req.data._id, req.params.orderId, req.body.products, isReturnAllProducts, language);
+        const result = await ordersManagmentFunctions.createNewRequestToReturnOrderProducts(req.data._id, req.params.orderId, req.body.products, isReturnAllProducts === "true" ? true : false, language);
         if (!result.error) {
             return res.json(result);
         }

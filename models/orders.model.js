@@ -332,6 +332,10 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
             await (new returnOrderModel({
                 storeId: result.data.storeId,
                 originalOrder: orderId,
+                totalPriceBeforeDiscount: result.data.totalPriceBeforeDiscount,
+                totalDiscount: result.data.totalDiscount,
+                totalPriceAfterDiscount: result.data.totalPriceAfterDiscount,
+                orderAmount: result.data.orderAmount,
                 products: result.data.products.map((product) => ({
                     productId: product.productId,
                     quantity: product.quantity,
@@ -388,8 +392,23 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
                 imagePath: orderedProducts[i].imagePath,
             });
         }
+        const totalPrices = {
+            totalPriceBeforeDiscount: 0,
+            totalDiscount: 0,
+            totalPriceAfterDiscount: 0
+        }
+        for (let i = 0; i < products.length; i++) {
+            totalPrices.totalPriceBeforeDiscount += orderedProducts[i].unitPrice * products[i].quantity;
+            totalPrices.totalDiscount += orderedProducts[i].unitDiscount * products[i].quantity;
+        }
+        totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
         await (new returnOrderModel({
+            storeId: result.data.storeId,
             originalOrder: orderId,
+            totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
+            totalDiscount: totalPrices.totalDiscount,
+            totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
+            orderAmount: totalPrices.totalPriceAfterDiscount,
             products: orderProductsDetails,
             orderNumber: await returnOrderModel.countDocuments() + 1,
         })).save();
