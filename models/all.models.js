@@ -601,7 +601,7 @@ const returnOrderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    acceptedOrderAmount: {
+    approvedOrderAmount: {
         type: Number,
         default: 0,
     },
@@ -636,7 +636,7 @@ const returnOrderSchema = new mongoose.Schema({
             type: Number,
             default: 0,
         },
-        acceptedQuantity: {
+        approvedQuantity: {
             type: Number,
             default: 0,
         },
