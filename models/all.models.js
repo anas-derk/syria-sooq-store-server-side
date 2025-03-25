@@ -587,17 +587,21 @@ const returnOrderSchema = new mongoose.Schema({
     },
     totalPriceBeforeDiscount: {
         type: Number,
-        default: 0,
+        required: true,
     },
     totalDiscount: {
         type: Number,
-        default: 0,
+        required: true,
     },
     totalPriceAfterDiscount: {
         type: Number,
-        default: 0,
+        required: true,
     },
     orderAmount: {
+        type: Number,
+        required: true,
+    },
+    acceptedOrderAmount: {
         type: Number,
         default: 0,
     },
@@ -631,6 +635,14 @@ const returnOrderSchema = new mongoose.Schema({
         unitDiscount: {
             type: Number,
             default: 0,
+        },
+        acceptedQuantity: {
+            type: Number,
+            default: 0,
+        },
+        notes: {
+            type: String,
+            default: "",
         },
         imagePath: {
             type: String,
