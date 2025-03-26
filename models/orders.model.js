@@ -336,13 +336,14 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
                 totalDiscount: result.data.totalDiscount,
                 totalPriceAfterDiscount: result.data.totalPriceAfterDiscount,
                 orderAmount: result.data.orderAmount,
-                products: result.data.products.map((product) => ({
+                products: result.data.products.map((product, index) => ({
                     productId: product.productId,
                     quantity: product.quantity,
                     name: product.name,
                     unitPrice: product.unitPrice,
                     unitDiscount: product.unitDiscount,
                     imagePath: product.imagePath,
+                    returnReason: products[index].returnReason
                 })),
                 orderNumber: await returnOrderModel.countDocuments() + 1,
             })).save();
@@ -390,6 +391,7 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
                 totalAmount: orderedProducts[i].unitPrice * products[i].quantity,
                 quantity: products[i].quantity,
                 imagePath: orderedProducts[i].imagePath,
+                returnReason: products[i].returnReason
             });
         }
         const totalPrices = {

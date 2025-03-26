@@ -167,20 +167,19 @@ ordersRouter.post("/create-new-request-to-return-order-products/:orderId",
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
             { fieldName: "Is Return All Products", fieldValue: Boolean(req.query.isReturnAllProducts), dataTypes: ["boolean"], isRequiredValue: false },
-            { fieldName: "Order Products", fieldValue: products, dataTypes: ["array"], isRequiredValue: req.query.isReturnAllProducts ? false : true },
+            { fieldName: "Order Products", fieldValue: products, dataTypes: ["array"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
         const { products } = req.body;
-        if (products) {
-            return validateIsExistValueForFieldsAndDataTypes(
-                products.flatMap((product, index) => ([
-                    { fieldName: `Id In Product ${index + 1}`, fieldValue: product?.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
-                    { fieldName: `Quantity In Product ${index + 1}`, fieldValue: product?.quantity, dataTypes: ["number"], isRequiredValue: true },
-                ]))
-                , res, next);
-        }
-        next();
+        const { isReturnAllProducts } = req.query;
+        validateIsExistValueForFieldsAndDataTypes(
+            products.flatMap((product, index) => ([
+                { fieldName: `Id In Product ${index + 1}`, fieldValue: product?.productId, dataTypes: ["ObjectId"], isRequiredValue: isReturnAllProducts === "true" ? true : false },
+                { fieldName: `Quantity In Product ${index + 1}`, fieldValue: product?.quantity, dataTypes: ["number"], isRequiredValue: isReturnAllProducts === "true" ? true : false },
+                { fieldName: `Return Reason In Product ${index + 1}`, fieldValue: product?.returnReason, dataTypes: ["string"], isRequiredValue: true },
+            ]))
+            , res, next);
     },
     (req, res, next) => validateIsNotExistDublicateProductId(req.body.products, res, next),
     (req, res, next) => {

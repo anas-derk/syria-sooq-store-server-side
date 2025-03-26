@@ -648,6 +648,10 @@ const returnOrderSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        returnReason: {
+            type: String,
+            default: "",
+        },
     }],
     addedDate: {
         type: Date,
