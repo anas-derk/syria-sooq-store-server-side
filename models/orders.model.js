@@ -356,7 +356,7 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
         for (let product of products) {
             let isExistProduct = false;
             for (let existProduct of result.data.products) {
-                if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct.productId)) {
+                if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)) {
                     isExistProduct = true;
                     break;
                 }
@@ -369,9 +369,9 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
                 }
             }
         }
-        const orderedProducts = products.map((product) => result.data.products.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct.productId)));
+        const orderedProducts = products.map((product) => result.data.products.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
         for (let i = 0; i < orderedProducts.length; i++) {
-            if ((new mongoose.Types.ObjectId(products[i].productId)).equals(orderedProducts[i].productId)) {
+            if ((new mongoose.Types.ObjectId(products[i].productId)).equals(orderedProducts[i]._id)) {
                 if (products[i].quantity > orderedProducts[i].quantity) {
                     return {
                         msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i].productId, quantity: orderedProducts[i].quantity }),
