@@ -194,6 +194,34 @@ ordersRouter.post("/create-new-request-to-return-order-products/:orderId",
     ordersController.postNewRequestToReturnOrderProducts
 );
 
+ordersRouter.post("/approving-on-return-product/:orderId/:productId",
+    validateJWT,
+    (req, res, next) => {
+        const { approvedQuantity, notes } = req.body;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Approved Quantity", fieldValue: approvedQuantity, dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Notes", fieldValue: notes, dataTypes: ["string"], isRequiredValue: false },
+        ], res, next);
+    },
+    (req, res, next) => {
+        const { approvedQuantity } = req.body;
+        if (approvedQuantity) {
+            return validateNumbersIsGreaterThanZero([approvedQuantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Zero ) !!");
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { approvedQuantity } = req.body;
+        if (approvedQuantity) {
+            return validateNumbersIsNotFloat([quantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Float ) !!");
+        }
+        next();
+    },
+    ordersController.postApprovingOnReturnProduct
+);
+
 ordersRouter.post("/handle-checkout-complete/:orderId",
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([

@@ -104,6 +104,22 @@ async function postNewRequestToReturnOrderProducts(req, res) {
     }
 }
 
+async function postApprovingOnReturnProduct(req, res) {
+    try {
+        const { orderId, productId } = req.query;
+        const result = await ordersManagmentFunctions.approvingOnReturnProduct(req.data._id, orderId, productId, { approvedQuantity, notes } = req.body, req.query.language);
+        if (result.error) {
+            if (result.msg !== "Sorry, This Order Is Not Found !!" || result.msg !== "Sorry, This Product For This Order Is Not Found !!") {
+                return res.status(401).json(result);
+            }
+        }
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function postCheckoutComplete(req, res) {
     try {
         const result = await ordersManagmentFunctions.changeCheckoutStatusToSuccessfull(req.params.orderId, req.query.language);
@@ -142,7 +158,8 @@ async function putOrder(req, res) {
 
 async function putOrderProduct(req, res) {
     try {
-        const result = await ordersManagmentFunctions.updateOrderProduct(req.data._id, req.params.orderId, req.params.productId, { quantity, name, unitPrice } = req.body, req.query.language);
+        const { orderId, productId } = req.query;
+        const result = await ordersManagmentFunctions.updateOrderProduct(req.data._id, orderId, productId, { quantity, name, unitPrice } = req.body, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Order Is Not Found !!" || result.msg !== "Sorry, This Product For This Order Is Not Found !!") {
                 return res.status(401).json(result);
@@ -208,6 +225,7 @@ module.exports = {
     getOrderDetails,
     postNewOrder,
     postNewRequestToReturnOrderProducts,
+    postApprovingOnReturnProduct,
     postCheckoutComplete,
     putOrder,
     putOrderProduct,

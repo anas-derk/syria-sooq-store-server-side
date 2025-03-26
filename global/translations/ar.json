@@ -193,5 +193,6 @@
     "Sorry, The Order Cannot Be Returned Because It Has Already Been Canceled !!": "عذراً ، لا يمكن إرجاع الطلبية لأنه تم إلغاؤها مسبقاً !!",
     "Sorry, A Return Request Cannot Be Created Because The Order Has Not Reached You ( Status: Pending Or Shipping ) !!": "عذراً ، لا يمكن إنشاء طلب لإرجاع منتجات لأنّ الطلبية لم تصل لك ( الحالة: الانتظار أو قيد التوصيل ) !!",
     "Creating New Request To Return Order Products Process Has Been Successfuly !!": "عملية إنشاء طلب جديد لإعادة منتجات طلبية تمت بنجاح !!",
-    "Sorry, The Return Request For This Order's Products Already Exists !!": "عذراً ، طلب الإعادة لمنتجات هذه الطلبية موجود مسبقاً !!"
+    "Sorry, The Return Request For This Order's Products Already Exists !!": "عذراً ، طلب الإعادة لمنتجات هذه الطلبية موجود مسبقاً !!",
+    "Sorry, Permission Denied Because Approved Quantity Greater Than Quantity In Return Order For This Product !!": "عذراً، تم رفض الإذن لأن الكمية المعتمدة أكبر من الكمية الموجودة في طلب الإرجاع لهذا المنتج !!"
 }

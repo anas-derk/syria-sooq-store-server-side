@@ -424,6 +424,72 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
     }
 }
 
+async function approvingOnReturnProduct(authorizationId, orderId, productId, approvingDetails, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (!admin.isBlocked) {
+                let order = await returnOrderModel.findOne({ _id: orderId });
+                if (order) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
+                        const productIndex = order.products.findIndex((order_product) => order_product.productId == productId);
+                        if (productIndex >= 0) {
+                            if (approvingDetails.approvedQuantity > order.products[productIndex].quantity) {
+                                return {
+                                    msg: getSuitableTranslations("Sorry, Permission Denied Because Approved Quantity Greater Than Quantity In Return Order For This Product !!", language),
+                                    error: true,
+                                    data: {},
+                                }
+                            } else {
+                                order.products[productIndex].approvedQuantity = approvingDetails.approvedQuantity;
+                            }
+                            if (approvingDetails.notes) {
+                                order.products[productIndex].notes = approvingDetails.notes;
+                            }
+                            await order.save();
+                            return {
+                                msg: getSuitableTranslations("Approving On Return Order For This Product Process Has Been Successfuly !!", language),
+                                error: false,
+                                data: {},
+                            }
+                        }
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Product For This Order Is Not Found !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    return {
+                        msg: getSuitableTranslations("Sorry, Permission Denied Because This Order Is Not Exist At Store Managed By This Admin !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, This Order Is Not Found !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Admin Has Been Blocked !!", language),
+                error: true,
+                data: {
+                    blockingDate: admin.blockingDate,
+                    blockingReason: admin.blockingReason,
+                },
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function updateOrder(authorizationId, orderId, ordersType = "normal", newOrderDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -775,6 +841,7 @@ module.exports = {
     getOrderDetails,
     createNewOrder,
     createNewRequestToReturnOrderProducts,
+    approvingOnReturnProduct,
     updateOrder,
     changeCheckoutStatusToSuccessfull,
     updateOrderProduct,

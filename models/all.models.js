@@ -601,6 +601,18 @@ const returnOrderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    approvedTotalPriceBeforeDiscount: {
+        type: Number,
+        default: 0,
+    },
+    approvedTotalDiscount: {
+        type: Number,
+        default: 0,
+    },
+    approvedTotalPriceAfterDiscount: {
+        type: Number,
+        default: 0,
+    },
     approvedOrderAmount: {
         type: Number,
         default: 0,
