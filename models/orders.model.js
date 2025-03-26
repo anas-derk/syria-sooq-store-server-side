@@ -515,6 +515,77 @@ async function approvingOnReturnProduct(authorizationId, orderId, productId, app
     }
 }
 
+async function refusalReturnProduct(authorizationId, orderId, productId, notes, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (!admin.isBlocked) {
+                let order = await returnOrderModel.findOne({ _id: orderId }).populate("originalOrder");
+                if (order) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
+                        const productIndex = order.products.findIndex((order_product) => (new mongoose.Types.ObjectId(productId)).equals(order_product._id));
+                        if (productIndex >= 0) {
+                            if (order.products[productIndex].status !== "checking") {
+                                return {
+                                    msg: getSuitableTranslations("Sorry, Permission Denied Because This Product Has Been Checked In Return Order !!", language),
+                                    error: true,
+                                    data: {},
+                                }
+                            }
+                            const user = await userModel.findById(order.originalOrder.userId);
+                            if (!user) {
+                                return {
+                                    msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                                    error: true,
+                                    data: {},
+                                }
+                            }
+                            order.products[productIndex].status = "reject";
+                            order.products[productIndex].notes = notes;
+                            await order.save();
+                            return {
+                                msg: getSuitableTranslations("Refusal Return Order For This Product Process Has Been Successfuly !!", language),
+                                error: false,
+                                data: {},
+                            }
+                        }
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Product For This Order Is Not Found !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    return {
+                        msg: getSuitableTranslations("Sorry, Permission Denied Because This Order Is Not Exist At Store Managed By This Admin !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, This Order Is Not Found !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Admin Has Been Blocked !!", language),
+                error: true,
+                data: {
+                    blockingDate: admin.blockingDate,
+                    blockingReason: admin.blockingReason,
+                },
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function updateOrder(authorizationId, orderId, ordersType = "normal", newOrderDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -877,6 +948,7 @@ module.exports = {
     createNewOrder,
     createNewRequestToReturnOrderProducts,
     approvingOnReturnProduct,
+    refusalReturnProduct,
     updateOrder,
     changeCheckoutStatusToSuccessfull,
     updateOrderProduct,

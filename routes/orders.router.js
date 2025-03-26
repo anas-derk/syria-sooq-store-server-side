@@ -205,21 +205,21 @@ ordersRouter.post("/approving-on-return-product/:orderId/:productId",
             { fieldName: "Notes", fieldValue: notes, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
-    (req, res, next) => {
-        const { approvedQuantity } = req.body;
-        if (approvedQuantity) {
-            return validateNumbersIsGreaterThanZero([approvedQuantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Zero ) !!");
-        }
-        next();
-    },
-    (req, res, next) => {
-        const { approvedQuantity } = req.body;
-        if (approvedQuantity) {
-            return validateNumbersIsNotFloat([approvedQuantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Float ) !!");
-        }
-        next();
-    },
+    (req, res, next) => validateNumbersIsGreaterThanZero([req.body.approvedQuantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Zero ) !!"),
+    (req, res, next) => validateNumbersIsNotFloat([req.body.approvedQuantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Float ) !!"),
     ordersController.postApprovingOnReturnProduct
+);
+
+ordersRouter.post("/refusal-return-product/:orderId/:productId",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Order Id", fieldValue: req.params.orderId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Notes", fieldValue: req.body.notes, dataTypes: ["string"], isRequiredValue: true },
+        ], res, next);
+    },
+    ordersController.postRefusalReturnProduct
 );
 
 ordersRouter.post("/handle-checkout-complete/:orderId",

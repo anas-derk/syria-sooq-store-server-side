@@ -120,6 +120,23 @@ async function postApprovingOnReturnProduct(req, res) {
     }
 }
 
+async function postRefusalReturnProduct(req, res) {
+    try {
+        const { orderId, productId } = req.params;
+        const result = await ordersManagmentFunctions.refusalReturnProduct(req.data._id, orderId, productId, req.body.notes, req.query.language);
+        if (result.error) {
+            if (!["Sorry, This User Is Not Exist !!", "Sorry, This Order Is Not Found !!", "Sorry, This Product For This Order Is Not Found !!"].includes(result.error)) {
+                return res.status(401).json(result);
+            }
+        }
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function postCheckoutComplete(req, res) {
     try {
         const result = await ordersManagmentFunctions.changeCheckoutStatusToSuccessfull(req.params.orderId, req.query.language);
@@ -226,6 +243,7 @@ module.exports = {
     postNewOrder,
     postNewRequestToReturnOrderProducts,
     postApprovingOnReturnProduct,
+    postRefusalReturnProduct,
     postCheckoutComplete,
     putOrder,
     putOrderProduct,
