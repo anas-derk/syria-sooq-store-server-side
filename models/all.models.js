@@ -624,7 +624,9 @@ const returnOrderSchema = new mongoose.Schema({
             "awaiting products",
             "received products",
             "checking products",
-            "returned products"
+            "partially return products",
+            "fully return products",
+            "return refused"
         ]
     },
     products: [{
@@ -664,6 +666,16 @@ const returnOrderSchema = new mongoose.Schema({
             type: String,
             default: "",
         },
+        status: {
+            type: String,
+            default: "checking",
+            enum: [
+                "checking",
+                "full approval",
+                "partial approval",
+                "reject",
+            ],
+        }
     }],
     addedDate: {
         type: Date,

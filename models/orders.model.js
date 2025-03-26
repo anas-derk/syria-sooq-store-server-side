@@ -440,10 +440,17 @@ async function approvingOnReturnProduct(authorizationId, orderId, productId, app
                                     error: true,
                                     data: {},
                                 }
-                            } else {
-                                order.products[productIndex].approvedQuantity = approvingDetails.approvedQuantity;
-                                order = editReturnOrderPrices(order);
                             }
+                            if (order.products[productIndex].status !== "checking") {
+                                return {
+                                    msg: getSuitableTranslations("Sorry, Permission Denied Because This Product Has Been Checked In Return Order !!", language),
+                                    error: true,
+                                    data: {},
+                                }
+                            }
+                            order.products[productIndex].approvedQuantity = approvingDetails.approvedQuantity;
+                            order.products[productIndex].status = approvingDetails.approvedQuantity < order.products[productIndex].quantity ? "partial approval" : "full approval";
+                            order = editReturnOrderPrices(order);
                             if (approvingDetails.notes) {
                                 order.products[productIndex].notes = approvingDetails.notes;
                             }
