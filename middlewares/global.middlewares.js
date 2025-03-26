@@ -196,7 +196,14 @@ function validatePaymentGateway(paymentGate, res, nextFunc) {
 }
 
 function validateOrderStatus(ordersType, status, res, nextFunc) {
-    const validNormalOrderStatus = ["pending", "shipping", "completed"], validReturnOrderStatus = ["awaiting products", "received products", "checking products", "returned products"];
+    const validNormalOrderStatus = ["pending", "shipping", "completed"], validReturnOrderStatus = [
+        "awaiting products",
+        "received products",
+        "checking products",
+        "partially return products",
+        "fully return products",
+        "return refused"
+    ];
     if (ordersType === "normal" ? !validNormalOrderStatus.includes(status) : !validReturnOrderStatus.includes(status)) {
         res.status(400).json(getResponseObject("Please Send Valid Order Status !!", true, {}));
         return;
