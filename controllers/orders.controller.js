@@ -109,7 +109,7 @@ async function postApprovingOnReturnProduct(req, res) {
         const { orderId, productId } = req.params;
         const result = await ordersManagmentFunctions.approvingOnReturnProduct(req.data._id, orderId, productId, { approvedQuantity, notes } = req.body, req.query.language);
         if (result.error) {
-            if (result.msg !== "Sorry, This Order Is Not Found !!" || result.msg !== "Sorry, This Product For This Order Is Not Found !!") {
+            if (!["Sorry, This User Is Not Exist !!", "Sorry, This Order Is Not Found !!", "Sorry, This Product For This Order Is Not Found !!"].includes(result.error)) {
                 return res.status(401).json(result);
             }
         }

@@ -429,7 +429,7 @@ async function approvingOnReturnProduct(authorizationId, orderId, productId, app
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (!admin.isBlocked) {
-                let order = await returnOrderModel.findOne({ _id: orderId });
+                let order = await returnOrderModel.findOne({ _id: orderId }).populate("originalOrder");
                 if (order) {
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
                         const productIndex = order.products.findIndex((order_product) => (new mongoose.Types.ObjectId(productId)).equals(order_product._id));
@@ -448,6 +448,14 @@ async function approvingOnReturnProduct(authorizationId, orderId, productId, app
                                     data: {},
                                 }
                             }
+                            const user = await userModel.findById(order.originalOrder.userId);
+                            if (!user) {
+                                return {
+                                    msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                                    error: true,
+                                    data: {},
+                                }
+                            }
                             order.products[productIndex].approvedQuantity = approvingDetails.approvedQuantity;
                             order.products[productIndex].status = approvingDetails.approvedQuantity < order.products[productIndex].quantity ? "partial approval" : "full approval";
                             order = editReturnOrderPrices(order);
@@ -455,6 +463,15 @@ async function approvingOnReturnProduct(authorizationId, orderId, productId, app
                                 order.products[productIndex].notes = approvingDetails.notes;
                             }
                             await order.save();
+                            user.wallet.fullDepositAmount += order.approvedOrderAmount;
+                            user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
+                            await user.save();
+                            await (new walletOperationsModel({
+                                type: "deposit",
+                                userId: user._id,
+                                amount: order.approvedOrderAmount,
+                                operationNumber: await walletOperationsModel.countDocuments({ userId: user._id }) + 1
+                            })).save();
                             return {
                                 msg: getSuitableTranslations("Approving On Return Order For This Product Process Has Been Successfuly !!", language),
                                 error: false,
