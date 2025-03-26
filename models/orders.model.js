@@ -123,7 +123,7 @@ async function getOrderDetails(authorizationId, orderId, destination, ordersType
             }
         }
         return {
-            msg: getSuitableTranslations(`Sorry, This ${user.distination.replace(user.distination[0], user.distination[0].toUpperCase())} Is Not Exist !!`, language),
+            msg: getSuitableTranslations(`Sorry, This ${destination.replace(destination[0], destination[0].toUpperCase())} Is Not Exist !!`, language),
             error: true,
             data: {},
         }
