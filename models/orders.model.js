@@ -432,7 +432,7 @@ async function approvingOnReturnProduct(authorizationId, orderId, productId, app
                 let order = await returnOrderModel.findOne({ _id: orderId });
                 if (order) {
                     if ((new mongoose.Types.ObjectId(admin.storeId)).equals(order.storeId)) {
-                        const productIndex = order.products.findIndex((order_product) => order_product.productId == productId);
+                        const productIndex = order.products.findIndex((order_product) => (new mongoose.Types.ObjectId(productId)).equals(order_product._id));
                         if (productIndex >= 0) {
                             if (approvingDetails.approvedQuantity > order.products[productIndex].quantity) {
                                 return {
@@ -442,6 +442,7 @@ async function approvingOnReturnProduct(authorizationId, orderId, productId, app
                                 }
                             } else {
                                 order.products[productIndex].approvedQuantity = approvingDetails.approvedQuantity;
+                                order = editReturnOrderPrices(order);
                             }
                             if (approvingDetails.notes) {
                                 order.products[productIndex].notes = approvingDetails.notes;
@@ -600,6 +601,16 @@ function editOrderPrices(order) {
     order.totalDiscount = result.totalDiscount;
     order.totalPriceAfterDiscount = result.totalPriceAfterDiscount;
     order.orderAmount = order.totalPriceAfterDiscount + order.shippingCost;
+    return order;
+}
+
+function editReturnOrderPrices(order) {
+    const { calcReturnOrderTotalPrices } = require("../global/functions");
+    const result = calcReturnOrderTotalPrices(order.products);
+    order.approvedTotalPriceBeforeDiscount = result.approvedTotalPriceBeforeDiscount;
+    order.approvedTotalDiscount = result.approvedTotalDiscount;
+    order.approvedTotalPriceAfterDiscount = result.approvedTotalPriceAfterDiscount;
+    order.approvedOrderAmount = order.approvedTotalPriceAfterDiscount;
     return order;
 }
 

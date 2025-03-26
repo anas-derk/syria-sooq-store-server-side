@@ -215,7 +215,7 @@ ordersRouter.post("/approving-on-return-product/:orderId/:productId",
     (req, res, next) => {
         const { approvedQuantity } = req.body;
         if (approvedQuantity) {
-            return validateNumbersIsNotFloat([quantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Float ) !!");
+            return validateNumbersIsNotFloat([approvedQuantity], res, next, [], "Sorry, Please Send Valid Approved Quantity ( Number Must Be Greater Than Float ) !!");
         }
         next();
     },

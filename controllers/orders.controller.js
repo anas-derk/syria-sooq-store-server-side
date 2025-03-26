@@ -106,7 +106,7 @@ async function postNewRequestToReturnOrderProducts(req, res) {
 
 async function postApprovingOnReturnProduct(req, res) {
     try {
-        const { orderId, productId } = req.query;
+        const { orderId, productId } = req.params;
         const result = await ordersManagmentFunctions.approvingOnReturnProduct(req.data._id, orderId, productId, { approvedQuantity, notes } = req.body, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Order Is Not Found !!" || result.msg !== "Sorry, This Product For This Order Is Not Found !!") {
@@ -116,6 +116,7 @@ async function postApprovingOnReturnProduct(req, res) {
         res.json(result);
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
