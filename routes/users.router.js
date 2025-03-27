@@ -4,7 +4,7 @@ const usersController = require("../controllers/users.controller");
 
 const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, getResponseObject } = require("../global/functions");
 
-const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName, validateIsExistErrorInFiles, validateUserType } = require("../middlewares/global.middlewares");
 
 const multer = require("multer");
 
@@ -262,12 +262,21 @@ usersRouter.put("/change-user-image",
     usersController.putUserImage
 );
 
-usersRouter.delete("/:userId",
+usersRouter.delete("/delete-user",
     validateJWT,
     (req, res, next) => {
+        const { userType, userId } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "User Id", fieldValue: req.params.userId, dataTypes: ["ObjectId"], isRequiredValue: false },
+            { fieldName: "User Type", fieldValue: userType, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "User Id", fieldValue: userId, dataTypes: ["ObjectId"], isRequiredValue: userType === "admin" },
         ], res, next);
+    },
+    (req, res, next) => {
+        const { userType } = req.query;
+        if (userType) {
+            return validateUserType(userType, res, next);
+        }
+        next();
     },
     usersController.deleteUser
 );

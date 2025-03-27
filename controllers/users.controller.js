@@ -256,7 +256,8 @@ async function putUserImage(req, res) {
 
 async function deleteUser(req, res) {
     try {
-        const result = await usersOPerationsManagmentFunctions.deleteUser(req.data._id, req.params.userId, req.query.language);
+        const { userType, userId } = req.query;
+        const result = await usersOPerationsManagmentFunctions.deleteUser(req.data._id, userType, userId, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This User Is Not Found !!") {
                 return res.status(401).json(result);

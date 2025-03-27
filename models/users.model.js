@@ -442,35 +442,46 @@ async function changeUserImage(authorizationId, newUserImagePath, language) {
     }
 }
 
-async function deleteUser(authorizationId, userId, language) {
+async function deleteUser(authorizationId, userType = "user", userId, language) {
     try {
-        const admin = await adminModel.findById(authorizationId);
-        if (admin) {
-            if (admin.isWebsiteOwner) {
-                const user = await userModel.findOneAndDelete({ _id: userId });
-                if (user) {
-                    await productsWalletModel.deleteMany({ userId });
-                    await favoriteProductModel.deleteMany({ userId });
+        const user = userType === "user" ? await userModel.findOneAndDelete(authorizationId) : await adminModel.findById(authorizationId);
+        if (user) {
+            if (userType === "user") {
+                await cartModel.deleteMany({ authorizationId });
+                await favoriteProductModel.deleteMany({ authorizationId });
+                return {
+                    msg: getSuitableTranslations("Deleting User Process Has Been Successfully !!", language),
+                    error: false,
+                    data: {},
+                }
+            }
+            else {
+                if (user.isWebsiteOwner) {
+                    const user = await userModel.findOneAndDelete({ _id: userId });
+                    if (user) {
+                        await cartModel.deleteMany({ userId });
+                        await favoriteProductModel.deleteMany({ userId });
+                        return {
+                            msg: getSuitableTranslations("Deleting User Process Has Been Successfully !!", language),
+                            error: false,
+                            data: {},
+                        }
+                    }
                     return {
-                        msg: getSuitableTranslations("Deleting User Process Has Been Successfully !!", language),
-                        error: false,
+                        msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                        error: true,
                         data: {},
                     }
                 }
                 return {
-                    msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                    msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
                     error: true,
                     data: {},
                 }
             }
-            return {
-                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
-                error: true,
-                data: {},
-            }
         }
         return {
-            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            msg: getSuitableTranslations(`Sorry, This ${userType.replace(userType[0], userType[0].toUpperCase())} Is Not Exist !!`, language),
             error: true,
             data: {},
         }
