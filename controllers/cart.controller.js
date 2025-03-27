@@ -5,7 +5,7 @@ const cartOperationsManagmentFunctions = require("../models/cart.model");
 async function postNewProduct(req, res) {
     try {
         const result = await cartOperationsManagmentFunctions.addNewProduct(req.data._id, {
-            ...{ productId, quantity } = Object.assign({}, req.body),
+            ...{ productId, quantity, message } = Object.assign({}, req.body),
         }, req.query.language);
         if (result.error) {
             if (result.msg === "Sorry, This User Is Not Exist !!") {

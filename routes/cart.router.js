@@ -9,10 +9,11 @@ const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functio
 cartRouter.post("/add-new-product",
     validateJWT,
     (req, res, next) => {
-        const { productId, quantity } = Object.assign({}, req.body);
+        const { productId, quantity, message } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: productId, dataTypes: ["ObjectId"], isRequiredValue: true },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Message", fieldValue: message, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([Object.assign({}, req.body).quantity], res, next, ["Sorry, Please Send Valid Quantity( Number Must Be Greater Than Zero ) !!"]),
