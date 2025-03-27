@@ -249,10 +249,11 @@ async function createNewOrder(userId, orderDetails, language) {
             user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
             await user.save();
         }
+        const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
         const newOrder = await (
             new orderModel({
                 storeId: existOrderProducts[0].storeId,
-                orderNumber: await orderModel.countDocuments() + 1,
+                orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000,
                 totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
                 totalDiscount: totalPrices.totalDiscount,
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
