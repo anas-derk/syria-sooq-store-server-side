@@ -69,7 +69,7 @@ async function deleteProduct(req, res) {
 
 async function putProduct(req, res) {
     try {
-        const result = await cartOperationsManagmentFunctions.updateProduct(req.data._id, req.params.cartId, { quantity } = req.body, req.query.language);
+        const result = await cartOperationsManagmentFunctions.updateProduct(req.data._id, req.params.cartId, { quantity, message } = req.body, req.query.language);
         if (result.error) {
             if (result.msg === "Sorry, This User Is Not Exist !!") {
                 return res.status(401).json(result);

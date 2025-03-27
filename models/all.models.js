@@ -891,6 +891,10 @@ const cartSchema = new mongoose.Schema({
         type: Number,
         default: 1,
     },
+    message: {
+        type: String,
+        default: "",
+    },
 });
 
 // Create Card Model From Cart Schema

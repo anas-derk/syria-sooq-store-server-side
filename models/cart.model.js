@@ -145,7 +145,10 @@ async function updateProduct(authorizationId, cartId, newData, language) {
     try {
         const userInfo = await userModel.findById(authorizationId);
         if (userInfo) {
-            const product = await cartModel.findOneAndUpdate({ _id: cartId }, newData);
+            const product = await cartModel.findOneAndUpdate({ _id: cartId }, {
+                quantity: newData.quantity,
+                ...newData.message !== undefined && { message: newData.message }
+            });
             if (product) {
                 return {
                     msg: getSuitableTranslations("Updating Product Info Inside The Cart For This User Process Has Been Successfully !!", language),

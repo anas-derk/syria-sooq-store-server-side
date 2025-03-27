@@ -40,9 +40,11 @@ cartRouter.delete("/:cartId",
 cartRouter.put("/:cartId",
     validateJWT,
     (req, res, next) => {
+        const { quantity, message } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Cart Id", fieldValue: req.params.cartId, dataTypes: ["ObjectId"], isRequiredValue: true },
-            { fieldName: "New Quantity", fieldValue: req.body.quantity, dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "New Quantity", fieldValue: quantity, dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Message", fieldValue: message, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     cartController.putProduct
