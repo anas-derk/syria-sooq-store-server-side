@@ -447,6 +447,7 @@ async function deleteUser(authorizationId, userType = "user", userId, language) 
         const user = userType === "user" ? await userModel.findOneAndDelete(authorizationId) : await adminModel.findById(authorizationId);
         if (user) {
             if (userType === "user") {
+                await userModel.deleteOne({ _id: authorizationId });
                 await cartModel.deleteMany({ authorizationId });
                 await favoriteProductModel.deleteMany({ authorizationId });
                 return {
