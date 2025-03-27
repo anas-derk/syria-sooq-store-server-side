@@ -126,6 +126,7 @@ ordersRouter.post("/create-new-order",
             products.flatMap((product, index) => ([
                 { fieldName: `Id In Product ${index + 1}`, fieldValue: product?.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
                 { fieldName: `Quantity In Product ${index + 1}`, fieldValue: product?.quantity, dataTypes: ["number"], isRequiredValue: true },
+                { fieldName: `Message In Product ${index + 1}`, fieldValue: product?.message, dataTypes: ["string"], isRequiredValue: false },
             ]))
             , res, next);
     },

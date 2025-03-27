@@ -475,6 +475,10 @@ const orderSchema = new mongoose.Schema({
             type: Number,
             default: 0,
         },
+        message: {
+            type: String,
+            default: "",
+        },
         name: {
             type: String,
             default: "none",

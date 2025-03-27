@@ -223,6 +223,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 unitPrice: orderedProducts[i].price,
                 unitDiscount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
                 quantity: orderDetails.products[i].quantity,
+                message: orderDetails.products[i].message,
                 imagePath: orderedProducts[i].imagePath,
             });
         }
