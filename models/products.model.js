@@ -319,7 +319,11 @@ async function getAllProductsByCategoryInsideThePage(authorizationId, pageNumber
             const subcategories = await categoryModel.find({ parent: categoryId }, { name: 1, storeId: 1, parent: 1, color: 1 }).limit(pageSize);
             let groupedProducts = {};
             for (let category of subcategories) {
-                groupedProducts[category.name] = await productModel.find({ categories: category._id }).skip((pageNumber - 1) * pageSize).limit(10).populate("categories");
+                let productsBySubCategory = await productModel.find({ categories: category._id }).skip((pageNumber - 1) * pageSize).limit(10).populate("categories");
+                for (let product of productsBySubCategory) {
+                    product._doc.isExistOffer = product.startDiscountPeriod <= currentDate && product.endDiscountPeriod >= currentDate ? true : false;
+                }
+                groupedProducts[category.name] = productsBySubCategory;
             }
             return {
                 msg: getSuitableTranslations("Get All Products By Category Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
