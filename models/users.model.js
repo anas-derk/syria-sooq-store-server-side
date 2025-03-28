@@ -272,6 +272,7 @@ async function getMainPageData(authorizationId, language) {
                 .populate("categories").populate("storeId");
         for (let product of products) {
             product.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+            product.isExistOffer = product.startDiscountPeriod <= currentDate && endDiscountPeriod >= currentDate ? true : false;
         }
         for (let product of offers) {
             product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
