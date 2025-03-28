@@ -166,6 +166,7 @@ async function getProductInfo(authorizationId, productId, userType = "user", lan
         if (user) {
             let productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
             if (productInfo) {
+                productInfo._doc.isExistOffer = productInfo.startDiscountPeriod <= currentDate && productInfo.endDiscountPeriod >= currentDate ? true : false;
                 productInfo._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId, userId: authorizationId }) ? true : false;
                 return {
                     msg: getSuitableTranslations("Get Product Info Process Has Been Successfuly !!", language),
@@ -276,6 +277,7 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
             ]);
             let products = await productModel.populate(result[0].products, "categories");
             for (let product of products) {
+                product._doc.isExistOffer = product.startDiscountPeriod <= currentDate && endDiscountPeriod >= currentDate ? true : false;
                 product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
             }
             return {
@@ -288,8 +290,10 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
                 },
             }
         }
+        const currentDate = new Date();
         let products = await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories");
         for (let product of products) {
+            product._doc.isExistOffer = product.startDiscountPeriod <= currentDate && product.endDiscountPeriod >= currentDate ? true : false;
             product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
         }
         return {
@@ -298,7 +302,7 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
             data: {
                 products,
                 productsCount: await productModel.countDocuments(filters),
-                currentDate: new Date()
+                currentDate,
             },
         }
     }
@@ -404,7 +408,8 @@ async function getRelatedProductsInTheProduct(authorizationId, productId, langua
                     { $sample: { size: 10 } }
                 ]);
                 for (let product of products) {
-                    product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+                    product.isExistOffer = product.startDiscountPeriod <= currentDate && product.endDiscountPeriod >= currentDate ? true : false;
+                    product.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
                 }
                 return {
                     msg: getSuitableTranslations("Get Sample From Related Products In This Product Process Has Been Successfuly !!", language),
