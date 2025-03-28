@@ -291,6 +291,7 @@ async function getMainPageData(authorizationId, language) {
                     products,
                     offers,
                     cartLength: await cartModel.countDocuments({ userId: authorizationId }),
+                    currentDate,
                 },
             }
         }
