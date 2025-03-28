@@ -88,6 +88,7 @@ async function getProductInfo(req, res) {
         res.json(await productsManagmentFunctions.getProductInfo(req.data._id, req.params.productId, req.query.userType, req.query.language));
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
