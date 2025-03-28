@@ -166,6 +166,7 @@ async function getProductInfo(authorizationId, productId, userType = "user", lan
         if (user) {
             let productInfo = await productModel.findById(productId).populate("categories").populate("storeId");
             if (productInfo) {
+                const currentDate = new Date();
                 productInfo._doc.isExistOffer = productInfo.startDiscountPeriod <= currentDate && productInfo.endDiscountPeriod >= currentDate ? true : false;
                 productInfo._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId, userId: authorizationId }) ? true : false;
                 return {
@@ -173,7 +174,7 @@ async function getProductInfo(authorizationId, productId, userType = "user", lan
                     error: false,
                     data: {
                         productDetails: productInfo,
-                        currentDate: new Date(),
+                        currentDate,
                     },
                 }
             }
