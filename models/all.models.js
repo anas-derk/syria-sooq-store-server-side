@@ -579,6 +579,11 @@ const orderModel = mongoose.model("order", orderSchema);
 // Create Return Order Schema
 
 const returnOrderSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Types.ObjectId,
+        ref: "user",
+        required: true,
+    },
     storeId: {
         type: mongoose.Types.ObjectId,
         ref: "store",
