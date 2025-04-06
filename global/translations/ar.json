@@ -78,6 +78,7 @@
     "Sorry, Email Or Password Incorrect !!": "عذراً ، البريد الالكتروني أو كلمة السر غير صحيح / صحيحة !!",
     "Get Orders Count Process Has Been Successfully !!": "عملية جلب عدد الطلبات تمت بنجاح !!",
     "Get All Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل الطلبات بداخل الصفحة: {{pageNumber}} تمت بنجاح !!",
+    "Get All Return Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل طلبات الإعادة بداخل الصفحة: {{pageNumber}} تمت بنجاح !!",
     "Get Order Details Process Has Been Successfully !!": "عملية جلب تفاصيل الطلب تمت بنجاح !!",
     "Sorry, This Order Is Not Found !!": "عذراً ، هذا الطلب غير موجود !!",
     "Sorry, Product Id: {{productId}} Is Not Exist !!": "عذراً ، معرّف المنتج: {{productId}} غير موجود !!",
