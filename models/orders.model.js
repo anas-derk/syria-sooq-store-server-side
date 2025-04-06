@@ -56,7 +56,6 @@ async function getAllOrdersInsideThePage(authorizationId, pageNumber, pageSize, 
                     },
                 }
             } else if (ordersType === "return" && !filters.email && !filters.fullName) {
-                console.log(filters)
                 return {
                     msg: getSuitableTranslations(`Get All ${ordersType.replace(ordersType[0], ordersType[0].toUpperCase())} Orders Inside The Page: {{pageNumber}} Process Has Been Successfully !!`, language, { pageNumber }),
                     error: false,
