@@ -407,6 +407,7 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
         }
         totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
         await (new returnOrderModel({
+            userId: authorizationId,
             storeId: result.data.storeId,
             originalOrder: orderId,
             totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
