@@ -28,7 +28,7 @@ async function postNewCategory(req, res) {
             imagePath: outputImageFilePath,
         }, req.query.language);
         if (result.error) {
-            if (result.msg !== "Sorry, This Cateogry Is Already Exist !!" || result.msg !== "Sorry, This Parent Cateogry Is Not Exist !!") {
+            if (result.msg !== "Sorry, This Cateogry Is Already Exist !!" && result.msg !== "Sorry, This Parent Cateogry Is Not Exist !!") {
                 return res.status(401).json(result);
             }
         }

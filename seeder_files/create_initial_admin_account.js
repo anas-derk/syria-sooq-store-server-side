@@ -90,7 +90,7 @@ const adminModel = mongoose.model("admin", adminSchema);
 const { hash } = require("bcryptjs");
 
 const userInfo = {
-    fullName: "Ahmad Hussein",
+    fullName: process.env.MAIN_ADMIN_FULL_NAME,
     email: process.env.MAIN_ADMIN_EMAIL,
     password: process.env.MAIN_ADMIN_PASSWORD,
     isWebsiteOwner: true,
