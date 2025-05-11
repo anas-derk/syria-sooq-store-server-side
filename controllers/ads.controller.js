@@ -22,6 +22,7 @@ async function postNewAd(req, res) {
         adInfo.content = bodyData.content;
         if (bodyData.city) adInfo.city = bodyData.city;
         adInfo.product = bodyData.product;
+        adInfo.type = bodyData.type;
         const result = await adsOPerationsManagmentFunctions.addNewAd(req.data._id, adInfo, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, Can't Add New Ad Because Arrive To Max Limits For Ads Count ( Limits: 10 ) !!") {
