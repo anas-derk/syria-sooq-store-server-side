@@ -13,11 +13,14 @@ async function postNewProduct(req, res) {
             outputImageFilePaths.push(`assets/images/products/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
         });
         await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
-        const productInfo = {
-            ...{ name, price, description, categories, discount, quantity, isAvailableForDelivery } = Object.assign({}, req.body),
+        let productInfo = {
+            ...{ name, price, description, categories, discount, quantity, isAvailableForDelivery, customizes } = Object.assign({}, req.body),
             imagePath: outputImageFilePaths[0],
             galleryImagesPaths: outputImageFilePaths.slice(1),
         };
+        if (productInfo.customizes) {
+            productInfo.customizes = JSON.parse(productInfo.customizes);
+        }
         const result = await productsManagmentFunctions.addNewProduct(req.data._id, productInfo, req.query.language);
         if (result.error) {
             if (result.msg === "Sorry, This Admin Has Been Blocked !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {

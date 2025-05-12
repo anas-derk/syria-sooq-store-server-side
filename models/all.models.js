@@ -259,6 +259,79 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "store",
         required: true,
+    },
+    hasCustomizes: {
+        type: Boolean,
+        default: false,
+    },
+    customizes: {
+        hasColors: {
+            type: Boolean,
+            default: false,
+        },
+        colors: [],
+        hasSizes: {
+            type: Boolean,
+            default: false,
+        },
+        sizes: {
+            s: {
+                type: Boolean,
+                default: false,
+            },
+            m: {
+                type: Boolean,
+                default: false,
+            },
+            l: {
+                type: Boolean,
+                default: false,
+            },
+            xl: {
+                type: Boolean,
+                default: false,
+            },
+            xxl: {
+                type: Boolean,
+                default: false,
+            },
+            xxxl: {
+                type: Boolean,
+                default: false,
+            },
+            "4xl": {
+                type: Boolean,
+                default: false,
+            }
+        },
+        allowCustomText: {
+            type: Boolean,
+            default: false,
+        },
+        allowAdditionalNotes: {
+            type: Boolean,
+            default: false,
+        },
+        allowUploadImage: {
+            type: Boolean,
+            default: false,
+        },
+        hasAdditionalCost: {
+            type: Boolean,
+            default: false,
+        },
+        additionalCost: {
+            type: Number,
+            default: 0,
+        },
+        hasAdditionalTime: {
+            type: Boolean,
+            default: false,
+        },
+        additionalTime: {
+            type: Number,
+            default: 0,
+        },
     }
 });
 

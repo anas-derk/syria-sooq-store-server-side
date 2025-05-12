@@ -33,7 +33,7 @@ productsRouter.post("/add-new-product",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, price, description, categories, discount, quantity, isAvailableForDelivery } = Object.assign({}, req.body);
+        const { name, price, description, categories, discount, quantity, isAvailableForDelivery, hasCustomizes, customizes } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Price", fieldValue: Number(price), dataTypes: ["number"], isRequiredValue: true },
@@ -42,6 +42,8 @@ productsRouter.post("/add-new-product",
             { fieldName: "Discount", fieldValue: Number(discount), dataTypes: ["number"], isRequiredValue: discount < 0 },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Is Available For Delivery", fieldValue: isAvailableForDelivery, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Has Customizes", fieldValue: hasCustomizes, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Customizes", fieldValue: JSON.parse(customizes), dataTypes: ["object"], isRequiredValue: hasCustomizes ?? false },
         ], res, next);
     },
     (req, res, next) => {
@@ -60,6 +62,43 @@ productsRouter.post("/add-new-product",
     (req, res, next) => {
         const { price, discount } = Object.assign({}, req.body);
         validateIsPriceGreaterThanDiscount(price, discount, res, next);
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            validateIsExistValueForFieldsAndDataTypes([
+                { fieldName: "Has Colors", fieldValue: customizes?.hasColors, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Colors", fieldValue: customizes?.colors, dataTypes: ["array"], isRequiredValue: true },
+                { fieldName: "Has Sizes", fieldValue: customizes?.hasSizes, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Sizes", fieldValue: customizes?.sizes, dataTypes: ["object"], isRequiredValue: true },
+                { fieldName: "S Size", fieldValue: customizes?.sizes?.s, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "M Size", fieldValue: customizes?.sizes?.m, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "L Size", fieldValue: customizes?.sizes?.l, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "XL Size", fieldValue: customizes?.sizes?.xl, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "XXL Size", fieldValue: customizes?.sizes?.xxl, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "XXXL Size", fieldValue: customizes?.sizes?.xxxl, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "4XL Size", fieldValue: customizes?.sizes?.["4xl"], dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Allow Custom Text", fieldValue: customizes?.allowCustomText, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Allow Additional Notes", fieldValue: customizes?.allowAdditionalNotes, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Allow Upload Image", fieldValue: customizes?.allowUploadImage, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Has Additional Cost", fieldValue: customizes?.hasAdditionalCost, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Additional Cost", fieldValue: Number(customizes?.additionalCost), dataTypes: ["number"], isRequiredValue: customizes?.hasAdditionalCost ?? false },
+                { fieldName: "Has Additional Time", fieldValue: customizes?.hasAdditionalTime, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Additional Time", fieldValue: Number(customizes?.additionalTime), dataTypes: ["number"], isRequiredValue: customizes?.hasAdditionalTime ?? false },
+            ], res, next);
+            return;
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = req.body;
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            validateNumbersIsGreaterThanZero([customizes.additionalCost, customizes.additionalTime], res, next, ["Sorry, Please Send Valid Additional Cost In Customizes ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Additional Time In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
+            return;
+        }
+        next();
     },
     productsController.postNewProduct
 );
