@@ -1,11 +1,27 @@
-const { getResponseObject, getSuitableTranslations } = require("../global/functions");
+const { getResponseObject, getSuitableTranslations, handleResizeImagesAndConvertFormatToWebp } = require("../global/functions");
 
 const cartOperationsManagmentFunctions = require("../models/cart.model");
 
 async function postNewProduct(req, res) {
     try {
+        const productImages = Object.assign({}, req.files);
+        let files = [], outputImageFilePaths = [];
+        if (productImages?.additionalFiles?.length > 0) {
+            productImages.additionalFiles.forEach((file) => {
+                if (
+                    file.mimetype === "image/jpeg" ||
+                    file.mimetype === "image/png" ||
+                    file.mimetype === "image/webp"
+                ) {
+                    files.push(file.buffer);
+                    outputImageFilePaths.push(`assets/images/cart/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`);
+                }
+            });
+            await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
+        }
         const result = await cartOperationsManagmentFunctions.addNewProduct(req.data._id, {
-            ...{ productId, quantity, message } = Object.assign({}, req.body),
+            ...{ productId, quantity, message, customText, additionalNotes } = Object.assign({}, req.body),
+            additionalFiles: outputImageFilePaths,
         }, req.query.language);
         if (result.error) {
             if (result.msg === "Sorry, This User Is Not Exist !!") {
@@ -15,6 +31,7 @@ async function postNewProduct(req, res) {
         res.json(result);
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
