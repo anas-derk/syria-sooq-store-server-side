@@ -4,16 +4,19 @@ const productsController = require("../controllers/products.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount, validateUserType } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount, validateUserType, validateColors } = require("../middlewares/global.middlewares");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes, getResponseObject } = require("../global/functions");
 
 productsRouter.post("/add-new-product",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
         fileFilter: (req, file, cb) => {
-            if (!file) {
+            if (file.fieldname === "colorImages" && !file) {
+                return cb(null, true);
+            }
+            else if (!file) {
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
                 return cb(null, false);
             }
@@ -30,6 +33,7 @@ productsRouter.post("/add-new-product",
     }).fields([
         { name: "productImage", maxCount: 1 },
         { name: "galleryImages", maxCount: 10 },
+        { name: "colorImages", maxCount: 100 },
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
@@ -42,7 +46,7 @@ productsRouter.post("/add-new-product",
             { fieldName: "Discount", fieldValue: Number(discount), dataTypes: ["number"], isRequiredValue: discount < 0 },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Is Available For Delivery", fieldValue: isAvailableForDelivery, dataTypes: ["boolean"], isRequiredValue: false },
-            { fieldName: "Has Customizes", fieldValue: hasCustomizes, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Has Customizes", fieldValue: Boolean(hasCustomizes), dataTypes: ["boolean"], isRequiredValue: false },
             { fieldName: "Customizes", fieldValue: JSON.parse(customizes), dataTypes: ["object"], isRequiredValue: hasCustomizes ?? false },
         ], res, next);
     },
@@ -66,12 +70,11 @@ productsRouter.post("/add-new-product",
     (req, res, next) => {
         let { customizes } = Object.assign({}, req.body);
         if (customizes) {
-            customizes = JSON.parse(customizes);
             validateIsExistValueForFieldsAndDataTypes([
                 { fieldName: "Has Colors", fieldValue: customizes?.hasColors, dataTypes: ["boolean"], isRequiredValue: false },
-                { fieldName: "Colors", fieldValue: customizes?.colors, dataTypes: ["array"], isRequiredValue: true },
+                { fieldName: "Colors", fieldValue: customizes?.colors, dataTypes: ["array"], isRequiredValue: customizes?.hasColors ?? false },
                 { fieldName: "Has Sizes", fieldValue: customizes?.hasSizes, dataTypes: ["boolean"], isRequiredValue: false },
-                { fieldName: "Sizes", fieldValue: customizes?.sizes, dataTypes: ["object"], isRequiredValue: true },
+                { fieldName: "Sizes", fieldValue: customizes?.sizes, dataTypes: ["object"], isRequiredValue: customizes?.hasSizes ?? false },
                 { fieldName: "S Size", fieldValue: customizes?.sizes?.s, dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "M Size", fieldValue: customizes?.sizes?.m, dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "L Size", fieldValue: customizes?.sizes?.l, dataTypes: ["boolean"], isRequiredValue: false },
@@ -81,7 +84,7 @@ productsRouter.post("/add-new-product",
                 { fieldName: "4XL Size", fieldValue: customizes?.sizes?.["4xl"], dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "Allow Custom Text", fieldValue: customizes?.allowCustomText, dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "Allow Additional Notes", fieldValue: customizes?.allowAdditionalNotes, dataTypes: ["boolean"], isRequiredValue: false },
-                { fieldName: "Allow Upload Image", fieldValue: customizes?.allowUploadImage, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Allow Upload Images", fieldValue: customizes?.allowUploadImages, dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "Has Additional Cost", fieldValue: customizes?.hasAdditionalCost, dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "Additional Cost", fieldValue: Number(customizes?.additionalCost), dataTypes: ["number"], isRequiredValue: customizes?.hasAdditionalCost ?? false },
                 { fieldName: "Has Additional Time", fieldValue: customizes?.hasAdditionalTime, dataTypes: ["boolean"], isRequiredValue: false },
@@ -92,11 +95,45 @@ productsRouter.post("/add-new-product",
         next();
     },
     (req, res, next) => {
-        let { customizes } = req.body;
+        let { customizes } = Object.assign({}, req.body);
         if (customizes) {
             customizes = JSON.parse(customizes);
-            validateNumbersIsGreaterThanZero([customizes.additionalCost, customizes.additionalTime], res, next, ["Sorry, Please Send Valid Additional Cost In Customizes ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Additional Time In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
-            return;
+            if (customizes?.colors?.length > 0) {
+                const colorsLength = customizes.colors.length;
+                const productImages = Object.assign({}, req.files);
+                if (colorsLength !== productImages?.colorImages?.length) {
+                    res.status(400).json(getResponseObject("Sorry, Can't Find Match Between Color Images Count And Colors Count !!", true, {}));
+                    return;
+                }
+                let errorMsgs = [];
+                for (let i = 0; i < customizes.colors.length; i++) {
+                    errorMsgs.push(`Sorry, Please Send Valid Color In Index ${i} ( Must Be Start To # And In Hexadecimal System ) !!`);
+                }
+                validateColors(customizes.colors, res, next, errorMsgs);
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasAdditionalCost) {
+                validateNumbersIsGreaterThanZero([customizes.additionalCost], res, next, ["Sorry, Please Send Valid Additional Cost In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasAdditionalTime) {
+                validateNumbersIsGreaterThanZero([customizes.additionalTime], res, next, ["Sorry, Please Send Valid Additional Time In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
+                return;
+            }
         }
         next();
     },

@@ -252,7 +252,8 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    galleryImagesPaths: Array,
+    galleryImagesPaths: [String],
+    colorImagesPaths: [String],
     startDiscountPeriod: Date,
     endDiscountPeriod: Date,
     storeId: {

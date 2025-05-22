@@ -258,6 +258,16 @@ function validateColor(color, res, nextFunc, errorMsg = "Sorry, Please Send Vali
     nextFunc();
 }
 
+function validateColors(colors, res, nextFunc, errorMsgs, defaultMsg = "Sorry, Please Send Valid Color ( Must Be Start To # And In Hexadecimal System ) !!") {
+    for (let i = 0; i < colors.length; i++) {
+        if (!isValidColor(colors[i])) {
+            res.status(400).json(getResponseObject(errorMsgs[i] ? errorMsgs[i] : defaultMsg, true, {}));
+            return;
+        }
+    }
+    nextFunc();
+}
+
 function keyGeneratorForRequestsRateLimit(req) {
     const ipAddress = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     const ipWithoutPort = ipAddress.split(',')[0];
@@ -292,5 +302,6 @@ module.exports = {
     validateAdvertismentType,
     validateSize,
     validateColor,
+    validateColors,
     keyGeneratorForRequestsRateLimit,
 }

@@ -7,16 +7,25 @@ const { unlinkSync } = require("fs");
 async function postNewProduct(req, res) {
     try {
         const productImages = Object.assign({}, req.files);
-        let files = [productImages.productImage[0].buffer], outputImageFilePaths = [`assets/images/products/${Math.random()}_${Date.now()}__${productImages.productImage[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`];
+        let baseFiles = [productImages.productImage[0].buffer], outputImageFilePaths = [`assets/images/products/${Math.random()}_${Date.now()}__${productImages.productImage[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`];
         productImages.galleryImages.forEach((file) => {
-            files.push(file.buffer);
+            baseFiles.push(file.buffer);
             outputImageFilePaths.push(`assets/images/products/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
         });
-        await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
+        await handleResizeImagesAndConvertFormatToWebp(baseFiles, outputImageFilePaths);
+        let colorImageFiles = [], outputColorImageFilePaths = [];
+        if (productImages?.colorImages?.length > 0) {
+            productImages.colorImages.forEach((file) => {
+                colorImageFiles.push(file.buffer);
+                outputColorImageFilePaths.push(`assets/images/colors/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
+            });
+            await handleResizeImagesAndConvertFormatToWebp(colorImageFiles, outputColorImageFilePaths);
+        }
         let productInfo = {
             ...{ name, price, description, categories, discount, quantity, isAvailableForDelivery, customizes } = Object.assign({}, req.body),
             imagePath: outputImageFilePaths[0],
             galleryImagesPaths: outputImageFilePaths.slice(1),
+            colorImagesPaths: outputColorImageFilePaths,
         };
         if (productInfo.customizes) {
             productInfo.customizes = JSON.parse(productInfo.customizes);
@@ -185,6 +194,9 @@ async function deleteProduct(req, res) {
             unlinkSync(result.data.deletedProductImagePath);
             for (let productImagePath of result.data.galleryImagePathsForDeletedProduct) {
                 unlinkSync(productImagePath);
+            }
+            for (let colorImage of result.data.colorImagesPathsForDeletedProduct) {
+                unlinkSync(colorImage);
             }
         }
         else {

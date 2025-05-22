@@ -502,6 +502,7 @@ async function deleteProduct(authorizationId, productId, language) {
                             data: {
                                 deletedProductImagePath: productInfo.imagePath,
                                 galleryImagePathsForDeletedProduct: productInfo.galleryImagesPaths,
+                                colorImagesPathsForDeletedProduct: productInfo.colorImagesPaths,
                             },
                         }
                     }
