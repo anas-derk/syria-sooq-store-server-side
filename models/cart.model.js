@@ -24,7 +24,7 @@ async function addNewProduct(authorizationId, productInfo, language) {
                         data: {},
                     }
                 }
-                if (productInfo.additionalNotes && !product?.customizes?.allowUploadImages) {
+                if (productInfo.additionalFiles && !product?.customizes?.allowUploadImages) {
                     return {
                         msg: getSuitableTranslations("Sorry, Upload Images Is Not Allowed For This Product !!", language),
                         error: true,

@@ -2,6 +2,8 @@ const { getResponseObject, getSuitableTranslations, handleResizeImagesAndConvert
 
 const cartOperationsManagmentFunctions = require("../models/cart.model");
 
+const { unlinkSync } = require("fs");
+
 async function postNewProduct(req, res) {
     try {
         const productImages = Object.assign({}, req.files);
@@ -20,12 +22,17 @@ async function postNewProduct(req, res) {
             await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
         }
         const result = await cartOperationsManagmentFunctions.addNewProduct(req.data._id, {
-            ...{ productId, quantity, message, customText, additionalNotes } = Object.assign({}, req.body),
+            ...{ productId, quantity, message, customText, additionalNotes, size, color } = Object.assign({}, req.body),
             additionalFiles: outputImageFilePaths,
         }, req.query.language);
         if (result.error) {
             if (result.msg === "Sorry, This User Is Not Exist !!") {
                 return res.status(401).json(result);
+            }
+            if (result.msg === "Sorry, Upload Images Is Not Allowed For This Product !!") {
+                for (let productImagePath of outputImageFilePaths) {
+                    unlinkSync(productImagePath);
+                }
             }
         }
         res.json(result);
