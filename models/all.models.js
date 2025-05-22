@@ -312,7 +312,7 @@ const productSchema = new mongoose.Schema({
             type: Boolean,
             default: false,
         },
-        allowUploadImage: {
+        allowUploadImages: {
             type: Boolean,
             default: false,
         },

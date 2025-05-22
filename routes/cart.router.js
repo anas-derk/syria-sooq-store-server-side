@@ -2,9 +2,10 @@ const cartRouter = require("express").Router();
 
 const cartController = require("../controllers/cart.controller");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles, validateSize, validateColor } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../global/functions");
+
 const multer = require("multer");
 
 cartRouter.post("/add-new-product",
@@ -32,17 +33,33 @@ cartRouter.post("/add-new-product",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { productId, quantity, message, customText, additionalNotes } = Object.assign({}, req.body);
+        const { productId, quantity, message, customText, additionalNotes, size } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: productId, dataTypes: ["ObjectId"], isRequiredValue: true },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Message", fieldValue: message, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Custom Text", fieldValue: customText, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Additional Notes", fieldValue: additionalNotes, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Size", fieldValue: size, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Color", fieldValue: size, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([Object.assign({}, req.body).quantity], res, next, ["Sorry, Please Send Valid Quantity( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([Object.assign({}, req.body).quantity], res, next, ["Sorry, Please Send Valid Quantity( Number Must Be Not Float ) !!"]),
+    (req, res, next) => {
+        const { size } = Object.assign({}, req.body);
+        if (size) {
+            return validateSize(size, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { color } = Object.assign({}, req.body);
+        if (color) {
+            return validateColor(color, res, next);
+        }
+        next();
+    },
     cartController.postNewProduct
 );
 

@@ -195,5 +195,10 @@
     "Sorry, A Return Request Cannot Be Created Because The Order Has Not Reached You ( Status: Pending Or Shipping ) !!": "عذراً ، لا يمكن إنشاء طلب لإرجاع منتجات لأنّ الطلبية لم تصل لك ( الحالة: الانتظار أو قيد التوصيل ) !!",
     "Creating New Request To Return Order Products Process Has Been Successfuly !!": "عملية إنشاء طلب جديد لإعادة منتجات طلبية تمت بنجاح !!",
     "Sorry, The Return Request For This Order's Products Already Exists !!": "عذراً ، طلب الإعادة لمنتجات هذه الطلبية موجود مسبقاً !!",
-    "Sorry, Permission Denied Because Approved Quantity Greater Than Quantity In Return Order For This Product !!": "عذراً، تم رفض الإذن لأن الكمية المعتمدة أكبر من الكمية الموجودة في طلب الإرجاع لهذا المنتج !!"
+    "Sorry, Permission Denied Because Approved Quantity Greater Than Quantity In Return Order For This Product !!": "عذراً، تم رفض الإذن لأن الكمية المعتمدة أكبر من الكمية الموجودة في طلب الإرجاع لهذا المنتج !!",
+    "Sorry, Write Custom Text Is Not Allowed For This Product !!": "عذراً، كتابة نص مخصص غير مسموح لهذالمنتج !!",
+    "Sorry, Write Additional Notes Is Not Allowed For This Product !!": "عذراً، كتابة ملاحظات إضافية غير مسموح لهذالمنتج !!",
+    "Sorry, Upload Images Is Not Allowed For This Product !!": "عذراً ، رفع صور غير مسموح لهذا المنتج !!",
+    "Sorry, Select Size Is Not Allowed For This Product !!": "عذراً، اختيار مقاس غير مسموح لهذالمنتج !!",
+    "Sorry, This Size Is Not Allowed For This Product !!": "عذراً، هذا المقاس غير مسموح لهذالمنتج !!"
 }

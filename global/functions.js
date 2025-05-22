@@ -484,6 +484,10 @@ function getSuitableTranslations(msg, language, variables = {}) {
     }
 }
 
+function isValidColor(color) {
+    return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color);
+}
+
 module.exports = {
     isEmail,
     isValidPassword,
@@ -507,5 +511,6 @@ module.exports = {
     checkIsExistValueForFieldsAndDataTypes,
     validateIsExistValueForFieldsAndDataTypes,
     handleResizeImagesAndConvertFormatToWebp,
-    getSuitableTranslations
+    getSuitableTranslations,
+    isValidColor
 }

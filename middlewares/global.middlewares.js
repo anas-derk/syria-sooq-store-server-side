@@ -1,4 +1,4 @@
-const { getResponseObject, isEmail, isValidPassword, isValidLanguage, isValidMobilePhone } = require("../global/functions");
+const { getResponseObject, isEmail, isValidPassword, isValidLanguage, isValidMobilePhone, isValidColor } = require("../global/functions");
 
 const { verify } = require("jsonwebtoken");
 
@@ -242,6 +242,22 @@ function validateAdvertismentType(type, res, nextFunc, errorMsg = "Sorry, Please
     nextFunc();
 }
 
+function validateSize(size, res, nextFunc, errorMsg = "Sorry, Please Send Valid Size ( ['s','m', 'l', 'xl', 'xxl', 'xxxl', '4xl'] ) !!") {
+    if (!['s', 'm', 'l', 'xl', 'xxl', 'xxxl', '4xl'].includes(size)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
+function validateColor(color, res, nextFunc, errorMsg = "Sorry, Please Send Valid Color ( Must Be Start To # And In Hexadecimal System ) !!") {
+    if (!isValidColor(color)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
 function keyGeneratorForRequestsRateLimit(req) {
     const ipAddress = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     const ipWithoutPort = ipAddress.split(',')[0];
@@ -274,5 +290,7 @@ module.exports = {
     validateIsPriceGreaterThanDiscount,
     validateUserType,
     validateAdvertismentType,
+    validateSize,
+    validateColor,
     keyGeneratorForRequestsRateLimit,
 }

@@ -10,6 +10,59 @@ async function addNewProduct(authorizationId, productInfo, language) {
         if (userInfo) {
             const product = await productModel.findById(productInfo.productId);
             if (product) {
+                if (productInfo.customText && !product?.customizes?.allowCustomText) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Write Custom Text Is Not Allowed For This Product !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                if (productInfo.additionalNotes && !product?.customizes?.allowAdditionalNotes) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Write Additional Notes Is Not Allowed For This Product !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                if (productInfo.additionalNotes && !product?.customizes?.allowUploadImages) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Upload Images Is Not Allowed For This Product !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                if (productInfo.size) {
+                    if (!product?.customizes?.sizes) {
+                        return {
+                            msg: getSuitableTranslations("Sorry, Select Size Is Not Allowed For This Product !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    if (!product?.customizes?.sizes?.[size]) {
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Size Is Not Allowed For This Product !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                }
+                if (productInfo.color) {
+                    if (!product?.customizes?.colors?.length === 0) {
+                        return {
+                            msg: getSuitableTranslations("Sorry, Select Color Is Not Allowed For This Product !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    if (!product?.customizes?.colors?.includes(productInfo.color)) {
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Color Is Not Allowed For This Product !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                }
                 await (new cartModel({
                     userId: authorizationId,
                     product: productInfo.productId,
