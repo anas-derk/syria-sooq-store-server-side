@@ -492,7 +492,7 @@ async function deleteProduct(authorizationId, productId, language) {
             if (!admin.isBlocked) {
                 const productInfo = await productModel.findById(productId);
                 if (productInfo) {
-                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(productInfo.storeId)) {
                         await productModel.deleteOne({
                             _id: productId,
                         });
