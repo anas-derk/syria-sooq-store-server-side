@@ -149,14 +149,17 @@ const isExistOfferOnProduct = (startDateAsString, endDateAsString) => {
     return false;
 }
 
-async function decreaseProductQuantities(items) {
+async function updateProductsAfterOrder(items) {
     const bulkOperations = items.map(item => ({
         updateOne: {
             filter: {
                 _id: new mongoose.Types.ObjectId(item.productId),
             },
             update: {
-                $inc: { quantity: -item.quantity }
+                $inc: {
+                    quantity: -item.quantity,
+                    numberOfOrders: item.quantity
+                }
             }
         }
     }));
@@ -299,7 +302,7 @@ async function createNewOrder(userId, orderDetails, language) {
             })).save();
         }
         await cartModel.deleteMany({ userId, product: { $in: newOrder.products.map((product) => product.productId) } });
-        await decreaseProductQuantities(newOrder.products);
+        await updateProductsAfterOrder(newOrder.products);
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
             error: false,
