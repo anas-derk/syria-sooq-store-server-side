@@ -13,7 +13,6 @@ cartRouter.post("/add-new-product",
     multer({
         storage: multer.memoryStorage(),
         fileFilter: (req, file, cb) => {
-            console.log(file);
             if (!file) {
                 return cb(null, true);
             }
