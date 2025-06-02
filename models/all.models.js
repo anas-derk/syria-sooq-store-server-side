@@ -333,6 +333,70 @@ const productSchema = new mongoose.Schema({
             type: Number,
             default: 0,
         },
+        hasWeight: {
+            type: Boolean,
+            default: false,
+        },
+        weightDetails: {
+            unit: {
+                type: String,
+                default: ""
+            },
+            weight: {
+                type: Number,
+                default: null
+            }
+        },
+        hasDimentions: {
+            type: Boolean,
+            default: false,
+        },
+        dimentions: {
+            length: {
+                type: Number,
+                default: null
+            },
+            width: {
+                type: Number,
+                default: null
+            },
+            height: {
+                type: Number,
+                default: null
+            }
+        },
+        hasProductionDate: {
+            type: Boolean,
+            default: false,
+        },
+        productionDate: {
+            type: Date,
+            default: null,
+        },
+        hasExpiryDate: {
+            type: Boolean,
+            default: false,
+        },
+        expiryDate: {
+            type: Date,
+            default: null,
+        },
+        possibilityOfSwitching: {
+            type: Boolean,
+            default: false,
+        },
+        possibilityOfReturn: {
+            type: Boolean,
+            default: false,
+        },
+        hasAdditionalDetails: {
+            type: Boolean,
+            default: false,
+        },
+        additionalDetails: {
+            type: [String],
+            default: false,
+        },
     }
 });
 

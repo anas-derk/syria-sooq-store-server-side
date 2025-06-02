@@ -89,6 +89,21 @@ productsRouter.post("/add-new-product",
                 { fieldName: "Additional Cost", fieldValue: Number(customizes?.additionalCost), dataTypes: ["number"], isRequiredValue: customizes?.hasAdditionalCost ?? false },
                 { fieldName: "Has Additional Time", fieldValue: customizes?.hasAdditionalTime, dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "Additional Time", fieldValue: Number(customizes?.additionalTime), dataTypes: ["number"], isRequiredValue: customizes?.hasAdditionalTime ?? false },
+                { fieldName: "Has Weight", fieldValue: customizes?.hasWeight, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Weight Unit", fieldValue: Number(customizes?.weightDetails?.unit), dataTypes: ["string"], isRequiredValue: customizes?.hasWeight ?? false },
+                { fieldName: "Weight", fieldValue: Number(customizes?.weightDetails?.weight), dataTypes: ["number"], isRequiredValue: customizes?.hasWeight ?? false },
+                { fieldName: "Has Dimentions", fieldValue: customizes?.hasDimentions, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Length", fieldValue: Number(customizes?.dimentions?.length), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Width", fieldValue: Number(customizes?.dimentions?.width), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Height", fieldValue: Number(customizes?.dimentions?.height), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Has Production Date", fieldValue: customizes?.hasProductionDate, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Production Date", fieldValue: customizes?.productionDate, dataTypes: ["date"], isRequiredValue: customizes?.hasProductionDate ?? false },
+                { fieldName: "Has Expiry Date", fieldValue: customizes?.hasExpiryDate, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Expiry Date", fieldValue: customizes?.expiryDate, dataTypes: ["date"], isRequiredValue: customizes?.hasExpiryDate ?? false },
+                { fieldName: "Possibility Of Switching", fieldValue: customizes?.possibilityOfSwitching, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Possibility Of Return", fieldValue: customizes?.possibilityOfReturn, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Has Additional Details", fieldValue: customizes?.hasAdditionalDetails, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Additional Details", fieldValue: customizes?.additionalDetails, dataTypes: ["array"], isRequiredValue: customizes?.hasAdditionalDetails ?? false },
             ], res, next);
             return;
         }
@@ -132,6 +147,19 @@ productsRouter.post("/add-new-product",
             customizes = JSON.parse(customizes);
             if (customizes?.hasAdditionalTime) {
                 validateNumbersIsGreaterThanZero([customizes.additionalTime], res, next, ["Sorry, Please Send Valid Additional Time In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasAdditionalDetails) {
+                validateIsExistValueForFieldsAndDataTypes(customizes.additionalDetails.map((caption, index) => (
+                    { fieldName: `Caption In Additional Details In ${index}`, fieldValue: caption, dataTypes: ["string"], isRequiredValue: false }
+                )), res, next);
                 return;
             }
         }
