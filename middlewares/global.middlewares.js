@@ -268,6 +268,22 @@ function validateColors(colors, res, nextFunc, errorMsgs, defaultMsg = "Sorry, P
     nextFunc();
 }
 
+function validateWeightUnit(unit, res, nextFunc, errorMsg = "Sorry, Please Send Weight Unit ( ['gr','kg'] ) !!") {
+    if (!["gr", "kg"].includes(unit)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
+function validateDimentionsUnit(unit, res, nextFunc, errorMsg = "Sorry, Please Send Dimentions Unit ( ['cm', 'm', 'cm2', 'm2'] ) !!") {
+    if (!["cm", "m", "cm2", "m2"].includes(unit)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
 function keyGeneratorForRequestsRateLimit(req) {
     const ipAddress = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     const ipWithoutPort = ipAddress.split(',')[0];
@@ -303,5 +319,7 @@ module.exports = {
     validateSize,
     validateColor,
     validateColors,
+    validateWeightUnit,
+    validateDimentionsUnit,
     keyGeneratorForRequestsRateLimit,
 }

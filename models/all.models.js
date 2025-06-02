@@ -340,7 +340,8 @@ const productSchema = new mongoose.Schema({
         weightDetails: {
             unit: {
                 type: String,
-                default: ""
+                default: "",
+                enum: ["gr", "kg"]
             },
             weight: {
                 type: Number,
@@ -351,7 +352,12 @@ const productSchema = new mongoose.Schema({
             type: Boolean,
             default: false,
         },
-        dimentions: {
+        dimentionsDetails: {
+            unit: {
+                type: String,
+                default: "",
+                enum: ["cm", "m", "cm2", "m2"]
+            },
             length: {
                 type: Number,
                 default: null
@@ -363,7 +369,7 @@ const productSchema = new mongoose.Schema({
             height: {
                 type: Number,
                 default: null
-            }
+            },
         },
         hasProductionDate: {
             type: Boolean,

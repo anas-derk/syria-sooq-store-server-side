@@ -4,7 +4,7 @@ const productsController = require("../controllers/products.controller");
 
 const multer = require("multer");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount, validateUserType, validateColors } = require("../middlewares/global.middlewares");
+const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount, validateUserType, validateColors, validateWeightUnit, validateDimentionsUnit } = require("../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes, getResponseObject } = require("../global/functions");
 
@@ -93,9 +93,10 @@ productsRouter.post("/add-new-product",
                 { fieldName: "Weight Unit", fieldValue: Number(customizes?.weightDetails?.unit), dataTypes: ["string"], isRequiredValue: customizes?.hasWeight ?? false },
                 { fieldName: "Weight", fieldValue: Number(customizes?.weightDetails?.weight), dataTypes: ["number"], isRequiredValue: customizes?.hasWeight ?? false },
                 { fieldName: "Has Dimentions", fieldValue: customizes?.hasDimentions, dataTypes: ["boolean"], isRequiredValue: false },
-                { fieldName: "Length", fieldValue: Number(customizes?.dimentions?.length), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
-                { fieldName: "Width", fieldValue: Number(customizes?.dimentions?.width), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
-                { fieldName: "Height", fieldValue: Number(customizes?.dimentions?.height), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Dimentions Unit", fieldValue: customizes?.dimentionsDetails?.unit, dataTypes: ["string"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Length", fieldValue: Number(customizes?.dimentionsDetails?.length), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Width", fieldValue: Number(customizes?.dimentionsDetails?.width), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Height", fieldValue: Number(customizes?.dimentionsDetails?.height), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
                 { fieldName: "Has Production Date", fieldValue: customizes?.hasProductionDate, dataTypes: ["boolean"], isRequiredValue: false },
                 { fieldName: "Production Date", fieldValue: customizes?.productionDate, dataTypes: ["date"], isRequiredValue: customizes?.hasProductionDate ?? false },
                 { fieldName: "Has Expiry Date", fieldValue: customizes?.hasExpiryDate, dataTypes: ["boolean"], isRequiredValue: false },
@@ -147,6 +148,28 @@ productsRouter.post("/add-new-product",
             customizes = JSON.parse(customizes);
             if (customizes?.hasAdditionalTime) {
                 validateNumbersIsGreaterThanZero([customizes.additionalTime], res, next, ["Sorry, Please Send Valid Additional Time In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasWeight) {
+                validateWeightUnit(customizes?.weightDetails.unit, res, next);
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasWeight) {
+                validateDimentionsUnit(customizes?.dimentionsDetails.unit, res, next);
                 return;
             }
         }
