@@ -1,6 +1,6 @@
 // Import Product Model Object
 
-const { productModel, categoryModel, adminModel, userModel, favoriteProductModel } = require("../models/all.models");
+const { productModel, categoryModel, adminModel, userModel, favoriteProductModel, brandModel } = require("../models/all.models");
 
 const { mongoose } = require("../server");
 
@@ -13,6 +13,16 @@ async function addNewProduct(authorizationId, productInfo, language) {
             if (!admin.isBlocked) {
                 const product = await productModel.findOne({ name: productInfo.name, categoryId: productInfo.categoryId });
                 if (!product) {
+                    if (product?.brand) {
+                        const brand = await brandModel.findById(product.brand);
+                        if (!brand) {
+                            return {
+                                msg: getSuitableTranslations("Sorry, This Brand Is Not Exist !!", language),
+                                error: false,
+                                data: {},
+                            }
+                        }
+                    }
                     const categories = await categoryModel.find({ _id: { $in: productInfo.categories } });
                     if (categories.length === productInfo.categories.length) {
                         productInfo.categories = categories.map((category) => category._id);

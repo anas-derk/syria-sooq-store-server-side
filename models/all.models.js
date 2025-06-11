@@ -270,7 +270,11 @@ const productSchema = new mongoose.Schema({
             type: Boolean,
             default: false,
         },
-        colors: [],
+        colors: {
+            type: [String],
+            default: [],
+            required: () => this.hasColors,
+        },
         hasSizes: {
             type: Boolean,
             default: false,
@@ -341,7 +345,7 @@ const productSchema = new mongoose.Schema({
             unit: {
                 type: String,
                 default: "",
-                enum: ["gr", "kg"]
+                enum: ["gr", "kg", ""]
             },
             weight: {
                 type: Number,
@@ -356,7 +360,7 @@ const productSchema = new mongoose.Schema({
             unit: {
                 type: String,
                 default: "",
-                enum: ["cm", "m", "cm2", "m2"]
+                enum: ["cm", "m", "cm2", "m2", ""]
             },
             length: {
                 type: Number,
@@ -403,7 +407,12 @@ const productSchema = new mongoose.Schema({
             type: [String],
             default: false,
         },
-    }
+    },
+    brand: {
+        type: mongoose.Types.ObjectId,
+        ref: "brand",
+        default: null,
+    },
 });
 
 // Create Product Model From Product Schema
