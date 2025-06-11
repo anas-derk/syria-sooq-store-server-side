@@ -111,6 +111,8 @@ app.listen(PORT, async () => {
 
     app.use("/wallet-operations", require("./routes/wallet_operations.router"));
 
+    app.use("/brands", require("./routes/brands.router"));
+
     /* End Handle The Routes */
 });
 
