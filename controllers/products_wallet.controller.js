@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../global/functions");
 
-const walletOPerationsManagmentFunctions = require("../models/products_wallet.model");
+// const walletOPerationsManagmentFunctions = require("../models/products_wallet.model");
 
 function getFiltersObject(filters) {
     let filtersObject = {};
@@ -30,10 +30,10 @@ async function getAllWalletProductsInsideThePage(req, res) {
 }
 
 async function deleteWalletProduct(req, res) {
-    try{
+    try {
         res.json(await walletOPerationsManagmentFunctions.deleteWalletProduct(req.data._id, req.params.productId, req.query.language));
     }
-    catch(err) {
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }

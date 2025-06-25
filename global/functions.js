@@ -1,6 +1,6 @@
 const { Types } = require("mongoose");
 
-const { getPasswordForBussinessEmail } = require("../models/global_passwords.model");
+const { getPasswordForBussinessEmail } = require("../models/global_password.model");
 
 const { createTransport } = require("nodemailer");
 

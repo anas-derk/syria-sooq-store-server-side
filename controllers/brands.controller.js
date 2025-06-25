@@ -1,6 +1,6 @@
-const { getResponseObject, handleResizeImagesAndConvertFormatToWebp, getSuitableTranslations, translateSentensesByAPI } = require("../global/functions");
+const { getResponseObject, handleResizeImagesAndConvertFormatToWebp, getSuitableTranslations } = require("../global/functions");
 
-const brandsManagmentFunctions = require("../models/brands.model");
+// const brandsManagmentFunctions = require("../models/brand.model");
 
 const { unlinkSync } = require("fs");
 

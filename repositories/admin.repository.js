@@ -1,10 +1,10 @@
 // Import Admin Model Object
 
-const { adminModel } = require("./all.models");
+const { adminModel } = require("../models");
 
 const { compare, hash } = require("bcryptjs");
 
-const { mongoose } = require("..");
+const mongoose = require("../database");
 
 const { getSuitableTranslations } = require("../global/functions");
 

@@ -1,8 +1,8 @@
 const mongoose = require("../database");
 
-// Create Products Wallet Schema
+// Create Favorite Product Schema
 
-const productsWalletShema = new mongoose.Schema({
+const favoriteProductShema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -25,8 +25,8 @@ const productsWalletShema = new mongoose.Schema({
     },
 });
 
-// Create Products Wallet Model From Products Wallet Schema
+// Create Favorite Product Model From Favorite Product Schema
 
-const productsWalletModel = mongoose.model("products_wallet", productsWalletShema);
+const favoriteProductModel = mongoose.model("favorite_products", favoriteProductShema);
 
-module.exports = productsWalletModel;
+module.exports = favoriteProductModel;

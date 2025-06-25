@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../global/functions");
 
-const cardOPerationsManagmentFunctions = require("../models/wallet_operations.model");
+// const cardOPerationsManagmentFunctions = require("../models/wallet_operation.model");
 
 async function getAllWalletOperationsInsideThePage(req, res) {
     try {

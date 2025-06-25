@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../global/functions");
 
-const adminsOPerationsManagmentFunctions = require("../models/admins.model");
+const adminsOPerationsManagmentFunctions = require("../repositories/admin.repository");
 
 const { sign } = require("jsonwebtoken");
 
