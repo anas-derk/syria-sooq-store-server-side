@@ -1,8 +1,14 @@
 {
   "name": "syria-sooq-store-server-side",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "author": "Anas Derk",
+  "description": "Multi-vendor Store Backend API Using Node.js & Expressjs & Mongo Database",
   "private": true,
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anas-derk/syria-sooq-store-server-side.git"
+  },
   "scripts": {
     "start": "node index",
     "dev": "nodemon"
@@ -45,7 +51,7 @@
     "verbose": true,
     "env": {
       "NODE_ENV": "development",
-      "PORT": "3000"
+      "PORT": "3030"
     },
     "restartable": "rs"
   }
