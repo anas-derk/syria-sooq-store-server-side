@@ -1,6 +1,6 @@
 // Import Mongoose
 
-const { mongoose } = require("..");
+const mongoose = require("../database");
 
 // Create Admin Schema
 
