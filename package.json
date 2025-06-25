@@ -2,6 +2,11 @@
   "name": "syria-sooq-store-server-side",
   "version": "0.1.0",
   "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon"
+  },
   "dependencies": {
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
@@ -19,5 +24,29 @@
     "node-code-generator": "^1.0.3",
     "nodemailer": "^6.9.7",
     "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=20.11.0",
+    "npm": ">=10.2.4"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "*.*",
+      ".env",
+      "*"
+    ],
+    "ignore": [
+      "node_modules"
+    ],
+    "ext": "*",
+    "verbose": true,
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": "3030"
+    },
+    "restartable": "rs"
   }
 }

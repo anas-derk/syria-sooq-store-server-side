@@ -152,4 +152,4 @@ async function create_initial_store() {
     }
 }
 
-create_initial_store().then((result) => console.log(result));
+create_initial_store().then((result) => { console.log(result); process.exit(1) });

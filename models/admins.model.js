@@ -4,7 +4,7 @@ const { adminModel } = require("./all.models");
 
 const { compare, hash } = require("bcryptjs");
 
-const { mongoose } = require("../server");
+const { mongoose } = require("..");
 
 const { getSuitableTranslations } = require("../global/functions");
 

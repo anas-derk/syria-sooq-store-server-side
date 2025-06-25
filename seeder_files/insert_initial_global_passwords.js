@@ -40,10 +40,10 @@ async function create_initial_global_password() {
             await mongoose.disconnect();
             return "Ok !!, Create Initial Global Password Has Been Successfuly !!";
         }
-    } catch(err) {
+    } catch (err) {
         await mongoose.disconnect();
         throw Error(err);
     }
 }
 
-create_initial_global_password().then((result) => console.log(result));
+create_initial_global_password().then((result) => { console.log(result); process.exit(1) });

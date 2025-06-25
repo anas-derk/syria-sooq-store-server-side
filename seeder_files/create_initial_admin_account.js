@@ -164,4 +164,4 @@ async function create_initial_admin_user_account() {
     }
 }
 
-create_initial_admin_user_account().then((result) => console.log(result));
+create_initial_admin_user_account().then((result) => { console.log(result); process.exit(1) });

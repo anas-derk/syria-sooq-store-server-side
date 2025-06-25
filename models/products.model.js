@@ -2,7 +2,7 @@
 
 const { productModel, categoryModel, adminModel, userModel, favoriteProductModel, brandModel } = require("../models/all.models");
 
-const { mongoose } = require("../server");
+const { mongoose } = require("..");
 
 const { getSuitableTranslations } = require("../global/functions");
 
