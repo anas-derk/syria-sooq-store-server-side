@@ -35,11 +35,12 @@ async function postNewProduct(req, res) {
             if (result.msg === "Sorry, This Admin Has Been Blocked !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {
                 return res.status(401).json(result);
             }
+            return res.json(result);
         }
+
         res.json(result);
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
