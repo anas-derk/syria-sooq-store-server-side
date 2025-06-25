@@ -1,6 +1,6 @@
 // Import Brand Model Object
 
-const { brandModel, adminModel, storeModel } = require("../models/all.models");
+const { brandModel, adminModel, storeModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 

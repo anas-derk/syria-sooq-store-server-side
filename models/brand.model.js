@@ -20,3 +20,5 @@ const brandSchema = new mongoose.Schema({
 // Create Brand Model From Brand Schema
 
 const brandModel = mongoose.model("brand", brandSchema);
+
+module.exports = brandModel;

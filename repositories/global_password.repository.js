@@ -1,14 +1,14 @@
 // Import Global Password Model And Admin Model Object
 
-const { globalPasswordModel, adminModel } = require("./all.models");
+const { globalPasswordModel, adminModel } = require("../models");
 
 // require cryptoJs module for password encrypting
 
 const { AES, enc } = require("crypto-js");
 
-async function getPasswordForBussinessEmail(email, language){
-    try{
-    const { getSuitableTranslations } = require("../global/functions");
+async function getPasswordForBussinessEmail(email, language) {
+    try {
+        const { getSuitableTranslations } = require("../global/functions");
         const user = await globalPasswordModel.findOne({ email });
         if (user) {
             return {
@@ -23,16 +23,16 @@ async function getPasswordForBussinessEmail(email, language){
             data: {},
         }
     }
-    catch(err){
+    catch (err) {
         throw Error(err);
     }
 }
 
 async function changeBussinessEmailPassword(authorizationId, email, password, newPassword, language) {
     try {
-    const { getSuitableTranslations } = require("../global/functions");
+        const { getSuitableTranslations } = require("../global/functions");
         const admin = await adminModel.findById(authorizationId);
-        if (admin){
+        if (admin) {
             if (admin.isWebsiteOwner) {
                 const user = await globalPasswordModel.findOne({ email });
                 if (user) {

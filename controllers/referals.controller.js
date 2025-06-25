@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../global/functions");
 
-// const referalsManagmentFunctions = require("../models/referal.model");
+const referalsManagmentFunctions = require("../repositories/referal.repository");
 
 function getFiltersObject(filters) {
     let filtersObject = {};

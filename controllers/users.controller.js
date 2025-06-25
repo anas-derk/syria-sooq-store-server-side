@@ -1,6 +1,6 @@
 const { getResponseObject, sendVerificationCodeToUserEmail, sendCongratulationsOnCreatingNewAccountEmail, sendChangePasswordEmail, getSuitableTranslations, handleResizeImagesAndConvertFormatToWebp } = require("../global/functions");
 
-// const usersOPerationsManagmentFunctions = require("../models/user.model");
+const usersOPerationsManagmentFunctions = require("../repositories/user.repository");
 
 const { sign } = require("jsonwebtoken");
 

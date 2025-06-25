@@ -1,11 +1,11 @@
 const { getResponseObject, getSuitableTranslations } = require("../global/functions");
 
-// const cardOPerationsManagmentFunctions = require("../models/wallet_operation.model");
+const walletPerationsManagmentFunctions = require("../repositories/wallet_operation.repository");
 
 async function getAllWalletOperationsInsideThePage(req, res) {
     try {
         const { pageNumber, pageSize, language } = req.query;
-        const result = await cardOPerationsManagmentFunctions.getAllWalletOperationsInsideThePage(req.data._id, pageNumber, pageSize, language);
+        const result = await walletPerationsManagmentFunctions.getAllWalletOperationsInsideThePage(req.data._id, pageNumber, pageSize, language);
         if (result.error) {
             return res.status(401).json(result);
         }

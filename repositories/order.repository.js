@@ -1,6 +1,8 @@
 // Import  Order Model Object
 
-const { orderModel, userModel, adminModel, productModel, walletOperationsModel, cartModel, returnOrderModel, mongoose } = require("../models/all.models");
+const { orderModel, userModel, adminModel, productModel, walletOperationsModel, cartModel, returnOrderModel } = require("../models");
+
+const mongoose = require("../database");
 
 const { getSuitableTranslations } = require("../global/functions");
 

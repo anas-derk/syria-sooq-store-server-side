@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { storeModel, adminModel, categoryModel, productModel, userModel } = require("../models/all.models");
+const { storeModel, adminModel, categoryModel, productModel, userModel } = require("../models");
 
 // require bcryptjs module for password encrypting
 

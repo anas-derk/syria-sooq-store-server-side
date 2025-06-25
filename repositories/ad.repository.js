@@ -1,6 +1,6 @@
 // Import Product Model Object
 
-const { adsModel, adminModel, productModel } = require("../models/all.models");
+const { adsModel, adminModel, productModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 

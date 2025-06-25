@@ -1,6 +1,6 @@
 // Import Referal Model Object
 
-const { referalModel } = require("../models/all.models");
+const { referalModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 

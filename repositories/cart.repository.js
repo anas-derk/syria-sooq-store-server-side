@@ -1,6 +1,6 @@
 // Import Cart Model Object
 
-const { cartModel, productModel, userModel } = require("../models/all.models");
+const { cartModel, productModel, userModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 

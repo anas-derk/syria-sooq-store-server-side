@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../global/functions");
 
-// const walletOPerationsManagmentFunctions = require("../models/products_wallet.model");
+const walletOPerationsManagmentFunctions = require("../repositories/wallet_operation.repository");
 
 function getFiltersObject(filters) {
     let filtersObject = {};

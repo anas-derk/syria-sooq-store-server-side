@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations, handleResizeImagesAndConvertFormatToWebp } = require("../global/functions");
 
-// const cartOperationsManagmentFunctions = require("../models/cart.model");
+const cartOperationsManagmentFunctions = require("../repositories/cart.repository");
 
 const { unlinkSync } = require("fs");
 

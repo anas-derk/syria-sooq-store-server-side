@@ -1,6 +1,6 @@
 // Import User, Product Model And Products Rating Model  Object
 
-const { userModel, productModel, ratingModel, storeModel } = require("../models/all.models");
+const { userModel, productModel, ratingModel, storeModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 

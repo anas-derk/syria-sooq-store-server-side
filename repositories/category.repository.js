@@ -1,6 +1,6 @@
 // Import Category And Admin Model Object
 
-const { categoryModel, adminModel, productModel, userModel } = require("../models/all.models");
+const { categoryModel, adminModel, productModel, userModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 

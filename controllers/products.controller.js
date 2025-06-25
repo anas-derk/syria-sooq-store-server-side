@@ -1,6 +1,6 @@
 const { getResponseObject, handleResizeImagesAndConvertFormatToWebp, getSuitableTranslations } = require("../global/functions");
 
-// const productsManagmentFunctions = require("../models/product.model");
+const productsManagmentFunctions = require("../repositories/product.repository");
 
 const { unlinkSync } = require("fs");
 

@@ -1,6 +1,6 @@
 // Import Favorite Product Object
 
-const { favoriteProductModel, productModel, userModel } = require("../models/all.models");
+const { favoriteProductModel, productModel, userModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 

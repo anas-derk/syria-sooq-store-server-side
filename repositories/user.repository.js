@@ -1,6 +1,6 @@
 // Import User, Account Verification Codes And Product Model Object
 
-const { userModel, accountVerificationCodesModel, adminModel, productsWalletModel, favoriteProductModel, productModel, categoryModel, adsModel, cartModel, mongoose } = require("../models/all.models");
+const { userModel, accountVerificationCodesModel, adminModel, favoriteProductModel, productModel, categoryModel, adsModel, cartModel, mongoose } = require("../models");
 
 // require bcryptjs module for password encrypting
 

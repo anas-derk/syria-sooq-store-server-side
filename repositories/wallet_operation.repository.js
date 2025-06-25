@@ -1,6 +1,6 @@
 // Import Card Operations Model Object
 
-const { walletOperationsModel, userModel } = require("./all.models");
+const { walletOperationsModel, userModel } = require("../models");
 
 const { getSuitableTranslations } = require("../global/functions");
 
