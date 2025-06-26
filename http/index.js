@@ -3,10 +3,6 @@ const middlewares = require("../middlewares");
 const express = require("express");
 const app = express();
 
-const PORT = process.env.PORT || 5200;
-
-app.set("PORT", PORT);
-
 app.set("x-powered-by", false);
 
 app.set("trust proxy", true);

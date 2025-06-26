@@ -2,13 +2,15 @@ const database = require("./database");
 const server = require("./http");
 const { config } = require("dotenv");
 
+const PORT = process.env.PORT || 5200;
+
 config();
 
 database.connect(process.env.DB_URL);
 
 database.connection.on("connected", () => {
-    const Server = server.listen(() => {
-        console.log(`Server Listening On Port ${server.get("PORT")}`);
+    const Server = server.listen(PORT, () => {
+        console.log(`Server Listening On Port ${PORT}`);
     });
     process.on("SIGINT", async () => {
         if (database.connection.readyState) {

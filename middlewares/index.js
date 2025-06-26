@@ -16,7 +16,7 @@ app.use(cors());
 
 app.use(json({ limit: "999999999kb" }));
 
-app.use(validateLanguage);
+app.use((req, res, next) => validateLanguage(req.query.language, res, next));
 
 app.use("/assets", static(path.join(__dirname, "..", "assets")));
 
