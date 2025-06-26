@@ -1,18 +1,18 @@
-const adminsRouter = require("./admins.router");
-const adsRouter = require("./ads.router");
-const brandsRouter = require("./brands.router");
-const cartRouter = require("./cart.router");
-const categoriesRouter = require("./categories.router");
-const favoriteProductsRouter = require("./favorite_products.router");
-const globalPasswordsRouter = require("./global_passwords.router");
-const ordersRouter = require("./orders.router");
-const productsWalletRouter = require("./products_wallet.router");
-const productsRouter = require("./products.router");
-const ratingsRouter = require("./ratings.router");
-const referalsRouter = require("./referals.router");
-const storesRouter = require("./stores.router");
-const usersRouter = require("./users.router");
-const walletOperationsRouter = require("./wallet_operations.router");
+const adminsRouter = require("./admins");
+const adsRouter = require("./ads");
+const brandsRouter = require("./brands");
+const cartRouter = require("./cart");
+const categoriesRouter = require("./categories");
+const favoriteProductsRouter = require("./favorite_products");
+const globalPasswordsRouter = require("./global_passwords");
+const ordersRouter = require("./orders");
+const productsWalletRouter = require("./products_wallets");
+const productsRouter = require("./products");
+const ratingsRouter = require("./ratings");
+const referalsRouter = require("./referals");
+const storesRouter = require("./stores");
+const usersRouter = require("./users");
+const walletOperationsRouter = require("./wallet_operations");
 
 const { Router } = require("express")
 

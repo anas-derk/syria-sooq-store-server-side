@@ -1,6 +1,6 @@
 const { Types } = require("mongoose");
 
-const { getPasswordForBussinessEmail } = require("../models/global_password.model");
+const { getPasswordForBussinessEmail } = require("../repositories/global_password");
 
 const { createTransport } = require("nodemailer");
 
@@ -14,7 +14,7 @@ const { compile } = require("ejs");
 
 const sharp = require("sharp");
 
-const arTranslations = require("./translations/ar.json");
+const arTranslations = require("../locals/ar/index.json");
 
 function isEmail(email) {
     return email.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);

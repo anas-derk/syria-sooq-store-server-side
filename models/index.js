@@ -1,20 +1,20 @@
-const accountVerificationCodesModel = require("./account_code.model");
-const adModel = require("./ad.model");
-const adminModel = require("./admin.model");
-const brandModel = require("./brand.model");
-const cartModel = require("./cart.model");
-const categoryModel = require("./category.model");
-const favoriteProductModel = require("./favorite_product.model");
-const globalPasswordModel = require("./global_password.model");
-const orderModel = require("./order.model");
-const productModel = require("./product.model");
-const productsWalletModel = require("./products_wallet.model");
-const ratingModel = require("./rating.model");
-const referalModel = require("./referal.model");
-const storeModel = require("./store.model");
-const userModel = require("./user.model");
-const returnOrderModel = require("./return_order.model");
-const walletOperationsModel = require("./wallet_operation.model");
+const accountVerificationCodesModel = require("./account_code");
+const adModel = require("./ad");
+const adminModel = require("./admin");
+const brandModel = require("./brand");
+const cartModel = require("./cart");
+const categoryModel = require("./category");
+const favoriteProductModel = require("./favorite_product");
+const globalPasswordModel = require("./global_password");
+const orderModel = require("./order");
+const productModel = require("./product");
+const productsWalletModel = require("./product");
+const ratingModel = require("./rating");
+const referalModel = require("./referal");
+const storeModel = require("./store");
+const userModel = require("./user");
+const returnOrderModel = require("./return_order");
+const walletOperationsModel = require("./wallet_operation");
 
 module.exports = {
     accountVerificationCodesModel,
