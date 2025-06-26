@@ -1,6 +1,6 @@
 const cartRouter = require("express").Router();
 
-const cartController = require("../../controllers/cart.controller");
+const cartController = require("../../controllers/carts");
 
 const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles, validateSize, validateColor } = require("../../middlewares/global.middlewares");
 

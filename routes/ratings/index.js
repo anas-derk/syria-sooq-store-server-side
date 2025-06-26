@@ -1,6 +1,6 @@
 const ratingsRouter = require("express").Router();
 
-const ratingsController = require("../../controllers/ratings.controller");
+const ratingsController = require("../../controllers/ratings");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
 

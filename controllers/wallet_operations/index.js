@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../../global/functions");
 
-const walletPerationsManagmentFunctions = require("../../repositories/wallet_operation");
+const walletPerationsManagmentFunctions = require("../../repositories/wallet_operations");
 
 async function getAllWalletOperationsInsideThePage(req, res) {
     try {

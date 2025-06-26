@@ -1,6 +1,6 @@
 const walletRouter = require("express").Router();
 
-const walletController = require("../../controllers/products_wallet.controller");
+const walletController = require("../../controllers/products_wallets");
 
 const { validateJWT } = require("../../middlewares/global.middlewares");
 

@@ -1,6 +1,6 @@
 const ordersRouter = require("express").Router();
 
-const ordersController = require("../../controllers/orders.controller");
+const ordersController = require("../../controllers/orders");
 
 const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsNotExistDublicateProductId, validateCheckoutStatus, validateOrderDestination, validatePaymentGateway, validateOrderStatus, validateMobilePhone, validateOrdersType } = require("../../middlewares/global.middlewares");
 

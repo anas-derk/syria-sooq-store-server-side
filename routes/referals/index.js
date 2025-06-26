@@ -1,6 +1,6 @@
 const referalsRouter = require("express").Router();
 
-const referalsController = require("../../controllers/referals.controller");
+const referalsController = require("../../controllers/referals");
 
 const { validateEmail, validateName } = require("../../middlewares/global.middlewares");
 

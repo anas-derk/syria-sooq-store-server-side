@@ -1,6 +1,6 @@
 const walletOperationsRouter = require("express").Router();
 
-const walletOperationsController = require("../../controllers/wallet_operations.controller");
+const walletOperationsController = require("../../controllers/wallet_operations");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
 

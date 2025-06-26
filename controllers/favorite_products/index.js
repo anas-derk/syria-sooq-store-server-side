@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../../global/functions");
 
-const favoriteProductsOPerationsManagmentFunctions = require("../../repositories/category");
+const favoriteProductsOPerationsManagmentFunctions = require("../../repositories/favorite_products");
 
 function getFiltersObject(filters) {
     let filtersObject = {};

@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../../global/functions");
 
-const walletOPerationsManagmentFunctions = require("../../repositories/wallet_operation");
+const productsWalletsOPerationsManagmentFunctions = require("../../repositories/products_wallets");
 
 function getFiltersObject(filters) {
     let filtersObject = {};
@@ -12,7 +12,7 @@ function getFiltersObject(filters) {
 
 async function getWalletProductsCount(req, res) {
     try {
-        res.json(await walletOPerationsManagmentFunctions.getWalletProductsCount(getFiltersObject({ ...req.query, userId: req.data._id }), req.query.language));
+        res.json(await productsWalletsOPerationsManagmentFunctions.getWalletProductsCount(getFiltersObject({ ...req.query, userId: req.data._id }), req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -22,7 +22,7 @@ async function getWalletProductsCount(req, res) {
 async function getAllWalletProductsInsideThePage(req, res) {
     try {
         const filters = req.query;
-        res.json(await walletOPerationsManagmentFunctions.getAllWalletProductsInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject({ ...filters, userId: req.data._id }), req.query.language));
+        res.json(await productsWalletsOPerationsManagmentFunctions.getAllWalletProductsInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject({ ...filters, userId: req.data._id }), req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -31,7 +31,7 @@ async function getAllWalletProductsInsideThePage(req, res) {
 
 async function deleteWalletProduct(req, res) {
     try {
-        res.json(await walletOPerationsManagmentFunctions.deleteWalletProduct(req.data._id, req.params.productId, req.query.language));
+        res.json(await productsWalletsOPerationsManagmentFunctions.deleteWalletProduct(req.data._id, req.params.productId, req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));

@@ -1,6 +1,6 @@
-const { getResponseObject, getSuitableTranslations } = require("../global/functions");
+const { getResponseObject, getSuitableTranslations } = require("../../global/functions");
 
-const ratingOPerationsManagmentFunctions = require("../repositories/rating");
+const ratingOPerationsManagmentFunctions = require("../../repositories/ratings");
 
 async function postSelectProductRating(req, res) {
     try {

@@ -1,6 +1,6 @@
 const adsRouter = require("express").Router();
 
-const adsController = require("../../controllers/ads.controller");
+const adsController = require("../../controllers/ads");
 
 const multer = require("multer");
 

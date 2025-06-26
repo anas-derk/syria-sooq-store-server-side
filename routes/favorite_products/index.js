@@ -1,6 +1,6 @@
 const favoriteProductsRouter = require("express").Router();
 
-const favoriteProductsController = require("../../controllers/favorite_products.controller");
+const favoriteProductsController = require("../../controllers/favorite_products");
 
 const { validateJWT } = require("../../middlewares/global.middlewares");
 

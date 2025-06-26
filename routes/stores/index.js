@@ -1,6 +1,6 @@
 const storesRouter = require("express").Router();
 
-const storesController = require("../../controllers/stores.controller");
+const storesController = require("../../controllers/stores");
 
 const { validateJWT, validatePassword, validateEmail, validateName, validateIsExistErrorInFiles, validateUserType, validateCity } = require("../../middlewares/global.middlewares");
 

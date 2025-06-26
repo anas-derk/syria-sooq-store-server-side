@@ -10,7 +10,7 @@ const {
     getSuitableTranslations
 } = require("../../global/functions");
 
-const storesOPerationsManagmentFunctions = require("../../repositories/store");
+const storesOPerationsManagmentFunctions = require("../../repositories/stores");
 
 const { unlinkSync } = require("fs");
 

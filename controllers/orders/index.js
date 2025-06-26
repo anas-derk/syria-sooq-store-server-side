@@ -1,6 +1,6 @@
-const { getResponseObject, sendReceiveOrderEmail, sendUpdateOrderEmail, getSuitableTranslations } = require("../global/functions");
+const { getResponseObject, sendReceiveOrderEmail, sendUpdateOrderEmail, getSuitableTranslations } = require("../../global/functions");
 
-const ordersManagmentFunctions = require("../repositories/order");
+const ordersManagmentFunctions = require("../../repositories/orders");
 
 function getFiltersObject(filters) {
     let filtersObject = {};

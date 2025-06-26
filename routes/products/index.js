@@ -1,6 +1,6 @@
 const productsRouter = require("express").Router();
 
-const productsController = require("../../controllers/products.controller");
+const productsController = require("../../controllers/products");
 
 const multer = require("multer");
 

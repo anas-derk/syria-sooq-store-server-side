@@ -1,6 +1,6 @@
 const { getResponseObject, sendVerificationCodeToUserEmail, sendCongratulationsOnCreatingNewAccountEmail, sendChangePasswordEmail, getSuitableTranslations, handleResizeImagesAndConvertFormatToWebp } = require("../../global/functions");
 
-const usersOPerationsManagmentFunctions = require("../../repositories/user");
+const usersOPerationsManagmentFunctions = require("../../repositories/users");
 
 const { sign } = require("jsonwebtoken");
 
@@ -8,7 +8,7 @@ const {
     isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate,
     addNewAccountVerificationCode,
     isAccountVerificationCodeValid
-} = require("../../repositories/account_code");
+} = require("../../repositories/account_codes");
 
 const { unlinkSync } = require("fs");
 

@@ -1,6 +1,6 @@
 const categoriesRouter = require("express").Router();
 
-const categoriesController = require("../../controllers/categories.controller");
+const categoriesController = require("../../controllers/categories");
 
 const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles, validateUserType } = require("../../middlewares/global.middlewares");
 

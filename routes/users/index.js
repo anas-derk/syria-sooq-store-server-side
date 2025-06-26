@@ -1,6 +1,6 @@
 const usersRouter = require("express").Router();
 
-const usersController = require("../../controllers/users.controller");
+const usersController = require("../../controllers/users");
 
 const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, getResponseObject } = require("../../global/functions");
 

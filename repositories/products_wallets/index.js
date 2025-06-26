@@ -1,6 +1,6 @@
 // Import Wallet Product Object
 
-const { productsWalletModel, userModel } = require("./all.models");
+const { productsWalletModel, userModel } = require("../../models");
 
 const { getSuitableTranslations } = require("../../global/functions");
 

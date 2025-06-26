@@ -1,6 +1,6 @@
 const { getResponseObject, getSuitableTranslations } = require("../../global/functions");
 
-const globalPasswordsManagmentFunctions = require("../../repositories/global_password");
+const globalPasswordsManagmentFunctions = require("../../repositories/global_passwords");
 
 async function putChangeBussinessEmailPassword(req, res) {
     try {
