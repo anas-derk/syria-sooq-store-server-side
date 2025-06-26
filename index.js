@@ -15,10 +15,10 @@ database.connection.on("connected", () => {
             await database.connection.close();
         }
         Server.close((err) => {
-            console.log(`Error On Close Server: ${err.message}`);
+            console.log(`Error On Close Server: ${err?.message ?? err}`);
         });
     });
     Server.on("error", (err) => {
-        console.log(`Http Server Error: ${err.message}`);
+        console.log(`Http Server Error: ${err?.message ?? err}`);
     });
 });
