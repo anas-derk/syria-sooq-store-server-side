@@ -2,6 +2,7 @@
   "name": "syria-sooq-store-server-side",
   "version": "1.0.0",
   "author": "Anas Derk",
+  "license": "ISC",
   "description": "Multi-vendor Store Backend API Using Node.js & Expressjs & Mongo Database",
   "private": true,
   "main": "index.js",
