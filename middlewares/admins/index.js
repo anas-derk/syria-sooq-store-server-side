@@ -1,4 +1,4 @@
-const { getResponseObject } = require("../global/functions");
+const { getResponseObject } = require("../helpers/responses");
 const { verify } = require("jsonwebtoken");
 
 function adminMiddleware(req, res, next) {

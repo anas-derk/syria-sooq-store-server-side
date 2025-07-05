@@ -1,4 +1,4 @@
-const { getResponseObject } = require("../global/functions");
+const { getResponseObject } = require("../../helpers/responses");
 
 function validateRatingType(type, res, nextFunc) {
     if (![
