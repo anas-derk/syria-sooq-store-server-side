@@ -4,7 +4,7 @@ const categoriesController = require("../../controllers/categories");
 
 const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles, validateUserType } = require("../../middlewares/global.middlewares");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 const multer = require("multer");
 

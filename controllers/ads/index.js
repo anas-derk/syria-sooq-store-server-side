@@ -1,4 +1,12 @@
-const { getResponseObject, handleResizeImagesAndConvertFormatToWebp, getSuitableTranslations } = require("../../global/functions");
+const { responsesHelpers, translationHelpers, processingHelpers } = require("../../helpers");
+
+const { getResponseObject } = responsesHelpers;
+
+const { getSuitableTranslations } = translationHelpers;
+
+const { imagesHelpers } = processingHelpers;
+
+const { handleResizeImagesAndConvertFormatToWebp } = imagesHelpers;
 
 const adsOPerationsManagmentFunctions = require("../../repositories/ads");
 

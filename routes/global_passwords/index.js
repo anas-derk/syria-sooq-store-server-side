@@ -2,7 +2,7 @@ const globalPasswordRouter = require("express").Router();
 
 const globalPasswordController = require("../../controllers/global_passwords");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 const { validateJWT, validateEmail, validatePassword } = require("../../middlewares/global.middlewares");
 

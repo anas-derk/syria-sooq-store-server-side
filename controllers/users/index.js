@@ -1,4 +1,18 @@
-const { getResponseObject, sendVerificationCodeToUserEmail, sendCongratulationsOnCreatingNewAccountEmail, sendChangePasswordEmail, getSuitableTranslations, handleResizeImagesAndConvertFormatToWebp } = require("../../global/functions");
+const { responsesHelpers, translationHelpers, processingHelpers, emailsHelpers } = require("../../helpers");
+
+const { getResponseObject } = responsesHelpers;
+
+const { getSuitableTranslations } = translationHelpers;
+
+const { imagesHelpers } = processingHelpers;
+
+const { handleResizeImagesAndConvertFormatToWebp } = imagesHelpers;
+
+const {
+    sendVerificationCodeToUserEmail,
+    sendCongratulationsOnCreatingNewAccountEmail,
+    sendChangePasswordEmail
+} = emailsHelpers;
 
 const usersOPerationsManagmentFunctions = require("../../repositories/users");
 

@@ -4,7 +4,7 @@ const ordersController = require("../../controllers/orders");
 
 const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsNotExistDublicateProductId, validateCheckoutStatus, validateOrderDestination, validatePaymentGateway, validateOrderStatus, validateMobilePhone, validateOrdersType } = require("../../middlewares/global.middlewares");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 ordersRouter.get("/orders-count",
     validateJWT,

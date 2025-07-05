@@ -2,7 +2,7 @@ const adminsRouter = require("express").Router();
 
 const adminsController = require("../../controllers/admins");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 const { validateJWT, validateEmail, validatePassword, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateName } = require("../../middlewares/global.middlewares");
 

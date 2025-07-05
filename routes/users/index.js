@@ -2,7 +2,17 @@ const usersRouter = require("express").Router();
 
 const usersController = require("../../controllers/users");
 
-const { validateIsExistValueForFieldsAndDataTypes, isEmail, isValidMobilePhone, getResponseObject } = require("../../global/functions");
+const { validateHelpers, responsesHelpers } = require("../../helpers");
+
+const { emailValidator, mobilePhoneValidator } = require("../../validators/auth");
+
+const { validateIsExistValueForFieldsAndDataTypes } = validateHelpers;
+
+const { getResponseObject } = responsesHelpers;
+
+const { isValidEmail } = emailValidator;
+
+const { isValidMobilePhone } = mobilePhoneValidator;
 
 const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName, validateIsExistErrorInFiles, validateUserType } = require("../../middlewares/global.middlewares");
 
@@ -127,7 +137,6 @@ usersRouter.post("/add-new-interests",
 );
 
 usersRouter.post("/send-account-verification-code",
-    // usersMiddlewares.sendingVerificationCodeLimiterMiddleware,
     (req, res, next) => {
         const { email, typeOfUse } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -137,7 +146,7 @@ usersRouter.post("/send-account-verification-code",
     },
     (req, res, next) => {
         const { text } = req.query;
-        if (!isEmail(text) && !isValidMobilePhone(text)) {
+        if (!isValidEmail(text) && !isValidMobilePhone(text)) {
             return res.status(400).json(getResponseObject("Please Send Valid Email Or Mobile Phone Status !!", true, {}));
         }
         next();

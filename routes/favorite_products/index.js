@@ -4,7 +4,7 @@ const favoriteProductsController = require("../../controllers/favorite_products"
 
 const { validateJWT } = require("../../middlewares/global.middlewares");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 favoriteProductsRouter.post("/add-new-favorite-product/:productId",
     validateJWT,

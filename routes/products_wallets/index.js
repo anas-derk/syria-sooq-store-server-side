@@ -4,7 +4,7 @@ const walletController = require("../../controllers/products_wallets");
 
 const { validateJWT } = require("../../middlewares/global.middlewares");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 walletRouter.get("/wallet-products-count", validateJWT, walletController.getWalletProductsCount);
 

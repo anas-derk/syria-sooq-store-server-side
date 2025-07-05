@@ -4,7 +4,7 @@ const referalsController = require("../../controllers/referals");
 
 const { validateEmail, validateName } = require("../../middlewares/global.middlewares");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 referalsRouter.post("/add-new-referal",
     (req, res, next) => {

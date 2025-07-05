@@ -2,7 +2,7 @@ const ratingsRouter = require("express").Router();
 
 const ratingsController = require("../../controllers/ratings");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
 const { validateJWT } = require("../../middlewares/global.middlewares");
 

@@ -6,7 +6,9 @@ const multer = require("multer");
 
 const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount, validateUserType, validateColors, validateWeightUnit, validateDimentionsUnit } = require("../../middlewares/global.middlewares");
 
-const { validateIsExistValueForFieldsAndDataTypes, getResponseObject } = require("../../global/functions");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
+
+const { getResponseObject } = require("../../helpers/responses");
 
 productsRouter.post("/add-new-product",
     validateJWT,

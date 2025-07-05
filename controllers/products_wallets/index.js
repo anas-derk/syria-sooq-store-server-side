@@ -1,4 +1,8 @@
-const { getResponseObject, getSuitableTranslations } = require("../../global/functions");
+const { responsesHelpers, translationHelpers } = require("../../helpers");
+
+const { getResponseObject } = responsesHelpers;
+
+const { getSuitableTranslations } = translationHelpers;
 
 const productsWalletsOPerationsManagmentFunctions = require("../../repositories/products_wallets");
 

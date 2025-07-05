@@ -4,9 +4,9 @@ const adsController = require("../../controllers/ads");
 
 const multer = require("multer");
 
-const { validateJWT, validateIsExistErrorInFiles, validateAdvertismentType, validateCity } = require("../../middlewares/global.middlewares");
+const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
-const { validateIsExistValueForFieldsAndDataTypes } = require("../../global/functions");
+const { validateJWT, validateIsExistErrorInFiles, validateAdvertismentType, validateCity } = require("../../middlewares/global.middlewares");
 
 adsRouter.post("/add-new-ad",
     validateJWT,

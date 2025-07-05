@@ -1,4 +1,10 @@
-const { getResponseObject, sendReceiveOrderEmail, sendUpdateOrderEmail, getSuitableTranslations } = require("../../global/functions");
+const { responsesHelpers, translationHelpers, emailsHelpers } = reqeuire("../../helpers");
+
+const { getResponseObject } = responsesHelpers;
+
+const { getSuitableTranslations } = translationHelpers;
+
+const { sendReceiveOrderEmail, sendUpdateOrderEmail } = emailsHelpers;
 
 const ordersManagmentFunctions = require("../../repositories/orders");
 
