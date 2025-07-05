@@ -2,7 +2,7 @@
 
 const { referalModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewReferal(referalDetails, language) {
     try {

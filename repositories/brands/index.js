@@ -2,7 +2,7 @@
 
 const { brandModel, adminModel, storeModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewBrand(authorizationId, brandInfo, language) {
     try {

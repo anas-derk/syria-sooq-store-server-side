@@ -1,7 +1,8 @@
-const { getResponseObject } = require("../../helpers/responses");
+const { getResponseObject } = require("../../../helpers/responses");
+const customizationsConstants = require("../../../constants/products/customizations");
 
 function validateSize(size, res, nextFunc, errorMsg = "Sorry, Please Send Valid Size ( ['s','m', 'l', 'xl', 'xxl', 'xxxl', '4xl'] ) !!") {
-    if (!['s', 'm', 'l', 'xl', 'xxl', 'xxxl', '4xl'].includes(size)) {
+    if (!customizationsConstants.PRODUCT_SIZE.includes(size)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
         return;
     }
@@ -9,7 +10,7 @@ function validateSize(size, res, nextFunc, errorMsg = "Sorry, Please Send Valid 
 }
 
 function validateWeightUnit(unit, res, nextFunc, errorMsg = "Sorry, Please Send Weight Unit ( ['gr','kg'] ) !!") {
-    if (!["gr", "kg"].includes(unit)) {
+    if (!customizationsConstants.WEIGHT_UNIT.includes(unit)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
         return;
     }
@@ -17,7 +18,7 @@ function validateWeightUnit(unit, res, nextFunc, errorMsg = "Sorry, Please Send 
 }
 
 function validateDimentionsUnit(unit, res, nextFunc, errorMsg = "Sorry, Please Send Dimentions Unit ( ['cm', 'm', 'cm2', 'm2'] ) !!") {
-    if (!["cm", "m", "cm2", "m2"].includes(unit)) {
+    if (!customizationsConstants.DISTINATION_UNIT.includes(unit)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
         return;
     }

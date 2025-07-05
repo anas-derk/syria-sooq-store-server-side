@@ -1,7 +1,8 @@
 const { getResponseObject } = require("../../helpers/responses");
+const ordersConstants = require("../../constants/orders");
 
 function validateCheckoutStatus(checkoutStatus, res, nextFunc, errorMsg = "Sorry, Please Send Valid Checkout Status ( 'Checkout Incomplete' Or 'Checkout Successfull' ) !!") {
-    if (!["Checkout Incomplete", "Checkout Successfull"].includes(checkoutStatus)) {
+    if (!ordersConstants.CHECKOUT_STATUS.includes(checkoutStatus)) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
         return;
     }
@@ -10,11 +11,11 @@ function validateCheckoutStatus(checkoutStatus, res, nextFunc, errorMsg = "Sorry
 
 function validateShippingMethod(req, res, next) {
     const shippingMethod = req.body.shippingMethod;
-    if (!["normal", "ubuyblues"].includes(shippingMethod.forLocalProducts)) {
+    if (!ordersConstants.SHIPPING_METHODS.LOCAL.includes(shippingMethod.forLocalProducts)) {
         res.status(400).json(getResponseObject("Sorry Shipping Method For Local Products Is Not Valid ( Please Send 'normal' or 'ubuyblues' Value )", true, {}));
         return;
     }
-    if (!["normal", "fast"].includes(shippingMethod.forInternationalProducts)) {
+    if (!ordersConstants.SHIPPING_METHODS.INTERNATIONAL.includes(shippingMethod.forInternationalProducts)) {
         res.status(400).json(getResponseObject("Sorry Shipping Method For International Products Is Not Valid ( Please Send 'normal' or 'fast' Value )", true, {}));
         return;
     }
@@ -22,7 +23,7 @@ function validateShippingMethod(req, res, next) {
 }
 
 function validateOrderDestination(orderDestination, res, nextFunc) {
-    if (!["admin", "user"].includes(orderDestination)) {
+    if (!ordersConstants.ORDER_DESTINATIONS.includes(orderDestination)) {
         res.status(400).json(getResponseObject("Please Send Valid Order Destination !!", true, {}));
         return;
     }
@@ -30,7 +31,7 @@ function validateOrderDestination(orderDestination, res, nextFunc) {
 }
 
 function validatePaymentGateway(paymentGate, res, nextFunc) {
-    if (!["Wallet", "Credit Card", "Upon Receipt"].includes(paymentGate)) {
+    if (!ordersConstants.PAYMENT_GATEWAYS.includes(paymentGate)) {
         res.status(400).json(getResponseObject("Please Send Valid Payment Gateway !!", true, {}));
         return;
     }
@@ -38,15 +39,7 @@ function validatePaymentGateway(paymentGate, res, nextFunc) {
 }
 
 function validateOrderStatus(ordersType, status, res, nextFunc) {
-    const validNormalOrderStatus = ["pending", "shipping", "completed"], validReturnOrderStatus = [
-        "awaiting products",
-        "received products",
-        "checking products",
-        "partially return products",
-        "fully return products",
-        "return refused"
-    ];
-    if (ordersType === "normal" ? !validNormalOrderStatus.includes(status) : !validReturnOrderStatus.includes(status)) {
+    if (ordersType === "normal" ? !ordersConstants.ORDER_STATUS.NORMAL.includes(status) : !ordersConstants.ORDER_STATUS.RETRUN.includes(status)) {
         res.status(400).json(getResponseObject("Please Send Valid Order Status !!", true, {}));
         return;
     }
@@ -54,7 +47,7 @@ function validateOrderStatus(ordersType, status, res, nextFunc) {
 }
 
 function validateOrdersType(ordersType, res, nextFunc) {
-    if (!["normal", "return"].includes(ordersType)) {
+    if (!ordersConstants.ORDER_TYPE.includes(ordersType)) {
         res.status(400).json(getResponseObject("Please Send Valid Orders Type ( 'normal' or 'return' ) !!", true, {}));
         return;
     }

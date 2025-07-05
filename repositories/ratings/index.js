@@ -2,7 +2,7 @@
 
 const { userModel, productModel, ratingModel, storeModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function selectProductRating(userId, ratingInfo, language) {
     try {

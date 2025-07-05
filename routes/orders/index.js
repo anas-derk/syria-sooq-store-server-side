@@ -2,9 +2,32 @@ const ordersRouter = require("express").Router();
 
 const ordersController = require("../../controllers/orders");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsNotExistDublicateProductId, validateCheckoutStatus, validateOrderDestination, validatePaymentGateway, validateOrderStatus, validateMobilePhone, validateOrdersType } = require("../../middlewares/global.middlewares");
-
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
+
+const {
+    authMiddlewares,
+    numbersMiddlewares,
+    ordersMiddlewares,
+} = require("../../middlewares");
+
+const {
+    validateJWT,
+    validateMobilePhone,
+} = authMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat,
+} = numbersMiddlewares;
+
+const {
+    validateIsNotExistDublicateProductId,
+    validateCheckoutStatus,
+    validateOrderDestination,
+    validatePaymentGateway,
+    validateOrderStatus,
+    validateOrdersType
+} = ordersMiddlewares;
 
 ordersRouter.get("/orders-count",
     validateJWT,

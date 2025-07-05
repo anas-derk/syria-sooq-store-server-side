@@ -1,4 +1,5 @@
 const { getResponseObject } = require("../../helpers/responses");
+const { CITIES } = require("../../constants/cites");
 
 function validateName(name, res, nextFunc, errorMsg = "Sorry, Please Send Valid Name !!") {
     if (/^([\u0600-\u06FF\s]+|[a-zA-Z\s]+)$/.test(name)) {
@@ -27,22 +28,7 @@ function validateColors(colors, res, nextFunc, errorMsgs, defaultMsg = "Sorry, P
 }
 
 function validateCity(city, res, nextFunc) {
-    if (![
-        "lattakia",
-        "tartus",
-        "homs",
-        "hama",
-        "idleb",
-        "daraa",
-        "suwayda",
-        "deer-alzoor",
-        "raqqa",
-        "hasakah",
-        "damascus",
-        "rif-damascus",
-        "aleppo",
-        "quneitra"
-    ].includes(city)) {
+    if (!CITIES.includes(city)) {
         res.status(400).json(getResponseObject("Sorry, Please Send Valid City !!", true, {}));
         return;
     }

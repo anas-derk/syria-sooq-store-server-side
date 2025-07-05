@@ -6,7 +6,7 @@ const { storeModel, adminModel, categoryModel, productModel, userModel } = requi
 
 const { hash } = require("bcryptjs");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function getStoresCount(authorizationId, filters, language) {
     try {

@@ -4,7 +4,7 @@ const { productModel, categoryModel, adminModel, userModel, favoriteProductModel
 
 const mongoose = require("../../database");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewProduct(authorizationId, productInfo, language) {
     try {

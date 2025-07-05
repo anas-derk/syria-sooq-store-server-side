@@ -2,9 +2,26 @@ const brandsRouter = require("express").Router();
 
 const brandsController = require("../../controllers/brands");
 
-const { validateJWT, validateIsExistErrorInFiles, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat } = require("../../middlewares/global.middlewares");
-
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
+
+const {
+    authMiddlewares,
+    filesMiddlewares,
+    numbersMiddlewares,
+} = require("../../middlewares");
+
+const {
+    validateJWT,
+} = authMiddlewares;
+
+const {
+    validateIsExistErrorInFiles,
+} = filesMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat,
+} = numbersMiddlewares;
 
 const multer = require("multer");
 

@@ -2,9 +2,20 @@ const referalsRouter = require("express").Router();
 
 const referalsController = require("../../controllers/referals");
 
-const { validateEmail, validateName } = require("../../middlewares/global.middlewares");
-
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
+
+const {
+    authMiddlewares,
+    commonMiddlewares,
+} = require("../../middlewares");
+
+const {
+    validateEmail,
+} = authMiddlewares;
+
+const {
+    validateName
+} = commonMiddlewares;
 
 referalsRouter.post("/add-new-referal",
     (req, res, next) => {

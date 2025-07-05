@@ -4,9 +4,59 @@ const productsController = require("../../controllers/products");
 
 const multer = require("multer");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateSortMethod, validateSortType, validateIsExistErrorInFiles, validateCountries, validateIsPriceGreaterThanDiscount, validateUserType, validateColors, validateWeightUnit, validateDimentionsUnit } = require("../../middlewares/global.middlewares");
+// const { validateCountries } = require("../../middlewares/global.middlewares");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
+
+const {
+    authMiddlewares,
+    filesMiddlewares,
+    sortMiddlewares,
+    numbersMiddlewares,
+    productsMiddlewares,
+    usersMiddlewares,
+    commonMiddlewares,
+} = require("../../middlewares");
+
+const {
+    customizationsMiddlewares,
+    globalMiddlewares,
+} = productsMiddlewares;
+
+const {
+    validateJWT,
+} = authMiddlewares;
+
+const {
+    validateSortMethod,
+    validateSortType,
+} = sortMiddlewares;
+
+const {
+    validateIsExistErrorInFiles,
+} = filesMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat,
+} = numbersMiddlewares;
+
+const {
+    validateWeightUnit,
+    validateDimentionsUnit,
+} = customizationsMiddlewares;
+
+const {
+    validateIsPriceGreaterThanDiscount
+} = globalMiddlewares;
+
+const {
+    validateColors,
+} = commonMiddlewares;
+
+const {
+    validateUserType,
+} = usersMiddlewares;
 
 const { getResponseObject } = require("../../helpers/responses");
 

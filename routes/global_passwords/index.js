@@ -4,7 +4,7 @@ const globalPasswordController = require("../../controllers/global_passwords");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
-const { validateJWT, validateEmail, validatePassword } = require("../../middlewares/global.middlewares");
+const { validateJWT } = require("../../middlewares/auth");
 
 globalPasswordRouter.put("/change-bussiness-email-password",
     validateJWT,

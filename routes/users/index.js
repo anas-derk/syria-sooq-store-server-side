@@ -14,7 +14,33 @@ const { isValidEmail } = emailValidator;
 
 const { isValidMobilePhone } = mobilePhoneValidator;
 
-const { validateJWT, validateEmail, validatePassword, validateTypeOfUseForCode, validateCity, validateMobilePhone, validateName, validateIsExistErrorInFiles, validateUserType } = require("../../middlewares/global.middlewares");
+const {
+    authMiddlewares,
+    commonMiddlewares,
+    filesMiddlewares,
+    usersMiddlewares,
+} = require("../../middlewares");
+
+const {
+    validateJWT,
+    validateEmail,
+    validatePassword,
+    validateTypeOfUseForCode,
+    validateMobilePhone,
+} = authMiddlewares;
+
+const {
+    validateCity,
+    validateName
+} = commonMiddlewares;
+
+const {
+    validateIsExistErrorInFiles
+} = filesMiddlewares;
+
+const {
+    validateUserType
+} = usersMiddlewares;
 
 const multer = require("multer");
 

@@ -2,7 +2,7 @@
 
 const { walletOperationsModel, userModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function getAllWalletOperationsInsideThePage(authorizationId, pageNumber, pageSize, language) {
     try {

@@ -2,7 +2,7 @@
 
 const { productsWalletModel, userModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function getWalletProductsCount(filters, language) {
     try {

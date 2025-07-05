@@ -2,7 +2,7 @@
 
 const { cartModel, productModel, userModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewProduct(authorizationId, productInfo, language) {
     try {

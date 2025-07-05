@@ -6,7 +6,28 @@ const multer = require("multer");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
-const { validateJWT, validateIsExistErrorInFiles, validateAdvertismentType, validateCity } = require("../../middlewares/global.middlewares");
+const {
+    authMiddlewares,
+    filesMiddlewares,
+    adsMiddlewares,
+    commonMiddlewares,
+} = require("../../middlewares");
+
+const {
+    validateJWT,
+} = authMiddlewares;
+
+const {
+    validateIsExistErrorInFiles,
+} = filesMiddlewares;
+
+const {
+    validateAdvertismentType,
+} = adsMiddlewares;
+
+const {
+    validateCity
+} = commonMiddlewares;
 
 adsRouter.post("/add-new-ad",
     validateJWT,

@@ -1,4 +1,4 @@
-const { responsesHelpers, translationHelpers, emailsHelpers } = reqeuire("../../helpers");
+const { responsesHelpers, translationHelpers, emailsHelpers } = require("../../helpers");
 
 const { getResponseObject } = responsesHelpers;
 

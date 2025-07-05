@@ -4,7 +4,7 @@ const { orderModel, userModel, adminModel, productModel, walletOperationsModel, 
 
 const mongoose = require("../../database");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function getOrdersCount(authorizationId, ordersType = "normal", filters, language) {
     try {

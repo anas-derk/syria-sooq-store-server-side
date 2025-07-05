@@ -1,4 +1,4 @@
-const { getResponseObject } = require("../../helpers/responses");
+const { getResponseObject } = require("../../../helpers/responses");
 
 function validateIsPriceGreaterThanDiscount(price, discount, res, next) {
     if (Number(discount) > Number(price)) {

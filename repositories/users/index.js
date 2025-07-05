@@ -10,7 +10,7 @@ const { hash, compare } = require("bcryptjs");
 
 // Define Create New User Function
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function createNewUser(city, fullName, email, mobilePhone, password, language) {
     try {

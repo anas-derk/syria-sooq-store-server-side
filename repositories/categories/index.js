@@ -2,7 +2,7 @@
 
 const { categoryModel, adminModel, productModel, userModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewCategory(authorizationId, categoryData, language) {
     try {

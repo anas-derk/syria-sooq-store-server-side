@@ -2,7 +2,7 @@
 
 const { favoriteProductModel, productModel, userModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewFavoriteProduct(userId, productId, language) {
     try {

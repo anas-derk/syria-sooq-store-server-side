@@ -4,9 +4,19 @@ const ratingsController = require("../../controllers/ratings");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
-const { validateJWT } = require("../../middlewares/global.middlewares");
+const {
+    authMiddlewares,
+    ratingsMiddlewares,
+} = require("../../middlewares");
 
-const { validateRatingType, validateRating } = require("../../middlewares/ratings.midddlewares");
+const {
+    validateJWT,
+} = authMiddlewares;
+
+const {
+    validateRatingType,
+    validateRating,
+} = ratingsMiddlewares;
 
 ratingsRouter.post("/select-rating",
     validateJWT,

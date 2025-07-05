@@ -2,9 +2,21 @@ const favoriteProductsRouter = require("express").Router();
 
 const favoriteProductsController = require("../../controllers/favorite_products");
 
-const { validateJWT } = require("../../middlewares/global.middlewares");
-
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
+
+const {
+    authMiddlewares,
+    numbersMiddlewares,
+} = require("../../middlewares");
+
+const {
+    validateJWT,
+} = authMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat,
+} = numbersMiddlewares;
 
 favoriteProductsRouter.post("/add-new-favorite-product/:productId",
     validateJWT,
@@ -45,6 +57,8 @@ favoriteProductsRouter.get("/all-favorite-products-inside-the-page",
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
+    (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     favoriteProductsController.getAllFavoriteProductsInsideThePage
 );
 

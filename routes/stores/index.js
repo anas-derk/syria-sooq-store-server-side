@@ -2,13 +2,43 @@ const storesRouter = require("express").Router();
 
 const storesController = require("../../controllers/stores");
 
-const { validateJWT, validatePassword, validateEmail, validateName, validateIsExistErrorInFiles, validateUserType, validateCity } = require("../../middlewares/global.middlewares");
-
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
-const multer = require("multer");
+const {
+    authMiddlewares,
+    commonMiddlewares,
+    filesMiddlewares,
+    usersMiddlewares,
+    storesMiddlewares,
+} = require("../../middlewares");
 
-const { validateStoreCategory } = require("../../middlewares/stores.middlewares");
+const {
+    validateJWT,
+    validatePassword,
+    validateEmail
+} = authMiddlewares;
+
+const {
+    validateName
+} = commonMiddlewares;
+
+const {
+    validateIsExistErrorInFiles
+} = filesMiddlewares;
+
+const {
+    validateUserType
+} = usersMiddlewares;
+
+const {
+    validateCity
+} = commonMiddlewares;
+
+const {
+    validateStoreCategory
+} = storesMiddlewares;
+
+const multer = require("multer");
 
 storesRouter.get("/stores-count", validateJWT, storesController.getStoresCount);
 

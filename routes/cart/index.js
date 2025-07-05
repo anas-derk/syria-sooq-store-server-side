@@ -2,9 +2,40 @@ const cartRouter = require("express").Router();
 
 const cartController = require("../../controllers/carts");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat, validateIsExistErrorInFiles, validateSize, validateColor } = require("../../middlewares/global.middlewares");
-
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
+
+const {
+    authMiddlewares,
+    filesMiddlewares,
+    numbersMiddlewares,
+    productsMiddlewares,
+    commonMiddlewares,
+} = require("../../middlewares");
+
+const {
+    customizationsMiddlewares
+} = productsMiddlewares;
+
+const {
+    validateJWT,
+} = authMiddlewares;
+
+const {
+    validateIsExistErrorInFiles,
+} = filesMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat,
+} = numbersMiddlewares;
+
+const {
+    validateSize,
+} = customizationsMiddlewares;
+
+const {
+    validateColor,
+} = commonMiddlewares;
 
 const multer = require("multer");
 

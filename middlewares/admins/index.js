@@ -1,11 +1,11 @@
-const { getResponseObject } = require("../helpers/responses");
+const { getResponseObject } = require("../../helpers/responses");
 const { verify } = require("jsonwebtoken");
 
 function adminMiddleware(req, res, next) {
     const token = req.headers.authorization;
-    verify(token, process.env.secretKey, async (err, decode) => {
+    verify(token, process.env.SECRET_KEY, (err, decode) => {
         if (err) {
-            await res.status(401).json(getResponseObject("Unauthorized Error", true, {}));
+            res.status(401).json(getResponseObject("Unauthorized Error", true, {}));
             return;
         }
         req.data = decode;

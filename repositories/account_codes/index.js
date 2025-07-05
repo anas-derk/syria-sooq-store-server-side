@@ -2,7 +2,7 @@ const { accountVerificationCodesModel } = require("../../models");
 
 const { hash, compare } = require("bcryptjs");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse, language) {
     try {

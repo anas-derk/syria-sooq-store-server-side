@@ -2,7 +2,7 @@
 
 const { adModel, adminModel, productModel } = require("../../models");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewAd(authorizationId, adsInfo, language) {
     try {

@@ -4,7 +4,19 @@ const walletOperationsController = require("../../controllers/wallet_operations"
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
-const { validateJWT, validateNumbersIsGreaterThanZero, validateNumbersIsNotFloat } = require("../../middlewares/global.middlewares");
+const {
+    authMiddlewares,
+    numbersMiddlewares
+} = require("../../middlewares");
+
+const {
+    validateJWT,
+} = authMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat
+} = numbersMiddlewares;
 
 walletOperationsRouter.get("/all-wallet-operations-inside-the-page",
     validateJWT,

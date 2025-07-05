@@ -2,7 +2,7 @@ const walletRouter = require("express").Router();
 
 const walletController = require("../../controllers/products_wallets");
 
-const { validateJWT } = require("../../middlewares/global.middlewares");
+const { validateJWT } = require("../../middlewares/auth");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
