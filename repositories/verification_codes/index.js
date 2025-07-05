@@ -1,4 +1,4 @@
-const { accountVerificationCodesModel } = require("../../models");
+const { verificationCodeModel } = require("../../models");
 
 const { hash, compare } = require("bcryptjs");
 
@@ -8,10 +8,10 @@ async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse
     try {
         const creatingDate = new Date(Date.now());
         const expirationDate = new Date(creatingDate.getTime() + 24 * 60 * 60 * 1000);
-        const accountVerificationCode = await accountVerificationCodesModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
+        const accountVerificationCode = await verificationCodeModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
         if (accountVerificationCode) {
             const newRequestTimeCount = accountVerificationCode.requestTimeCount + 1;
-            await accountVerificationCodesModel.updateOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse },
+            await verificationCodeModel.updateOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse },
                 {
                     code: await hash(code, 10),
                     requestTimeCount: newRequestTimeCount,
@@ -28,7 +28,7 @@ async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse
                 data: {},
             }
         }
-        await (new accountVerificationCodesModel({
+        await (new verificationCodeModel({
             ...email && { email },
             ...mobilePhone && { mobilePhone },
             code: await hash(code, 10),
@@ -49,7 +49,7 @@ async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse
 
 async function isAccountVerificationCodeValid(email, mobilePhone, code, typeOfUse, language) {
     try {
-        const accountVerificationCode = await accountVerificationCodesModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
+        const accountVerificationCode = await verificationCodeModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
         if (accountVerificationCode) {
             if (await compare(code, accountVerificationCode.code)) {
                 return {
@@ -77,7 +77,7 @@ async function isAccountVerificationCodeValid(email, mobilePhone, code, typeOfUs
 
 async function isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate(email, mobilePhone, typeOfUse, language) {
     try {
-        const accountVerificationCode = await accountVerificationCodesModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
+        const accountVerificationCode = await verificationCodeModel.findOne(email ? { email, typeOfUse } : { mobilePhone, typeOfUse });
         if (accountVerificationCode) {
             const currentDate = new Date(Date.now());
             if (

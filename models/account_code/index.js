@@ -1,8 +1,8 @@
 const mongoose = require("../../database");
 
-// Create Account Verification Codes Schema
+// Create Verification Code Schema
 
-const accountVerificationCodesShema = new mongoose.Schema({
+const verificationCodeShema = new mongoose.Schema({
     email: String,
     mobilePhone: String,
     code: {
@@ -33,8 +33,8 @@ const accountVerificationCodesShema = new mongoose.Schema({
     }
 });
 
-// Create Account Verification Codes Model From Account Codes Schema
+// Create Verification Code Model From Verification Code Schema
 
-const accountVerificationCodesModel = mongoose.model("account_verification_codes", accountVerificationCodesShema);
+const verificationCodeModel = mongoose.model("verification_codes", verificationCodeShema);
 
-module.exports = accountVerificationCodesModel;
+module.exports = verificationCodeModel;

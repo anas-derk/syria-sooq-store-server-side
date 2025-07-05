@@ -22,7 +22,7 @@ const {
     isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate,
     addNewAccountVerificationCode,
     isAccountVerificationCodeValid
-} = require("../../repositories/account_codes");
+} = require("../../repositories/verification_codes");
 
 const { unlinkSync } = require("fs");
 

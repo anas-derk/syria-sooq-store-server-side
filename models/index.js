@@ -1,4 +1,4 @@
-const accountVerificationCodesModel = require("./account_code");
+const verificationCodeModel = require("./account_code");
 const adModel = require("./ad");
 const adminModel = require("./admin");
 const brandModel = require("./brand");
@@ -17,7 +17,7 @@ const returnOrderModel = require("./return_order");
 const walletOperationsModel = require("./wallet_operation");
 
 module.exports = {
-    accountVerificationCodesModel,
+    verificationCodeModel,
     adModel,
     adminModel,
     brandModel,
