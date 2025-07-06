@@ -2,9 +2,9 @@ const database = require("./database");
 const server = require("./http");
 const { config } = require("dotenv");
 
-const PORT = process.env.PORT || 5200;
-
 config();
+
+const PORT = process.env.PORT || 5200;
 
 database.connect(process.env.DB_URL);
 
