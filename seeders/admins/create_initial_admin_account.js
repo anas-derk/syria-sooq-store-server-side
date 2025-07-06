@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 
+const { resolve } = require("path");
+
 require("dotenv").config({
-    path: "../.env",
+    path: resolve(__dirname, "../../../.env"),
 });
 
 // create Admin User Schema For Admin User Model
@@ -164,4 +166,6 @@ async function create_initial_admin_user_account() {
     }
 }
 
-create_initial_admin_user_account().then((result) => { console.log(result); process.exit(1) });
+create_initial_admin_user_account()
+    .then((result) => { console.log(result); process.exit(1); })
+    .catch((err) => console.log(err.message));

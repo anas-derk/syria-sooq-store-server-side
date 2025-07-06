@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 
+const { resolve } = require("path");
+
 require("dotenv").config({
-    path: "../.env",
+    path: resolve(__dirname, "../../../.env"),
 });
 
 // Create Global Password Schema
@@ -46,4 +48,6 @@ async function create_initial_global_password() {
     }
 }
 
-create_initial_global_password().then((result) => { console.log(result); process.exit(1) });
+create_initial_global_password()
+    .then((result) => { console.log(result); process.exit(1); })
+    .catch((err) => console.log(err.message));
