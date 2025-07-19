@@ -16,8 +16,14 @@ app.use(cors());
 
 app.use(json({ limit: "999999999kb" }));
 
-app.use((req, res, next) => validateLanguage(req.query.language, res, next));
+app.use((req, res, next) => {
+    const language = req.query.language;
+    if (language) {
+        return validateLanguage(language, res, next)
+    }
+    next();
+});
 
-app.use("/assets", static(path.join(__dirname, "..", "assets")));
+app.use("/assets", static(path.join(__dirname, "..", "..", "assets")));
 
 module.exports = app;
