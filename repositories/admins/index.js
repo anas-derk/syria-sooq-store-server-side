@@ -6,7 +6,7 @@ const { compare, hash } = require("bcryptjs");
 
 const mongoose = require("../../database");
 
-const { getSuitableTranslations } = require("../../global/functions");
+const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function adminLogin(email, password, language) {
     try {

@@ -4,6 +4,8 @@ const { getResponseObject } = responsesHelpers;
 
 const { getSuitableTranslations } = translationHelpers;
 
+const adminsOPerationsManagmentFunctions = require("../../repositories/admins");
+
 const { sign } = require("jsonwebtoken");
 
 async function getAdminLogin(req, res) {
@@ -14,7 +16,7 @@ async function getAdminLogin(req, res) {
             return res.json({
                 ...result,
                 data: {
-                    token: sign(result.data, process.env.secretKey, {
+                    token: sign(result.data, process.env.SECRET_KEY, {
                         expiresIn: "7d",
                     }),
                 }
