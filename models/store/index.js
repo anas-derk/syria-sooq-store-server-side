@@ -1,5 +1,9 @@
 const mongoose = require("../../database");
 
+const storeConstants = require("../../constants/stores");
+
+const { CITIES } = require("../../constants/cites");
+
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
@@ -22,26 +26,12 @@ const storeSchema = new mongoose.Schema({
     city: {
         type: String,
         required: true,
-        enum: [
-            "lattakia",
-            "tartus",
-            "homs",
-            "hama",
-            "idleb",
-            "daraa",
-            "suwayda",
-            "deer-alzoor",
-            "raqqa",
-            "hasakah",
-            "damascus",
-            "rif-damascus",
-            "aleppo",
-            "quneitra"
-        ],
+        enum: CITIES,
     },
     category: {
         type: String,
         required: true,
+        enum: storeConstants.STORE_CATEGORIES,
     },
     headquarterAddress: {
         type: String,
@@ -81,13 +71,8 @@ const storeSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "pending",
-        enum: [
-            "pending",
-            "approving",
-            "rejecting",
-            "blocking",
-        ],
+        default: storeConstants.DEFAULT_STORE_STATUS,
+        enum: storeConstants.STORE_STATUS,
     },
     isMainStore: Boolean,
     creatingOrderDate: {

@@ -29,6 +29,17 @@ const STORE_CATEGORIES = [
     "السفر والرحلات والمستلزمات السياحية",
 ];
 
+const STORE_STATUS = [
+    "pending",
+    "approving",
+    "rejecting",
+    "blocking",
+];
+
+const DEFAULT_STORE_STATUS = STORE_STATUS[0];
+
 module.exports = {
-    STORE_CATEGORIES
+    STORE_CATEGORIES,
+    STORE_STATUS,
+    DEFAULT_STORE_STATUS
 }

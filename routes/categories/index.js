@@ -8,6 +8,7 @@ const {
     authMiddlewares,
     filesMiddlewares,
     usersMiddlewares,
+    numbersMiddlewares,
 } = require("../../middlewares");
 
 const {
@@ -21,6 +22,11 @@ const {
 const {
     validateUserType,
 } = usersMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat,
+} = numbersMiddlewares;
 
 const multer = require("multer");
 

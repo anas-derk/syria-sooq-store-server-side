@@ -267,6 +267,7 @@ async function followStoreByUser(userId, storeId, language) {
 async function updateStoreInfo(authorizationId, storeId, newStoreDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
+        console.log(newStoreDetails)
         if (admin) {
             if (admin.isWebsiteOwner) {
                 const store = await storeModel.findOneAndUpdate({ _id: storeId }, newStoreDetails);

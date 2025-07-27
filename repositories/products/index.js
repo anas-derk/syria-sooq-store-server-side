@@ -287,9 +287,10 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
                 }
             ]);
             let products = await productModel.populate(result[0].products, "categories");
+            const currentDate = new Date();
             for (let product of products) {
-                product._doc.isExistOffer = product.startDiscountPeriod <= currentDate && endDiscountPeriod >= currentDate ? true : false;
-                product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+                product.isExistOffer = product.startDiscountPeriod <= currentDate && endDiscountPeriod >= currentDate ? true : false;
+                product.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
             }
             return {
                 msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
