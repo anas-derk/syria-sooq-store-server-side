@@ -117,19 +117,56 @@ async function login(email, mobilePhone, password, language) {
                         isVerified: user.isVerified,
                         city: user.city,
                     },
-                };
+                }
             }
             return {
                 msg: getSuitableTranslations("Sorry, Email Or Password Incorrect !!", language),
                 error: true,
                 data: {},
-            };
+            }
         }
         return {
             msg: getSuitableTranslations("Sorry, Email Or Password Incorrect !!", language),
             error: true,
             data: {},
-        };
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
+async function loginByGoogle(userInfo, language) {
+    try {
+        const user = await userModel.findOne({ email: userInfo.email, provider: "google" });
+        if (user) {
+            return {
+                msg: getSuitableTranslations("Logining Process By Google Has Been Successfully !!", language),
+                error: false,
+                data: {
+                    _id: user._id,
+                    isVerified: user.isVerified,
+                    city: user.city,
+                    provider: "google",
+                },
+            };
+        }
+        const { _id, isVerified } = await (new userModel({
+            email: userInfo.email,
+            name: userInfo.name,
+            password: await hash(process.env.SECRET_KEY, 10),
+            isVerified: true,
+            provider: "google",
+        })).save();
+        return {
+            msg: getSuitableTranslations("Logining Process By Google Has Been Successfully !!", language),
+            error: false,
+            data: {
+                _id,
+                isVerified,
+                provider: "google"
+            },
+        }
     }
     catch (err) {
         throw Error(err);
@@ -500,6 +537,7 @@ module.exports = {
     createNewUser,
     addNewInterests,
     login,
+    loginByGoogle,
     getUserInfo,
     isExistUserAccount,
     isExistUserAndVerificationEmail,

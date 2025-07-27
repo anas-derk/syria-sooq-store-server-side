@@ -14,7 +14,7 @@ async function getPasswordForBussinessEmail(email, language) {
             return {
                 msg: getSuitableTranslations("Get Password For Bussiness Email Process Has Been Successfully !!", language),
                 error: false,
-                data: AES.decrypt(user.password, process.env.secretKey).toString(enc.Utf8),
+                data: AES.decrypt(user.password, process.env.SECRET_KEY).toString(enc.Utf8),
             }
         }
         return {
@@ -36,8 +36,8 @@ async function changeBussinessEmailPassword(authorizationId, email, password, ne
             if (admin.isWebsiteOwner) {
                 const user = await globalPasswordModel.findOne({ email });
                 if (user) {
-                    if (AES.decrypt(user.password, process.env.secretKey).toString(enc.Utf8) === password) {
-                        await globalPasswordModel.updateOne({ password: AES.encrypt(newPassword, process.env.secretKey).toString() });
+                    if (AES.decrypt(user.password, process.env.SECRET_KEY).toString(enc.Utf8) === password) {
+                        await globalPasswordModel.updateOne({ password: AES.encrypt(newPassword, process.env.SECRET_KEY).toString() });
                         return {
                             msg: getSuitableTranslations("Changing Bussiness Email Password Process Has Been Successfully !!", language),
                             error: false,

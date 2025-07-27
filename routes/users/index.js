@@ -68,7 +68,20 @@ usersRouter.get("/login",
         next();
     },
     (req, res, next) => validatePassword(req.query.password, res, next),
-    usersController.login
+    usersController.getLogin
+);
+
+usersRouter.get("/login-with-google",
+    (req, res, next) => {
+        const { email, name } = req.query;
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
+        ], res, next);
+    },
+    (req, res, next) => validateEmail(req.query.email, res, next),
+    (req, res, next) => validateName(req.query.name, res, next),
+    authController.getLoginWithGoogle
 );
 
 usersRouter.get("/user-info",

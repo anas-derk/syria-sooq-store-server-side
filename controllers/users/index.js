@@ -37,7 +37,7 @@ function getFiltersObject(filters) {
     return filtersObject;
 }
 
-async function login(req, res) {
+async function getLogin(req, res) {
     try {
         const { email, mobilePhone, password } = req.query;
         const result = await usersOPerationsManagmentFunctions.login(email, mobilePhone, password, req.query.language);
@@ -47,7 +47,7 @@ async function login(req, res) {
                 error: result.error,
                 data: {
                     ...result.data,
-                    token: sign(result.data, process.env.secretKey, {
+                    token: sign(result.data, process.env.SECRET_KEY, {
                         expiresIn: "7d",
                     }),
                 },
@@ -57,7 +57,26 @@ async function login(req, res) {
         res.json(result);
     }
     catch (err) {
-        console.log(err);
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
+async function getLoginWithGoogle(req, res) {
+    try {
+        const { email, name, language } = req.query;
+        const result = await usersOPerationsManagmentFunctions.loginByGoogle({ email, name }, language);
+        res.json({
+            msg: result.msg,
+            error: result.error,
+            data: {
+                ...result.data,
+                token: sign(result.data, process.env.SECRET_KEY, {
+                    expiresIn: ACCESS_TOKEN_EXPIRE,
+                }),
+            },
+        });
+    }
+    catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -289,7 +308,8 @@ module.exports = {
     createNewUser,
     postAddNewInterests,
     postAccountVerificationCode,
-    login,
+    getLogin,
+    getLoginWithGoogle,
     getUserInfo,
     getUsersCount,
     getAllUsersInsideThePage,
