@@ -81,7 +81,7 @@ usersRouter.get("/login-with-google",
     },
     (req, res, next) => validateEmail(req.query.email, res, next),
     (req, res, next) => validateName(req.query.name, res, next),
-    authController.getLoginWithGoogle
+    usersController.getLoginWithGoogle
 );
 
 usersRouter.get("/user-info",
