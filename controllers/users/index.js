@@ -18,6 +18,8 @@ const usersOPerationsManagmentFunctions = require("../../repositories/users");
 
 const { sign } = require("jsonwebtoken");
 
+const { ACCESS_TOKEN_EXPIRE } = require("../../constants/tokens");
+
 const {
     isBlockingFromReceiveTheCodeAndReceiveBlockingExpirationDate,
     addNewAccountVerificationCode,
@@ -48,7 +50,7 @@ async function getLogin(req, res) {
                 data: {
                     ...result.data,
                     token: sign(result.data, process.env.SECRET_KEY, {
-                        expiresIn: "7d",
+                        expiresIn: ACCESS_TOKEN_EXPIRE,
                     }),
                 },
             });
@@ -63,8 +65,8 @@ async function getLogin(req, res) {
 
 async function getLoginWithGoogle(req, res) {
     try {
-        const { email, name, language } = req.query;
-        const result = await usersOPerationsManagmentFunctions.loginByGoogle({ email, name }, language);
+        const { email, fullName, language } = req.query;
+        const result = await usersOPerationsManagmentFunctions.loginByGoogle({ email, fullName }, language);
         res.json({
             msg: result.msg,
             error: result.error,

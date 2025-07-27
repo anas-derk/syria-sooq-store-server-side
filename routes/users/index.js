@@ -73,14 +73,14 @@ usersRouter.get("/login",
 
 usersRouter.get("/login-with-google",
     (req, res, next) => {
-        const { email, name } = req.query;
+        const { email, fullName } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
-            { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateEmail(req.query.email, res, next),
-    (req, res, next) => validateName(req.query.name, res, next),
+    (req, res, next) => validateName(req.query.fullName, res, next, "Sorry, Please Send Valid Full Name !!"),
     usersController.getLoginWithGoogle
 );
 

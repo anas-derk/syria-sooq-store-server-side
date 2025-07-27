@@ -1,27 +1,14 @@
 const mongoose = require("../../database");
 
+const { CITIES } = require("../../constants/cites");
+
 // Create User Schema
 
 const userSchema = new mongoose.Schema({
     city: {
         type: String,
         required: true,
-        enum: [
-            "lattakia",
-            "tartus",
-            "homs",
-            "hama",
-            "idleb",
-            "daraa",
-            "suwayda",
-            "deer-alzoor",
-            "raqqa",
-            "hasakah",
-            "damascus",
-            "rif-damascus",
-            "aleppo",
-            "quneitra"
-        ],
+        enum: CITIES,
     },
     email: String,
     mobilePhone: String,
