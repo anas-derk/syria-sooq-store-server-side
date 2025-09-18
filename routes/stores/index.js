@@ -39,6 +39,7 @@ const {
 } = storesMiddlewares;
 
 const multer = require("multer");
+const { validateWorkingHours } = require("../../middlewares/stores");
 
 storesRouter.get("/stores-count", validateJWT, storesController.getStoresCount);
 
@@ -120,7 +121,7 @@ storesRouter.post("/create-new-store",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, city, category, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation, isOpen } = Object.assign({}, req.body);
+        const { name, city, category, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation, isClosed, isDeliverable, workingHours } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: true },
@@ -131,13 +132,30 @@ storesRouter.post("/create-new-store",
             { fieldName: "Phone Number", fieldValue: phoneNumber, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Owner Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Bank Account Information", fieldValue: bankAccountInformation, dataTypes: ["string"], isRequiredValue: true },
-            { fieldName: "Is Open", fieldValue: isOpen, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Is Closed", fieldValue: isClosed === "true" ?? false, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Is Deliverable", fieldValue: isDeliverable === "true" ?? false, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Working Hours", fieldValue: workingHours ? JSON.parse(workingHours) : workingHours, dataTypes: ["array"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateName(Object.assign({}, req.body).ownerFullName, res, next),
     (req, res, next) => validateCity(Object.assign({}, req.body).city, res, next),
     (req, res, next) => validateStoreCategory(Object.assign({}, req.body).category, res, next),
     (req, res, next) => validateEmail(Object.assign({}, req.body).email, res, next),
+    (req, res, next) => {
+        const { workingHours } = Object.assign({}, req.body);
+        workingHoursAfterProcess = JSON.parse(workingHours);
+        validateIsExistValueForFieldsAndDataTypes(
+            workingHoursAfterProcess.flatMap((hours, index) => ([
+                { fieldName: `Day In Index: ${index + 1}`, fieldValue: hours?.day, dataTypes: ["string"], isRequiredValue: true },
+                { fieldName: `Open Time In Day ${index + 1}`, fieldValue: hours?.openTime, dataTypes: ["string"], isRequiredValue: hours?.closeTime ?? false },
+                { fieldName: `Close Time In Day ${index + 1}`, fieldValue: hours?.closeTime, dataTypes: ["string"], isRequiredValue: hours?.openTime ?? false },
+            ]))
+            , res, next);
+    },
+    (req, res, next) => {
+        const { workingHours } = Object.assign({}, req.body);
+        validateWorkingHours(JSON.parse(workingHours), res, next);
+    },
     storesController.postNewStore
 );
 
@@ -165,15 +183,15 @@ storesRouter.post("/follow-store-by-user/:storeId",
 
 storesRouter.put("/update-store-info/:storeId", validateJWT, storesController.putStoreInfo);
 
-storesRouter.put("/change-open-status/:storeId",
+storesRouter.put("/change-close-status/:storeId",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
-            { fieldName: "Is Open", fieldValue: req.body.isOpen, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Is Closed", fieldValue: req.body.isClosed, dataTypes: ["boolean"], isRequiredValue: false },
         ], res, next);
     },
-    storesController.putOpenStatus
+    storesController.putCloseStatus
 );
 
 storesRouter.put("/blocking-store/:storeId",

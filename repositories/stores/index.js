@@ -319,17 +319,17 @@ async function updateStoreInfo(authorizationId, storeId, newStoreDetails, langua
     }
 }
 
-async function updateOpenStatus(authorizationId, storeId, isOpen, language) {
+async function updateCloseStatus(authorizationId, storeId, isClosed, language) {
     try {
         const user = await userModel.findById(authorizationId);
         if (user) {
             const store = await storeModel.findById(storeId);
             if (store) {
                 if (store.userId === authorizationId) {
-                    store.isOpen = isOpen;
+                    store.isClosed = isClosed;
                     await store.save();
                     return {
-                        msg: getSuitableTranslations("Updating Open Status Process For This Store Has Been Successfully !!", language),
+                        msg: getSuitableTranslations("Updating Close Status Process For This Store Has Been Successfully !!", language),
                         error: false,
                         data: {},
                     }
@@ -623,7 +623,7 @@ module.exports = {
     approveStore,
     followStoreByUser,
     updateStoreInfo,
-    updateOpenStatus,
+    updateCloseStatus,
     blockingStore,
     cancelBlockingStore,
     changeStoreImage,

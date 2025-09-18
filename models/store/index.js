@@ -93,10 +93,21 @@ const storeSchema = new mongoose.Schema({
             5: 0
         }
     },
-    isOpen: {
+    isClosed: {
+        type: Boolean,
+        default: false,
+    },
+    isDeliverable: {
         type: Boolean,
         default: true,
-    }
+    },
+    workingHours: [
+        {
+            day: { type: String, enum: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], required: true },
+            openTime: { type: String, default: "" },
+            closeTime: { type: String, default: "" },
+        }
+    ]
 });
 
 // Create Store Model From Store Schema

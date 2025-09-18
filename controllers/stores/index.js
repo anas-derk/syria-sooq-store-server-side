@@ -180,9 +180,9 @@ async function putStoreInfo(req, res) {
     }
 }
 
-async function putOpenStatus(req, res) {
+async function putCloseStatus(req, res) {
     try {
-        const result = await storesOPerationsManagmentFunctions.updateOpenStatus(req.data._id, req.params.storeId, req.body.isOpen ?? false, req.query.language);
+        const result = await storesOPerationsManagmentFunctions.updateCloseStatus(req.data._id, req.params.storeId, req.body.isClosed ?? false, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Store Is Not Found !!") {
                 return res.status(401).json(result);
@@ -303,7 +303,7 @@ module.exports = {
     postApproveStore,
     postFollowStoreByUser,
     putStoreInfo,
-    putOpenStatus,
+    putCloseStatus,
     putBlockingStore,
     putStoreImage,
     putCancelBlockingStore,
