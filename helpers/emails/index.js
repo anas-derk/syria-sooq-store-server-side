@@ -17,7 +17,7 @@ async function sendVerificationCodeToUserEmail(email) {
     if (!result.error) {
         const generator = new CodeGenerator();
         const generatedCode = generator.generateCodes("####")[0];
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "email_template.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "email_template.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ generatedCode });
         const mailConfigurations = {
@@ -43,7 +43,7 @@ async function sendVerificationCodeToUserEmail(email) {
 async function sendApproveStoreEmail(email, password, adminId, storeId, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "accept_add_store_request.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "accept_add_store_request.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ password, adminId, storeId, language });
         return new Promise((resolve, reject) => {
@@ -68,7 +68,7 @@ async function sendApproveStoreEmail(email, password, adminId, storeId, language
 async function sendCongratulationsOnCreatingNewAccountEmail(email, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "congratulations_creating_new_account.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "congratulations_creating_new_account.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ email, language });
         return new Promise((resolve, reject) => {
@@ -93,7 +93,7 @@ async function sendCongratulationsOnCreatingNewAccountEmail(email, language) {
 async function sendRejectStoreEmail(email, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "reject_add_store_request.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "reject_add_store_request.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ language });
         return new Promise((resolve, reject) => {
@@ -118,7 +118,7 @@ async function sendRejectStoreEmail(email, language) {
 async function sendConfirmRequestAddStoreArrivedEmail(email, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "confirm_request_add_store_arrived.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "confirm_request_add_store_arrived.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ language });
         return new Promise((resolve, reject) => {
@@ -143,7 +143,7 @@ async function sendConfirmRequestAddStoreArrivedEmail(email, language) {
 async function sendBlockStoreEmail(email, adminId, storeId, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "block_store.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "block_store.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ adminId, storeId, language });
         return new Promise((resolve, reject) => {
@@ -168,7 +168,7 @@ async function sendBlockStoreEmail(email, adminId, storeId, language) {
 async function sendDeleteStoreEmail(email, adminId, storeId, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "delete_store.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "delete_store.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ adminId, storeId, language });
         return new Promise((resolve, reject) => {
@@ -193,7 +193,7 @@ async function sendDeleteStoreEmail(email, adminId, storeId, language) {
 async function sendReceiveOrderEmail(email, orderDetails, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "receive_order.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "receive_order.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ orderDetails, language });
         return new Promise((resolve, reject) => {
@@ -218,7 +218,7 @@ async function sendReceiveOrderEmail(email, orderDetails, language) {
 async function sendUpdateOrderEmail(email, newOrderDetails, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", `${newOrderDetails.status === "shipping" ? "order_in_shipping_status" : "order_shipped"}.ejs`), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", `${newOrderDetails.status === "shipping" ? "order_in_shipping_status" : "order_shipped"}.ejs`), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ newOrderDetails, language });
         return new Promise((resolve, reject) => {
@@ -243,7 +243,7 @@ async function sendUpdateOrderEmail(email, newOrderDetails, language) {
 async function sendReceiveAddStoreRequestEmail(email, storeDetails) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "receive_add_store_request.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "receive_add_store_request.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate(storeDetails);
         return new Promise((resolve, reject) => {
@@ -268,7 +268,7 @@ async function sendReceiveAddStoreRequestEmail(email, storeDetails) {
 async function sendChangePasswordEmail(email, language) {
     const result = await getPasswordForBussinessEmail(process.env.BUSSINESS_EMAIL);
     if (!result.error) {
-        const templateContent = readFileSync(join(__dirname, "..", "assets", "email_templates", "change_password.ejs"), "utf-8");
+        const templateContent = readFileSync(join(__dirname, "..", "..", "assets", "email_templates", "change_password.ejs"), "utf-8");
         const compiledTemplate = compile(templateContent);
         const htmlContentAfterCompilingEjsTemplateFile = compiledTemplate({ language });
         return new Promise((resolve, reject) => {

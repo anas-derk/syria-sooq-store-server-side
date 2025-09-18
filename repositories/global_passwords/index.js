@@ -6,9 +6,10 @@ const { globalPasswordModel, adminModel } = require("../../models");
 
 const { AES, enc } = require("crypto-js");
 
+const { getSuitableTranslations } = require("../../helpers/translation");
+
 async function getPasswordForBussinessEmail(email, language) {
     try {
-        const { getSuitableTranslations } = require("../global/functions");
         const user = await globalPasswordModel.findOne({ email });
         if (user) {
             return {
