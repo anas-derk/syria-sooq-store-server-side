@@ -143,7 +143,7 @@ async function getAllUserStores(authorizationId, language) {
 
 async function createNewStore(storeDetails, language) {
     try {
-        const user = await userModel.findById(storeDetails.adminId);
+        const user = await userModel.findById(storeDetails.userId);
         if (user) {
             const store = await storeModel.findOne({ email: storeDetails.email });
             if (store) {

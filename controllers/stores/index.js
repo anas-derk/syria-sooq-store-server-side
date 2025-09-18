@@ -117,6 +117,7 @@ async function postNewStore(req, res) {
             for (let filePath of outputImageFilePaths) {
                 unlinkSync(filePath);
             }
+            res.json(result);
         }
         else {
             res.json(result);

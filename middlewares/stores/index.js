@@ -9,7 +9,7 @@ function validateStoreCategory(category, res, nextFunc, errorMsg = "Sorry, Pleas
     nextFunc();
 }
 
-function validateWorkingHours(workingHours, res, nextFunc, errorMsg = "Sorry, Please Send Valid Working Hours !!") {
+function validateWorkingHours(workingHours, res, nextFunc) {
     const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
     for (let i = 0; i < workingHours.length; i++) {
         if (!timeRegex.test(workingHours[i].openTime)) {
@@ -23,7 +23,7 @@ function validateWorkingHours(workingHours, res, nextFunc, errorMsg = "Sorry, Pl
         const openMinutes = openH * 60 + openM;
         const closeMinutes = closeH * 60 + closeM;
         if (openMinutes > closeMinutes) {
-            return res.status(400).json(getResponseObject(errorMsg, true, {}));
+            return res.status(400).json(getResponseObject(`Sorry, Please Send Valid Open Time In Day: ${i} !!`, true, {}));
         }
     }
     nextFunc();
