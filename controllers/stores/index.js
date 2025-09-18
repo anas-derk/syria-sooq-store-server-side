@@ -96,7 +96,7 @@ async function postNewStore(req, res) {
         ];
         await handleResizeImagesAndConvertFormatToWebp(bufferFiles, outputImageFilePaths);
         const result = await storesOPerationsManagmentFunctions.createNewStore({
-            adminId: req.data._id,
+            userId: req.data._id,
             ...Object.assign({}, req.body),
             coverImagePath: outputImageFilePaths[0],
             profileImagePath: outputImageFilePaths[1],
@@ -159,6 +159,21 @@ async function postFollowStoreByUser(req, res) {
 async function putStoreInfo(req, res) {
     try {
         const result = await storesOPerationsManagmentFunctions.updateStoreInfo(req.data._id, req.params.storeId, req.body, req.query.language);
+        if (result.error) {
+            if (result.msg !== "Sorry, This Store Is Not Found !!") {
+                return res.status(401).json(result);
+            }
+        }
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
+async function putOpenStatus(req, res) {
+    try {
+        const result = await storesOPerationsManagmentFunctions.updateOpenStatus(req.data._id, req.params.storeId, req.body.isOpen ?? false, req.query.language);
         if (result.error) {
             if (result.msg !== "Sorry, This Store Is Not Found !!") {
                 return res.status(401).json(result);
@@ -278,6 +293,7 @@ module.exports = {
     postApproveStore,
     postFollowStoreByUser,
     putStoreInfo,
+    putOpenStatus,
     putBlockingStore,
     putStoreImage,
     putCancelBlockingStore,

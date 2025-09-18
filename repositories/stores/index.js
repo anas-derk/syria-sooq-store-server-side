@@ -8,6 +8,8 @@ const { hash } = require("bcryptjs");
 
 const { getSuitableTranslations } = require("../../helpers/translation");
 
+const mongoose = require("../../database");
+
 async function getStoresCount(authorizationId, filters, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -267,7 +269,6 @@ async function followStoreByUser(userId, storeId, language) {
 async function updateStoreInfo(authorizationId, storeId, newStoreDetails, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
-        console.log(newStoreDetails)
         if (admin) {
             if (admin.isWebsiteOwner) {
                 const store = await storeModel.findOneAndUpdate({ _id: storeId }, newStoreDetails);
@@ -292,6 +293,43 @@ async function updateStoreInfo(authorizationId, storeId, newStoreDetails, langua
         }
         return {
             msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
+async function updateOpenStatus(authorizationId, storeId, isOpen, language) {
+    try {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            const store = await storeModel.findById(storeId);
+            if (store) {
+                if (store.userId === authorizationId) {
+                    store.isOpen = isOpen;
+                    await store.save();
+                    return {
+                        msg: getSuitableTranslations("Updating Open Status Process For This Store Has Been Successfully !!", language),
+                        error: false,
+                        data: {},
+                    }
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, Permission Denied Because This Store Is Not Exist At Store Managed By This Admin !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }
@@ -566,6 +604,7 @@ module.exports = {
     approveStore,
     followStoreByUser,
     updateStoreInfo,
+    updateOpenStatus,
     blockingStore,
     cancelBlockingStore,
     changeStoreImage,

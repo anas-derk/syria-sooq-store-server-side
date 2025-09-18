@@ -7,7 +7,7 @@ const { CITIES } = require("../../constants/cites");
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
-    adminId: {
+    userId: {
         type: String,
         required: true,
     },
@@ -93,6 +93,10 @@ const storeSchema = new mongoose.Schema({
             5: 0
         }
     },
+    isOpen: {
+        type: Boolean,
+        default: true,
+    }
 });
 
 // Create Store Model From Store Schema

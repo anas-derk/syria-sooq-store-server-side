@@ -162,6 +162,17 @@ storesRouter.post("/follow-store-by-user/:storeId",
 
 storesRouter.put("/update-store-info/:storeId", validateJWT, storesController.putStoreInfo);
 
+storesRouter.put("/change-open-status/:storeId",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Is Open", fieldValue: req.body.isOpen, dataTypes: ["boolean"], isRequiredValue: false },
+        ], res, next);
+    },
+    storesController.putOpenStatus
+);
+
 storesRouter.put("/blocking-store/:storeId",
     validateJWT,
     (req, res, next) => {
