@@ -110,6 +110,7 @@ async function postNewStore(req, res) {
             }
         }
         else {
+            res.json(result);
             try {
                 await sendConfirmRequestAddStoreArrivedEmail(result.data.email, "ar");
                 await sendReceiveAddStoreRequestEmail(process.env.BUSSINESS_EMAIL, result.data);
@@ -117,10 +118,8 @@ async function postNewStore(req, res) {
                 console.log(err);
             }
         }
-        res.json(result);
     }
     catch (err) {
-        console.log(err)
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
