@@ -9,7 +9,7 @@ require("dotenv").config({
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
-    adminId: {
+    userId: {
         type: String,
         required: true,
     },
@@ -28,26 +28,12 @@ const storeSchema = new mongoose.Schema({
     city: {
         type: String,
         required: true,
-        enum: [
-            "lattakia",
-            "tartus",
-            "homs",
-            "hama",
-            "idleb",
-            "daraa",
-            "suwayda",
-            "deer-alzoor",
-            "raqqa",
-            "hasakah",
-            "damascus",
-            "rif-damascus",
-            "aleppo",
-            "quneitra"
-        ],
+        enum: CITIES,
     },
     category: {
         type: String,
         required: true,
+        enum: storeConstants.STORE_CATEGORIES,
     },
     headquarterAddress: {
         type: String,
@@ -87,13 +73,8 @@ const storeSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "pending",
-        enum: [
-            "pending",
-            "approving",
-            "rejecting",
-            "blocking",
-        ],
+        default: storeConstants.DEFAULT_STORE_STATUS,
+        enum: storeConstants.STORE_STATUS,
     },
     isMainStore: Boolean,
     creatingOrderDate: {
@@ -114,6 +95,21 @@ const storeSchema = new mongoose.Schema({
             5: 0
         }
     },
+    isClosed: {
+        type: Boolean,
+        default: false,
+    },
+    isDeliverable: {
+        type: Boolean,
+        default: true,
+    },
+    workingHours: [
+        {
+            day: { type: String, enum: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], required: true },
+            openTime: { type: String, default: "" },
+            closeTime: { type: String, default: "" },
+        }
+    ]
 });
 
 // Create Store Model From Store Schema
@@ -121,7 +117,7 @@ const storeSchema = new mongoose.Schema({
 const storeModel = mongoose.model("store", storeSchema);
 
 const storeInfo = {
-    adminId: "674f61fc74fbe8e7d7355c07",
+    userId: "674f61fc74fbe8e7d7355c07",
     name: "Syria Sooq",
     city: "lattakia",
     category: "any",
@@ -140,6 +136,15 @@ const storeInfo = {
     status: "approving",
     isMainStore: true,
     approveDate: Date.now(),
+    workingHours: [
+        { day: "saturday", openTime: "09:00", closeTime: "18:00" },
+        { day: "sunday", openTime: "09:00", closeTime: "18:00" },
+        { day: "monday", openTime: "09:00", closeTime: "18:00" },
+        { day: "tuesday", openTime: "09:00", closeTime: "18:00" },
+        { day: "wednesday", openTime: "09:00", closeTime: "18:00" },
+        { day: "thursday", openTime: "09:00", closeTime: "18:00" },
+        { day: "friday", openTime: "", closeTime: "" }
+    ]
 };
 
 async function create_initial_store() {
