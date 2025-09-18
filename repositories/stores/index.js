@@ -8,8 +8,6 @@ const { hash } = require("bcryptjs");
 
 const { getSuitableTranslations } = require("../../helpers/translation");
 
-const mongoose = require("../../database");
-
 async function getStoresCount(authorizationId, filters, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -115,6 +113,26 @@ async function getMainStoreDetails(authorizationId, language) {
         }
         return {
             msg: getSuitableTranslations("Sorry, This User Is Not Found !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
+async function getAllUserStores(authorizationId, language) {
+    try {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            return {
+                msg: getSuitableTranslations("Get All Stores Process For This User Has Been Successfully !!", language),
+                error: false,
+                data: await storeModel.find({ userId: authorizationId }),
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
             error: true,
             data: {},
         }
@@ -600,6 +618,7 @@ module.exports = {
     getStoresCount,
     getStoreDetails,
     getMainStoreDetails,
+    getAllUserStores,
     createNewStore,
     approveStore,
     followStoreByUser,

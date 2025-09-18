@@ -75,6 +75,8 @@ storesRouter.get("/store-details/:storeId",
 
 storesRouter.get("/main-store-details", validateJWT, storesController.getMainStoreDetails);
 
+storesRouter.get("/all-user-stores", validateJWT, storesController.getAllUserStores);
+
 storesRouter.post("/create-new-store",
     validateJWT,
     multer({
