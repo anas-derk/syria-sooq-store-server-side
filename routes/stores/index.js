@@ -118,7 +118,7 @@ storesRouter.post("/create-new-store",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, city, category, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation } = Object.assign({}, req.body);
+        const { name, city, category, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation, isOpen } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: true },
@@ -129,6 +129,7 @@ storesRouter.post("/create-new-store",
             { fieldName: "Phone Number", fieldValue: phoneNumber, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Owner Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Bank Account Information", fieldValue: bankAccountInformation, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Is Open", fieldValue: isOpen, dataTypes: ["boolean"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateName(Object.assign({}, req.body).ownerFullName, res, next),
