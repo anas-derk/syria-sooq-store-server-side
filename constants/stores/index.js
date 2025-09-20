@@ -38,8 +38,25 @@ const STORE_STATUS = [
 
 const DEFAULT_STORE_STATUS = STORE_STATUS[0];
 
+const DAYS = [
+    "saturday",
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+];
+
+const PERIODS = [
+    "AM",
+    "PM"
+];
+
 module.exports = {
     STORE_CATEGORIES,
     STORE_STATUS,
-    DEFAULT_STORE_STATUS
+    DEFAULT_STORE_STATUS,
+    DAYS,
+    PERIODS
 }

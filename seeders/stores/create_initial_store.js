@@ -105,9 +105,15 @@ const storeSchema = new mongoose.Schema({
     },
     workingHours: [
         {
-            day: { type: String, enum: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"], required: true },
-            openTime: { type: String, default: "" },
-            closeTime: { type: String, default: "" },
+            day: { type: String, enum: storeConstants.DAYS, required: true },
+            openTime: {
+                time: { type: String, default: "" },
+                period: { type: String, enum: storeConstants.PERIODS, default: "" },
+            },
+            closeTime: {
+                time: { type: String, default: "" },
+                period: { type: String, enum: storeConstants.PERIODS, default: "" },
+            },
         }
     ]
 });

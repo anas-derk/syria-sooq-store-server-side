@@ -147,8 +147,11 @@ storesRouter.post("/create-new-store",
         validateIsExistValueForFieldsAndDataTypes(
             workingHoursAfterProcess.flatMap((hours, index) => ([
                 { fieldName: `Day In Index: ${index + 1}`, fieldValue: hours?.day, dataTypes: ["string"], isRequiredValue: true },
-                { fieldName: `Open Time In Day ${index + 1}`, fieldValue: hours?.openTime, dataTypes: ["string"], isRequiredValue: hours?.closeTime ?? false },
-                { fieldName: `Close Time In Day ${index + 1}`, fieldValue: hours?.closeTime, dataTypes: ["string"], isRequiredValue: hours?.openTime ?? false },
+                { fieldName: `Time For Open Time In Day ${index + 1}`, fieldValue: hours?.openTime.time, dataTypes: ["string"], isRequiredValue: hours?.closeTime.time ?? false },
+                { fieldName: `Period For Open Time In Day ${index + 1}`, fieldValue: hours?.openTime.period, dataTypes: ["string"], isRequiredValue: hours?.openTime.time ?? false },
+                { fieldName: `Time For Close Time In Day ${index + 1}`, fieldValue: hours?.closeTime.time, dataTypes: ["string"], isRequiredValue: hours?.openTime.time ?? false },
+                { fieldName: `Period For Close Time In Day ${index + 1}`, fieldValue: hours?.closeTime.period, dataTypes: ["string"], isRequiredValue: hours?.closeTime.time ?? false },
+
             ]))
             , res, next);
     },
