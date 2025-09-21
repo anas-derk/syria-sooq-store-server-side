@@ -599,7 +599,7 @@ async function cancelStoreVerification(authorizationId, storeId, verificationCan
                     });
                     return {
                         msg: getSuitableTranslations("Cancel Verfication Process For This Store Has Been Successfully !!", language),
-                        error: true,
+                        error: false,
                         data: {
                             email: admin.email
                         },
