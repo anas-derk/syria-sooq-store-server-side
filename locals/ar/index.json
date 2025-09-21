@@ -202,5 +202,7 @@
     "Sorry, Select Size Is Not Allowed For This Product !!": "عذراً، اختيار مقاس غير مسموح لهذالمنتج !!",
     "Sorry, This Size Is Not Allowed For This Product !!": "عذراً، هذا المقاس غير مسموح لهذالمنتج !!",
     "Updating Close Status Process For This Store Has Been Successfully !!": "عملية تحديث حالة إغلاق المتجر تمت بنجاح !!",
-    "Get All Stores Process For This User Has Been Successfully !!": "عملية جلب كل المتاجر لهذا المستخدم تمت بنجاح !!"
+    "Get All Stores Process For This User Has Been Successfully !!": "عملية جلب كل المتاجر لهذا المستخدم تمت بنجاح !!",
+    "Sorry, This Store Is Already Verified !!": "عذراً ، هذا المتجر قد تم التحقق منه مسبقاً !!",
+    "Sorry, This Store Is Not Approving It Yet !!": "عذراً ، هذا المتجر لم يتم الموافقة عليه حتى الآن !!"
 }

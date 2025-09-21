@@ -414,6 +414,61 @@ async function blockingStore(authorizationId, storeId, blockingReason, language)
     }
 }
 
+async function storeVerification(authorizationId, storeId, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (admin.isWebsiteOwner) {
+                const store = await storeModel.findById(storeId);
+                if (store) {
+                    if (store.status === "approving") {
+                        if (store.verificationStatus !== "approving") {
+                            await storeModel.updateOne({ _id: storeId }, {
+                                verificationDate: Date.now(),
+                                verificationStatus: "approving",
+                            });
+                            return {
+                                msg: getSuitableTranslations("Verification Process For This Store Has Been Successfully !!", language),
+                                error: false,
+                                data: {
+                                    email: admin.email,
+                                }
+                            }
+                        }
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Store Is Already Verified !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Store Is Not Approving It Yet !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function cancelBlockingStore(authorizationId, storeId, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -627,6 +682,7 @@ module.exports = {
     blockingStore,
     cancelBlockingStore,
     changeStoreImage,
+    storeVerification,
     deleteStore,
     rejectStore,
 }

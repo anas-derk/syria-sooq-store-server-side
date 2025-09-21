@@ -113,7 +113,17 @@ const storeSchema = new mongoose.Schema({
                 period: { type: String, enum: storeConstants.PERIODS, default: "" },
             },
         }
-    ]
+    ],
+    verificationDate: Date,
+    verificationRejectDate: Date,
+    verificationRejectReason: String,
+    dateOfCancelVerification: Date,
+    verificationCancelReason: String,
+    verificationStatus: {
+        type: String,
+        default: storeConstants.DEFAULT_STORE_VERIFICATION_STATUS,
+        enum: storeConstants.STORE_VERIFICATION_STATUS,
+    },
 });
 
 // Create Store Model From Store Schema

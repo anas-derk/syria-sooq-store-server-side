@@ -53,10 +53,20 @@ const PERIODS = [
     "PM"
 ];
 
+const STORE_VERIFICATION_STATUS = [
+    "pending",
+    "approving",
+    "rejecting",
+];
+
+const DEFAULT_STORE_VERIFICATION_STATUS = STORE_VERIFICATION_STATUS[0];
+
 module.exports = {
     STORE_CATEGORIES,
     STORE_STATUS,
     DEFAULT_STORE_STATUS,
     DAYS,
-    PERIODS
+    PERIODS,
+    STORE_VERIFICATION_STATUS,
+    DEFAULT_STORE_VERIFICATION_STATUS
 }

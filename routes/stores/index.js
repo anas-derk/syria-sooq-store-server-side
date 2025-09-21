@@ -247,6 +247,16 @@ storesRouter.put("/change-store-image/:storeId",
     storesController.putStoreImage
 );
 
+storesRouter.put("/store-verification/:storeId",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
+        ], res, next);
+    },
+    storesController.putStoreVerification
+);
+
 storesRouter.delete("/delete-store/:storeId",
     validateJWT,
     (req, res, next) => {

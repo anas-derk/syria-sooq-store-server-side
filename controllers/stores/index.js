@@ -255,6 +255,22 @@ async function putStoreImage(req, res) {
     }
 }
 
+async function putStoreVerification(req, res) {
+    try {
+        const result = await storesOPerationsManagmentFunctions.storeVerification(req.data._id, req.params.storeId, req.query.language);
+        if (result.error) {
+            if (result.msg === "Sorry, Permission Denied Because This Admin Is Not Website Owner !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {
+                return res.status(401).json(result);
+            }
+            return res.json(result);
+        }
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function deleteStore(req, res) {
     try {
         const result = await storesOPerationsManagmentFunctions.deleteStore(req.data._id, req.params.storeId, req.query.language);
@@ -307,6 +323,7 @@ module.exports = {
     putCloseStatus,
     putBlockingStore,
     putStoreImage,
+    putStoreVerification,
     putCancelBlockingStore,
     deleteStore,
     deleteRejectStore,
