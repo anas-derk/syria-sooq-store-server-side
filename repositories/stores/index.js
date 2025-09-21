@@ -557,6 +557,70 @@ async function storeVerification(authorizationId, storeId, language) {
     }
 }
 
+async function rejectStoreVerification(authorizationId, storeId, verificationRejectReason, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (admin.isWebsiteOwner) {
+                const store = await storeModel.findById(storeId);
+                if (store) {
+                    if (store.status === "approving") {
+                        if (store.verificationStatus === "rejecting") {
+                            return {
+                                msg: getSuitableTranslations("Sorry, This Store's Verification Has Already Been Rejected", language),
+                                error: true,
+                                data: {},
+                            }
+                        }
+                        if (store.verificationStatus === "approving") {
+                            return {
+                                msg: getSuitableTranslations("Sorry, The Store Verification Cannot Be Rejected Because It Has Already Been Verified", language),
+                                error: true,
+                                data: {},
+                            }
+                        }
+                        await storeModel.updateOne({ _id: storeId }, {
+                            verificationRejectReason,
+                            dateOfRejectVerification: Date.now(),
+                            verificationStatus: "rejecting"
+                        });
+                        return {
+                            msg: getSuitableTranslations("Reject Verfication Process For This Store Has Been Successfully !!", language),
+                            error: false,
+                            data: {
+                                email: admin.email
+                            },
+                        }
+                    }
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Store Is Not Approving It Yet !!", language),
+                        error: true,
+                        data: {},
+                    }
+
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function cancelStoreVerification(authorizationId, storeId, verificationCancelReason, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
@@ -753,6 +817,7 @@ module.exports = {
     cancelBlockingStore,
     changeStoreImage,
     storeVerification,
+    rejectStoreVerification,
     cancelStoreVerification,
     deleteStore,
     rejectStore,

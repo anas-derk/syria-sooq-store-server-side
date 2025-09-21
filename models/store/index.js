@@ -121,6 +121,7 @@ const storeSchema = new mongoose.Schema({
     },
     verificationDate: Date,
     verificationRejectDate: Date,
+    dateOfRejectVerification: Date,
     verificationRejectReason: String,
     dateOfCancelVerification: Date,
     verificationCancelReason: String,

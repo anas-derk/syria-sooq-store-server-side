@@ -208,5 +208,7 @@
     "Sorry, This Store Has Been Blocked !!": "عذراً ، هذا المتجر قد تم حظره !!",
     "Sorry, This Store Has Already Been Unverified": "عذراً ، هذا المتجر قد تم إلغاء توثيقه مسبقاً !!",
     "Sorry, This Store Is Not Verified !!": "عذراً ، هذا المتجر غير موثّق !!",
-    "Cancel Verfication Process For This Store Has Been Successfully !!": "عملية إلغاء التوثيق لهذا المتجر تمت بنجاح !!"
+    "Cancel Verfication Process For This Store Has Been Successfully !!": "عملية إلغاء التوثيق لهذا المتجر تمت بنجاح !!",
+    "Sorry, This Store's Verification Has Already Been Rejected": "عذراً، لقد تم رفض توثيق هذا المتجر بالفعل !!",
+    "Sorry, The Store Verification Cannot Be Rejected Because It Has Already Been Verified": "عذراً ، لا يمكن رفض توثيق المتجر لأنه قد تم توثيقه بالفعل"
 }
