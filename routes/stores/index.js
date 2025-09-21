@@ -143,7 +143,7 @@ storesRouter.post("/create-new-store",
     (req, res, next) => validateEmail(Object.assign({}, req.body).email, res, next),
     (req, res, next) => {
         const { workingHours } = Object.assign({}, req.body);
-        workingHoursAfterProcess = JSON.parse(workingHours);
+        const workingHoursAfterProcess = JSON.parse(workingHours);
         validateIsExistValueForFieldsAndDataTypes(
             workingHoursAfterProcess.flatMap((hours, index) => ([
                 { fieldName: `Day In Index: ${index + 1}`, fieldValue: hours?.day, dataTypes: ["string"], isRequiredValue: true },
