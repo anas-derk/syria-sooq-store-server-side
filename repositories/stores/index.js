@@ -146,6 +146,7 @@ async function createNewStore(storeDetails, language) {
         const user = await userModel.findById(storeDetails.userId);
         if (user) {
             const store = await storeModel.findOne({ email: storeDetails.email });
+            storeDetails.workingHours = JSON.parse(storeDetails.workingHours);
             if (store) {
                 return {
                     msg: getSuitableTranslations("Sorry, This Email Is Already Exist !!", language),
