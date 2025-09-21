@@ -257,6 +257,17 @@ storesRouter.put("/store-verification/:storeId",
     storesController.putStoreVerification
 );
 
+storesRouter.put("/cancel-store-verification/:storeId",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Verification Cancel Reason", fieldValue: req.body.verificationCancelReason, dataTypes: ["string"], isRequiredValue: true },
+        ], res, next);
+    },
+    storesController.putCancelStoreVerification
+);
+
 storesRouter.delete("/delete-store/:storeId",
     validateJWT,
     (req, res, next) => {

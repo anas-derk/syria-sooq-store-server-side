@@ -389,7 +389,7 @@ async function blockingStore(authorizationId, storeId, blockingReason, language)
                             msg: getSuitableTranslations("Sorry, This Store Is Already Blocked !!", language),
                             error: true,
                             data: {},
-                        };
+                        }
                     }
                 }
                 return {
@@ -410,6 +410,94 @@ async function blockingStore(authorizationId, storeId, blockingReason, language)
             data: {},
         }
     } catch (err) {
+        throw Error(err);
+    }
+}
+
+async function cancelBlockingStore(authorizationId, storeId, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (admin.isWebsiteOwner) {
+                const store = await storeModel.findById(storeId);
+                if (store) {
+                    if (store.status === "blocking") {
+                        await storeModel.updateOne({ _id: storeId }, {
+                            dateOfCancelBlocking: Date.now(),
+                            status: "approving"
+                        });
+                        await adminModel.updateMany({ storeId }, {
+                            dateOfCancelBlocking: Date.now(),
+                            isBlocked: false
+                        });
+                        return {
+                            msg: getSuitableTranslations("Cancel Blocking Process For This Store That Has Been Successfully !!", language),
+                            error: false,
+                            data: {},
+                        };
+                    }
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Store Is Not Blocked !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
+async function changeStoreImage(authorizationId, storeId, newStoreImagePath, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (admin.isWebsiteOwner) {
+                const store = await storeModel.findOneAndUpdate({ _id: storeId }, {
+                    imagePath: newStoreImagePath,
+                });
+                if (store) {
+                    return {
+                        msg: getSuitableTranslations("Updating Store Image Process Has Been Successfully !!", language),
+                        error: false,
+                        data: { deletedStoreImagePath: store.imagePath }
+                    };
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, This Store Is Not Exist !!", language),
+                    error: true,
+                    data: {}
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
         throw Error(err);
     }
 }
@@ -469,39 +557,59 @@ async function storeVerification(authorizationId, storeId, language) {
     }
 }
 
-async function cancelBlockingStore(authorizationId, storeId, language) {
+async function cancelStoreVerification(authorizationId, storeId, blockingReason, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (admin.isWebsiteOwner) {
                 const store = await storeModel.findById(storeId);
                 if (store) {
-                    if (store.status === "blocking") {
-                        await storeModel.updateOne({ _id: storeId }, {
-                            dateOfCancelBlocking: Date.now(),
-                            status: "approving"
-                        });
-                        await adminModel.updateMany({ storeId }, {
-                            dateOfCancelBlocking: Date.now(),
-                            isBlocked: false
-                        });
+                    // if (store.status === "pending" || store.status === "approving") {
+                    //     await storeModel.updateOne({ _id: storeId }, {
+                    //         blockingReason,
+                    //         blockingDate: Date.now(),
+                    //         status: "blocking"
+                    //     });
+                    //     await adminModel.updateMany({ storeId }, {
+                    //         blockingReason,
+                    //         blockingDate: Date.now(),
+                    //         isBlocked: true
+                    //     });
+                    //     const merchant = await adminModel.findOne({ storeId, isMerchant: true });
+                    //     return {
+                    //         msg: getSuitableTranslations("Blocking Process For This Store Has Been Successfully !!", language),
+                    //         error: false,
+                    //         data: {
+                    //             adminId: merchant._id,
+                    //             email: merchant.email,
+                    //         }
+                    //     }
+                    // }
+                    if (store.verificationStatus !== "approving") {
                         return {
-                            msg: getSuitableTranslations("Cancel Blocking Process For This Store That Has Been Successfully !!", language),
-                            error: false,
+                            msg: getSuitableTranslations("Sorry, This Store Is Not Approved !!", language),
+                            error: true,
                             data: {},
-                        };
+                        }
+                    }
+                    if (store.verificationStatus === "cane") {
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Store Is Not Approved !!", language),
+                            error: true,
+                            data: {},
+                        }
                     }
                     return {
-                        msg: getSuitableTranslations("Sorry, This Store Is Not Blocked !!", language),
+                        msg: getSuitableTranslations("Sorry, This Store Is Already Blocked !!", language),
                         error: true,
                         data: {},
-                    };
+                    }
                 }
                 return {
                     msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
                     error: true,
                     data: {},
-                };
+                }
             }
             return {
                 msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
@@ -515,44 +623,6 @@ async function cancelBlockingStore(authorizationId, storeId, language) {
             data: {},
         }
     } catch (err) {
-        throw Error(err);
-    }
-}
-
-async function changeStoreImage(authorizationId, storeId, newStoreImagePath, language) {
-    try {
-        const admin = await adminModel.findById(authorizationId);
-        if (admin) {
-            if (admin.isWebsiteOwner) {
-                const store = await storeModel.findOneAndUpdate({ _id: storeId }, {
-                    imagePath: newStoreImagePath,
-                });
-                if (store) {
-                    return {
-                        msg: getSuitableTranslations("Updating Store Image Process Has Been Successfully !!", language),
-                        error: false,
-                        data: { deletedStoreImagePath: store.imagePath }
-                    };
-                }
-                return {
-                    msg: getSuitableTranslations("Sorry, This Store Is Not Exist !!", language),
-                    error: true,
-                    data: {}
-                }
-            }
-            return {
-                msg: getSuitableTranslations("Sorry, Permission Denied Because This Admin Is Not Website Owner !!", language),
-                error: true,
-                data: {},
-            }
-        }
-        return {
-            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
-            error: true,
-            data: {},
-        }
-    }
-    catch (err) {
         throw Error(err);
     }
 }
@@ -683,6 +753,7 @@ module.exports = {
     cancelBlockingStore,
     changeStoreImage,
     storeVerification,
+    cancelStoreVerification,
     deleteStore,
     rejectStore,
 }

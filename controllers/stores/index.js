@@ -198,7 +198,7 @@ async function putCloseStatus(req, res) {
 
 async function putBlockingStore(req, res) {
     try {
-        const result = await storesOPerationsManagmentFunctions.blockingStore(req.data._id, req.params.storeId, req.query.blockingReason, req.query.language);
+        const result = await storesOPerationsManagmentFunctions.blockingStore(req.data._id, req.params.storeId, req.body.blockingReason, req.query.language);
         if (result.error) {
             if (result.msg === "Sorry, Permission Denied Because This Admin Is Not Website Owner !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {
                 return res.status(401).json(result);
@@ -208,7 +208,6 @@ async function putBlockingStore(req, res) {
         res.json(await sendBlockStoreEmail(result.data.email, result.data.adminId, req.params.storeId, "ar"));
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
@@ -271,6 +270,21 @@ async function putStoreVerification(req, res) {
     }
 }
 
+async function putCancelStoreVerification(req, res) {
+    try {
+        const result = await storesOPerationsManagmentFunctions.cancelStoreVerification(req.data._id, req.params.storeId, req.body.verificationCancelReason, req.query.language);
+        if (result.error) {
+            if (result.msg === "Sorry, Permission Denied Because This Admin Is Not Website Owner !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {
+                return res.status(401).json(result);
+            }
+        }
+        res.json(result);
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function deleteStore(req, res) {
     try {
         const result = await storesOPerationsManagmentFunctions.deleteStore(req.data._id, req.params.storeId, req.query.language);
@@ -323,8 +337,9 @@ module.exports = {
     putCloseStatus,
     putBlockingStore,
     putStoreImage,
-    putStoreVerification,
     putCancelBlockingStore,
+    putStoreVerification,
+    putCancelStoreVerification,
     deleteStore,
     deleteRejectStore,
 }
