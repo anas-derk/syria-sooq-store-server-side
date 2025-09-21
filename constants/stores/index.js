@@ -57,6 +57,7 @@ const STORE_VERIFICATION_STATUS = [
     "pending",
     "approving",
     "rejecting",
+    "cancel-approving",
 ];
 
 const DEFAULT_STORE_VERIFICATION_STATUS = STORE_VERIFICATION_STATUS[0];

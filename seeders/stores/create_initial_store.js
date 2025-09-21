@@ -6,6 +6,8 @@ require("dotenv").config({
     path: resolve(__dirname, "../../../.env"),
 });
 
+const storeConstants = require("../../constants/stores");
+
 // Create Store Schema
 
 const storeSchema = new mongoose.Schema({
@@ -115,7 +117,17 @@ const storeSchema = new mongoose.Schema({
                 period: { type: String, enum: storeConstants.PERIODS, default: "" },
             },
         }
-    ]
+    ],
+    verificationStatus: {
+        type: String,
+        default: storeConstants.DEFAULT_STORE_VERIFICATION_STATUS,
+        enum: storeConstants.STORE_VERIFICATION_STATUS,
+    },
+    verificationDate: Date,
+    verificationRejectDate: Date,
+    verificationRejectReason: String,
+    dateOfCancelVerification: Date,
+    verificationCancelReason: String,
 });
 
 // Create Store Model From Store Schema
@@ -143,14 +155,44 @@ const storeInfo = {
     isMainStore: true,
     approveDate: Date.now(),
     workingHours: [
-        { day: "saturday", openTime: "09:00", closeTime: "18:00" },
-        { day: "sunday", openTime: "09:00", closeTime: "18:00" },
-        { day: "monday", openTime: "09:00", closeTime: "18:00" },
-        { day: "tuesday", openTime: "09:00", closeTime: "18:00" },
-        { day: "wednesday", openTime: "09:00", closeTime: "18:00" },
-        { day: "thursday", openTime: "09:00", closeTime: "18:00" },
-        { day: "friday", openTime: "", closeTime: "" }
-    ]
+        {
+            "day": "saturday",
+            "openTime": { "time": "12:00", "period": "AM" },
+            "closeTime": { "time": "12:00", "period": "AM" }
+        },
+        {
+            "day": "sunday",
+            "openTime": { "time": "09:00", "period": "AM" },
+            "closeTime": { "time": "06:00", "period": "PM" }
+        },
+        {
+            "day": "monday",
+            "openTime": { "time": "09:00", "period": "AM" },
+            "closeTime": { "time": "06:00", "period": "PM" }
+        },
+        {
+            "day": "tuesday",
+            "openTime": { "time": "09:00", "period": "AM" },
+            "closeTime": { "time": "06:00", "period": "PM" }
+        },
+        {
+            "day": "wednesday",
+            "openTime": { "time": "09:00", "period": "AM" },
+            "closeTime": { "time": "06:00", "period": "PM" }
+        },
+        {
+            "day": "thursday",
+            "openTime": { "time": "09:00", "period": "AM" },
+            "closeTime": { "time": "06:00", "period": "PM" }
+        },
+        {
+            "day": "friday",
+            "openTime": { "time": "", "period": "AM" },
+            "closeTime": { "time": "", "period": "PM" }
+        }
+    ],
+    verificationStatus: "approving",
+    verificationDate: Date.now()
 };
 
 async function create_initial_store() {

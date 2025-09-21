@@ -114,16 +114,16 @@ const storeSchema = new mongoose.Schema({
             },
         }
     ],
-    verificationDate: Date,
-    verificationRejectDate: Date,
-    verificationRejectReason: String,
-    dateOfCancelVerification: Date,
-    verificationCancelReason: String,
     verificationStatus: {
         type: String,
         default: storeConstants.DEFAULT_STORE_VERIFICATION_STATUS,
         enum: storeConstants.STORE_VERIFICATION_STATUS,
     },
+    verificationDate: Date,
+    verificationRejectDate: Date,
+    verificationRejectReason: String,
+    dateOfCancelVerification: Date,
+    verificationCancelReason: String,
 });
 
 // Create Store Model From Store Schema

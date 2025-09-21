@@ -557,52 +557,52 @@ async function storeVerification(authorizationId, storeId, language) {
     }
 }
 
-async function cancelStoreVerification(authorizationId, storeId, blockingReason, language) {
+async function cancelStoreVerification(authorizationId, storeId, verificationCancelReason, language) {
     try {
         const admin = await adminModel.findById(authorizationId);
         if (admin) {
             if (admin.isWebsiteOwner) {
                 const store = await storeModel.findById(storeId);
                 if (store) {
-                    // if (store.status === "pending" || store.status === "approving") {
-                    //     await storeModel.updateOne({ _id: storeId }, {
-                    //         blockingReason,
-                    //         blockingDate: Date.now(),
-                    //         status: "blocking"
-                    //     });
-                    //     await adminModel.updateMany({ storeId }, {
-                    //         blockingReason,
-                    //         blockingDate: Date.now(),
-                    //         isBlocked: true
-                    //     });
-                    //     const merchant = await adminModel.findOne({ storeId, isMerchant: true });
-                    //     return {
-                    //         msg: getSuitableTranslations("Blocking Process For This Store Has Been Successfully !!", language),
-                    //         error: false,
-                    //         data: {
-                    //             adminId: merchant._id,
-                    //             email: merchant.email,
-                    //         }
-                    //     }
-                    // }
-                    if (store.verificationStatus !== "approving") {
+                    if (store.status === "blocking") {
                         return {
-                            msg: getSuitableTranslations("Sorry, This Store Is Not Approved !!", language),
+                            msg: getSuitableTranslations("Sorry, This Store Has Been Blocked !!", language),
                             error: true,
                             data: {},
                         }
                     }
-                    if (store.verificationStatus === "cane") {
+                    if (store.status !== "approving") {
                         return {
-                            msg: getSuitableTranslations("Sorry, This Store Is Not Approved !!", language),
+                            msg: getSuitableTranslations("Sorry, This Store Is Not Approving It Yet !!", language),
                             error: true,
                             data: {},
                         }
                     }
+                    if (store.verificationStatus === "cancel-approving") {
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Store Has Already Been Unverified", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    if (store.verificationStatus === "pending") {
+                        return {
+                            msg: getSuitableTranslations("Sorry, This Store Is Not Verified !!", language),
+                            error: true,
+                            data: {},
+                        }
+                    }
+                    await storeModel.updateOne({ _id: storeId }, {
+                        verificationCancelReason,
+                        dateOfCancelVerification: Date.now(),
+                        verificationStatus: "cancel-approving"
+                    });
                     return {
-                        msg: getSuitableTranslations("Sorry, This Store Is Already Blocked !!", language),
+                        msg: getSuitableTranslations("Cancel Verfication Process For This Store Has Been Successfully !!", language),
                         error: true,
-                        data: {},
+                        data: {
+                            email: admin.email
+                        },
                     }
                 }
                 return {
