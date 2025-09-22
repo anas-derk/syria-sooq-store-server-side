@@ -1,5 +1,7 @@
 const mongoose = require("../../database");
 
+const ratingConstants = require("../../constants/ratings");
+
 // Create Rating Schema
 
 const ratingShema = new mongoose.Schema({
@@ -9,17 +11,18 @@ const ratingShema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["product", "store"]
+        enum: ratingConstants.RATING_TYPE
     },
     id: {
         type: String,
-        required: true,
+        required: () => this.type !== "app",
     },
     rating: {
         type: Number,
         required: true,
-        enum: [1, 2, 3, 4, 5]
-    }
+        enum: ratingConstants.RATING
+    },
+    notes: String,
 });
 
 // Create Rating Model From Rating Schema

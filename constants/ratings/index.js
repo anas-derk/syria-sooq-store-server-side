@@ -1,4 +1,4 @@
-const RATING_TYPE = ["product", "store"];
+const RATING_TYPE = ["product", "store", "app"];
 const RATING = [1, 2, 3, 4, 5];
 
 module.exports = {

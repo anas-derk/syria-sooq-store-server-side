@@ -29,7 +29,7 @@ ratingsRouter.post("/select-rating",
     },
     (req, res, next) => validateRatingType(req.body.type, res, next),
     (req, res, next) => validateRating(req.body.rating, res, next),
-    ratingsController.postSelectProductRating
+    ratingsController.postSelectRating
 );
 
 ratingsRouter.get("/rating-by-user-id/:id",

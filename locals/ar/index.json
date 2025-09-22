@@ -210,5 +210,7 @@
     "Sorry, This Store Is Not Verified !!": "عذراً ، هذا المتجر غير موثّق !!",
     "Cancel Verfication Process For This Store Has Been Successfully !!": "عملية إلغاء التوثيق لهذا المتجر تمت بنجاح !!",
     "Sorry, This Store's Verification Has Already Been Rejected": "عذراً، لقد تم رفض توثيق هذا المتجر بالفعل !!",
-    "Sorry, The Store Verification Cannot Be Rejected Because It Has Already Been Verified": "عذراً ، لا يمكن رفض توثيق المتجر لأنه قد تم توثيقه بالفعل"
+    "Sorry, The Store Verification Cannot Be Rejected Because It Has Already Been Verified": "عذراً ، لا يمكن رفض توثيق المتجر لأنه قد تم توثيقه بالفعل",
+    "Updating App Rating By This User Process Has Been Successfully !!": "عملية تحديث تقييم التطبيق من قبل هذا المستخدم تمت بنجاح !!",
+    "Updating Store Rating By This User Process Has Been Successfully !!": "عملية تحديث تقييم المتجر من قبل هذا المستخدم تمت بنجاح !!"
 }

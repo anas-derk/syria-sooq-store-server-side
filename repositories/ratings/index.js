@@ -4,10 +4,18 @@ const { userModel, productModel, ratingModel, storeModel } = require("../../mode
 
 const { getSuitableTranslations } = require("../../helpers/translation");
 
-async function selectProductRating(userId, ratingInfo, language) {
+async function selectRating(userId, ratingInfo, language) {
     try {
         const user = await userModel.findById(userId);
         if (user) {
+            if (ratingInfo.type === "app") {
+                await ratingModel.updateOne({ userId, type: ratingInfo.type }, { rating: ratingInfo.rating, ...ratingInfo.notes && { notes: ratingInfo } }, { upsert: true });
+                return {
+                    msg: getSuitableTranslations("Updating App Rating By This User Process Has Been Successfully !!", language),
+                    error: false,
+                    data: {},
+                }
+            }
             const info = ratingInfo.type === "product" ? await productModel.findById(ratingInfo.id) : await storeModel.findById(ratingInfo.id);
             if (info) {
                 const ratingDetails = await ratingModel.findOne({ userId, id: ratingInfo.id, type: ratingInfo.type });
@@ -21,7 +29,7 @@ async function selectProductRating(userId, ratingInfo, language) {
                         await storeModel.updateOne({ _id: ratingInfo.id }, { ratings: info.ratings });
                     }
                     return {
-                        msg: getSuitableTranslations(`Updating Rating ${ratingInfo.type.replace(ratingInfo.type[0], ratingInfo.type[0].toUpperCase())} By This User Process Has Been Successfully !!`, language),
+                        msg: getSuitableTranslations(`Updating ${ratingInfo.type.replace(ratingInfo.type[0], ratingInfo.type[0].toUpperCase())} Rating By This User Process Has Been Successfully !!`, language),
                         error: false,
                         data: {},
                     }
@@ -99,6 +107,6 @@ async function getRatingByUserId(userId, id, type, language) {
 }
 
 module.exports = {
-    selectProductRating,
+    selectRating,
     getRatingByUserId
 }

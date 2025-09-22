@@ -6,9 +6,9 @@ const { getSuitableTranslations } = translationHelpers;
 
 const ratingOPerationsManagmentFunctions = require("../../repositories/ratings");
 
-async function postSelectProductRating(req, res) {
+async function postSelectRating(req, res) {
     try {
-        res.json(await ratingOPerationsManagmentFunctions.selectProductRating(req.data._id, req.body, req.query.language));
+        res.json(await ratingOPerationsManagmentFunctions.selectRating(req.data._id, req.body, req.query.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -26,6 +26,6 @@ async function getRatingByUserId(req, res) {
 }
 
 module.exports = {
-    postSelectProductRating,
+    postSelectRating,
     getRatingByUserId
 }
