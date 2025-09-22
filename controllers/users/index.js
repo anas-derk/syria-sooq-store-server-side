@@ -35,6 +35,8 @@ function getFiltersObject(filters) {
         if (objectKey === "email") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "fullName") filtersObject[objectKey] = filters[objectKey];
         if (objectKey === "isVerified") filtersObject[objectKey] = Boolean(filters[objectKey]);
+        if (objectKey === "registerationMethod") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "registerationAgent") filtersObject[objectKey] = filters[objectKey];
     }
     return filtersObject;
 }
@@ -65,8 +67,8 @@ async function getLogin(req, res) {
 
 async function getLoginWithGoogle(req, res) {
     try {
-        const { email, fullName, language } = req.query;
-        const result = await usersOPerationsManagmentFunctions.loginByGoogle({ email, fullName }, language);
+        const { email, fullName, registerationAgent, language } = req.query;
+        const result = await usersOPerationsManagmentFunctions.loginByGoogle({ email, fullName, registerationAgent }, language);
         res.json({
             msg: result.msg,
             error: result.error,
@@ -159,9 +161,9 @@ async function getMainPageData(req, res) {
 
 async function createNewUser(req, res) {
     try {
-        const { city, fullName, email, mobilePhone, password } = req.body;
+        const { city, fullName, email, mobilePhone, password, registerationAgent } = req.body;
         const { language } = req.query;
-        const result = await usersOPerationsManagmentFunctions.createNewUser(city, fullName, email, mobilePhone, password, language);
+        const result = await usersOPerationsManagmentFunctions.createNewUser(city, fullName, email, mobilePhone, password, registerationAgent, language);
         if (result.error) {
             return res.json(result);
         }

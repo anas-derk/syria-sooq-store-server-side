@@ -2,9 +2,21 @@ const mongoose = require("../../database");
 
 const { CITIES } = require("../../constants/cites");
 
+const userConstants = require("../../constants/users");
+
 // Create User Schema
 
 const userSchema = new mongoose.Schema({
+    registerationMethod: {
+        type: String,
+        enum: userConstants.REGISTERATION_METHOD,
+        default: userConstants.DEFAULT_REGISTERATION_METHOD,
+    },
+    registerationAgent: {
+        type: String,
+        enum: userConstants.REGISTERATION_AGENT,
+        default: userConstants.DEFAULT_REGISTERATION_AGENT,
+    },
     city: {
         type: String,
         required: true,

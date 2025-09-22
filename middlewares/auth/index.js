@@ -6,6 +6,8 @@ const { emailValidator, mobilePhoneValidator, passwordValidator, codeValidator }
 
 const { TYPES_OF_USE_VERIFICATION_CODE } = require("../../constants/verification_code");
 
+const { REGISTERATION_AGENT } = require("../../constants/users");
+
 function validateJWT(req, res, next) {
     const token = req.headers.authorization;
     verify(token, process.env.SECRET_KEY, async (err, decode) => {
@@ -58,6 +60,14 @@ function validateTypeOfUseForCode(typeOfUse, res, nextFunc) {
     nextFunc();
 }
 
+function validateRegisterationAgent(agent, res, nextFunc, errorMsg = "Sorry, Please Send Valid Registeration Agent !!") {
+    if (!REGISTERATION_AGENT.includes(agent)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
 module.exports = {
     validateJWT,
     validateEmail,
@@ -65,4 +75,5 @@ module.exports = {
     validatePassword,
     validateCode,
     validateTypeOfUseForCode,
+    validateRegisterationAgent
 }

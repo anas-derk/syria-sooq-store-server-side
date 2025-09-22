@@ -12,7 +12,7 @@ const { hash, compare } = require("bcryptjs");
 
 const { getSuitableTranslations } = require("../../helpers/translation");
 
-async function createNewUser(city, fullName, email, mobilePhone, password, language) {
+async function createNewUser(city, fullName, email, mobilePhone, password, registerationAgent, language) {
     try {
         const user = await userModel.findOne(email ? { email } : { mobilePhone });
         if (user) {
@@ -28,6 +28,8 @@ async function createNewUser(city, fullName, email, mobilePhone, password, langu
             ...email && { email },
             ...mobilePhone && { mobilePhone },
             password: await hash(password, 10),
+            registerationMethod: "traditional",
+            registerationAgent,
         })).save();
         return {
             msg: getSuitableTranslations("Creating New User Process Has Been Successfuly !!", language),
@@ -138,7 +140,7 @@ async function login(email, mobilePhone, password, language) {
 
 async function loginByGoogle(userInfo, language) {
     try {
-        const user = await userModel.findOne({ email: userInfo.email, provider: "google" });
+        const user = await userModel.findOne({ email: userInfo.email, registerationMethod: "google" });
         if (user) {
             return {
                 msg: getSuitableTranslations("Logining Process By Google Has Been Successfully !!", language),
@@ -147,7 +149,7 @@ async function loginByGoogle(userInfo, language) {
                     _id: user._id,
                     isVerified: user.isVerified,
                     city: user.city,
-                    provider: "google",
+                    registerationMethod: "google"
                 },
             };
         }
@@ -157,7 +159,8 @@ async function loginByGoogle(userInfo, language) {
             city: "damascus",
             password: await hash(process.env.SECRET_KEY, 10),
             isVerified: true,
-            provider: "google",
+            registerationMethod: "google",
+            registerationAgent: userInfo.registerationAgent
         })).save();
         return {
             msg: getSuitableTranslations("Logining Process By Google Has Been Successfully !!", language),
@@ -165,7 +168,7 @@ async function loginByGoogle(userInfo, language) {
             data: {
                 _id,
                 isVerified,
-                provider: "google"
+                registerationMethod: "google"
             },
         }
     }

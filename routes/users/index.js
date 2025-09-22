@@ -27,6 +27,7 @@ const {
     validatePassword,
     validateTypeOfUseForCode,
     validateMobilePhone,
+    validateRegisterationAgent
 } = authMiddlewares;
 
 const {
@@ -73,14 +74,16 @@ usersRouter.get("/login",
 
 usersRouter.get("/login-with-google",
     (req, res, next) => {
-        const { email, fullName } = req.query;
+        const { email, fullName, registerationAgent } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Registeration Agent", fieldValue: registerationAgent, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateEmail(req.query.email, res, next),
     (req, res, next) => validateName(req.query.fullName, res, next, "Sorry, Please Send Valid Full Name !!"),
+    (req, res, next) => validateRegisterationAgent(req.query.registerationAgent, res, next),
     usersController.getLoginWithGoogle
 );
 
@@ -132,13 +135,14 @@ usersRouter.get("/main-page-data", validateJWT, usersController.getMainPageData)
 
 usersRouter.post("/create-new-user",
     (req, res, next) => {
-        const { city, fullName, email, mobilePhone, password } = req.body;
+        const { city, fullName, email, mobilePhone, password, registerationAgent } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: mobilePhone ? false : true },
             { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: email ? false : true },
             { fieldName: "Password", fieldValue: password, dataTypes: ["string"], isRequiredValue: true },
+            { fieldName: "Registeration Agent", fieldValue: registerationAgent, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateCity(req.body.city, res, next),
@@ -158,6 +162,7 @@ usersRouter.post("/create-new-user",
         next();
     },
     (req, res, next) => validatePassword(req.body.password, res, next),
+    (req, res, next) => validateRegisterationAgent(req.body.registerationAgent, res, next),
     usersController.createNewUser
 );
 
