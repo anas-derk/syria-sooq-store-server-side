@@ -9,7 +9,7 @@ async function selectRating(userId, ratingInfo, language) {
         const user = await userModel.findById(userId);
         if (user) {
             if (ratingInfo.type === "app") {
-                await ratingModel.updateOne({ userId, type: ratingInfo.type }, { rating: ratingInfo.rating, ...ratingInfo.notes && { notes: ratingInfo } }, { upsert: true });
+                await ratingModel.updateOne({ userId, type: ratingInfo.type }, { rating: ratingInfo.rating, ...ratingInfo.notes && { notes: ratingInfo.notes } }, { upsert: true });
                 return {
                     msg: getSuitableTranslations("Updating App Rating By This User Process Has Been Successfully !!", language),
                     error: false,

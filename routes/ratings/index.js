@@ -25,6 +25,7 @@ ratingsRouter.post("/select-rating",
             { fieldName: "Id", fieldValue: req.body.id, dataTypes: ["ObjectId"], isRequiredValue: true },
             { fieldName: "Type", fieldValue: req.body.type, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Rating", fieldValue: req.body.rating, dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Notes", fieldValue: req.body.notes, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateRatingType(req.body.type, res, next),
