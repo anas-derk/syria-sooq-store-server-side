@@ -22,7 +22,7 @@ ratingsRouter.post("/select-rating",
     validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "Id", fieldValue: req.body.id, dataTypes: ["ObjectId"], isRequiredValue: true },
+            { fieldName: "Id", fieldValue: req.body.id, dataTypes: ["ObjectId"], isRequiredValue: req.body.type !== "app" },
             { fieldName: "Type", fieldValue: req.body.type, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Rating", fieldValue: req.body.rating, dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Notes", fieldValue: req.body.notes, dataTypes: ["string"], isRequiredValue: false },
