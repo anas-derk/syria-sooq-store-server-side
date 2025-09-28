@@ -87,7 +87,13 @@ async function getLoginWithGoogle(req, res) {
 
 async function getUserInfo(req, res) {
     try {
-        res.json(await usersOPerationsManagmentFunctions.getUserInfo(req.data._id, req.query.language));
+        const result = await usersOPerationsManagmentFunctions.getUserInfo(req.data._id, req.query.language);
+        if (result.error) {
+            if (result.msg === "Sorry, This User Is Not Exist !!") {
+                return res.status(401).json(result);
+            }
+        }
+        res.json(result);
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -154,7 +160,6 @@ async function getMainPageData(req, res) {
         res.json(await usersOPerationsManagmentFunctions.getMainPageData(req.data._id, req.query.language));
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
