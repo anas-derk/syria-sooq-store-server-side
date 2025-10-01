@@ -1,4 +1,4 @@
-const { responsesHelpers, translationHelpers, processingHelpers } = require("../../helpers");
+const { responsesHelpers, translationHelpers, processingHelpers, notificationsHelpers } = require("../../helpers");
 
 const { getResponseObject } = responsesHelpers;
 
@@ -7,6 +7,8 @@ const { getSuitableTranslations } = translationHelpers;
 const { imagesHelpers } = processingHelpers;
 
 const { handleResizeImagesAndConvertFormatToWebp } = imagesHelpers;
+
+const { sendNotification } = notificationsHelpers;
 
 const productsManagmentFunctions = require("../../repositories/products");
 
@@ -45,8 +47,20 @@ async function postNewProduct(req, res) {
             }
             return res.json(result);
         }
-
         res.json(result);
+        try {
+            await sendNotification({
+                title: "Adding New Product",
+                token: "cpUSP7eH1QpuTCnzjv9IZx:APA91bFWCd-4QTTmvg_r-1JmbnKrZscvWPvpQBVeRE7eMMwiXvDhqgZ_KviYDDYQqh9-6WYZrPjeuCH2VAp0b89P0ZWPDvjSoUHuK_QRmsq75a8YQrpnJSgs",
+                body: "Add A New Product In A Store You Follow",
+                data: {
+                    productId: "1"
+                }
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));

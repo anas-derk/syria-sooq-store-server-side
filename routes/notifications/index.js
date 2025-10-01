@@ -6,8 +6,6 @@ const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/val
 
 const { validateJWT } = require("../../middlewares/auth");
 
-const { validateNotificationsToken } = require("../../middlewares/notifications");
-
 notificationsRouter.post("/register-token",
     validateJWT,
     (req, res, next) => {
@@ -15,7 +13,6 @@ notificationsRouter.post("/register-token",
             { fieldName: "Token", fieldValue: req.body.token, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
-    (req, res, next) => validateNotificationsToken(req.body.token, res, next),
     notificationsController.postRegisterToken
 );
 

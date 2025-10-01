@@ -2,9 +2,9 @@ const { getResponseObject } = require("../../helpers/responses");
 
 const { getFirebaseAdmin } = require("../../config/notifications");
 
-async function validateNotificationsToken(token, res, nextFunc, errorMsg = "Sorry, Please Send Valid Valid Token !!") {
+async function validateNotificationsIdToken(id, res, nextFunc, errorMsg = "Sorry, Please Send Valid Valid Token !!") {
     try {
-        // await getFirebaseAdmin().auth().verifyIdToken(token);
+        await getFirebaseAdmin().auth().verifyIdToken(id);
         nextFunc();
     }
     catch (err) {
@@ -14,5 +14,5 @@ async function validateNotificationsToken(token, res, nextFunc, errorMsg = "Sorr
 }
 
 module.exports = {
-    validateNotificationsToken,
+    validateNotificationsIdToken,
 }
