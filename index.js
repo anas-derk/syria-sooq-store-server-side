@@ -1,6 +1,7 @@
 const database = require("./database");
 const server = require("./http");
 const { config } = require("dotenv");
+const { initializeFirebase } = require("./config/notifications");
 
 config();
 
@@ -11,6 +12,7 @@ database.connect(process.env.DB_URL);
 database.connection.on("connected", () => {
     const Server = server.listen(PORT, () => {
         console.log(`Server Listening On Port ${PORT}`);
+        initializeFirebase();
     });
     process.on("SIGINT", async () => {
         if (database.connection.readyState) {

@@ -5,6 +5,7 @@ const cartRouter = require("./cart");
 const categoriesRouter = require("./categories");
 const favoriteProductsRouter = require("./favorite_products");
 const globalPasswordsRouter = require("./global_passwords");
+const notificationsRouter = require("./notifications");
 const ordersRouter = require("./orders");
 const productsWalletRouter = require("./products_wallets");
 const productsRouter = require("./products");
@@ -31,6 +32,8 @@ routes.use("/categories", categoriesRouter);
 routes.use("/favorite-products", favoriteProductsRouter);
 
 routes.use("/global-passwords", globalPasswordsRouter);
+
+routes.use("/notifications", notificationsRouter);
 
 routes.use("/orders", ordersRouter);
 

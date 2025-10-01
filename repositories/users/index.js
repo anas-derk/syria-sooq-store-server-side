@@ -1,6 +1,6 @@
 // Import User, Account Verification Codes And Product Model Object
 
-const { userModel, accountVerificationCodesModel, adminModel, favoriteProductModel, productModel, categoryModel, adModel, cartModel } = require("../../models");
+const { userModel, verificationCodeModel, adminModel, favoriteProductModel, productModel, categoryModel, adModel, cartModel } = require("../../models");
 
 const mongoose = require("../../database");
 
@@ -417,7 +417,7 @@ async function updateVerificationStatus(text, language) {
     try {
         const userInfo = await userModel.findOneAndUpdate({ text }, { isVerified: true });
         if (userInfo) {
-            await accountVerificationCodesModel.deleteOne({ text, typeOfUse: "to activate account" });
+            await verificationCodeModel.deleteOne({ text, typeOfUse: "to activate account" });
             return {
                 msg: getSuitableTranslations("Updating Verification Status Process Has Been Successfully !!", language),
                 error: false,
