@@ -18,7 +18,7 @@ async function addNewProduct(authorizationId, productInfo, language) {
                         if (!brand) {
                             return {
                                 msg: getSuitableTranslations("Sorry, This Brand Is Not Exist !!", language),
-                                error: false,
+                                error: true,
                                 data: {},
                             }
                         }
