@@ -45,30 +45,21 @@ adminsRouter.get("/admins-count", validateJWT, adminsController.getAdminsCount);
 adminsRouter.get("/all-admins-inside-the-page",
     validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, _id, firstName, lastName, email } = req.query;
+        const { pageNumber, pageSize, _id, fullName, email } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "Admin Id", fieldValue: _id, dataTypes: ["ObjectId"], isRequiredValue: false },
-            { fieldName: "First Name", fieldValue: firstName, dataTypes: ["string"], isRequiredValue: false },
-            { fieldName: "Last Name", fieldValue: lastName, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     (req, res, next) => {
-        const { firstName } = req.body;
-        if (firstName) {
-            validateName(firstName, res, next);
-            return;
-        }
-        next();
-    },
-    (req, res, next) => {
-        const { lastName } = req.body;
-        if (lastName) {
-            validateName(lastName, res, next);
+        const { fullName } = req.body;
+        if (fullName) {
+            validateName(fullName, res, next);
             return;
         }
         next();

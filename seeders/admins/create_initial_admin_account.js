@@ -77,7 +77,7 @@ const adminSchema = mongoose.Schema({
     blockingReason: String,
     creatingDate: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     blockingDate: Date,
     dateOfCancelBlocking: Date,
