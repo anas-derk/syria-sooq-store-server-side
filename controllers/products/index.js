@@ -179,12 +179,10 @@ async function getAllFlashProductsInsideThePage(req, res) {
 
 async function getAllProductsByCategoryInsideThePage(req, res) {
     try {
-        console.log("aa");
         const { pageNumber, pageSize } = req.query;
         res.json(await productsManagmentFunctions.getAllProductsByCategoryInsideThePage(req.data._id, pageNumber, pageSize, req.params.categoryId, req.query.language));
     }
     catch (err) {
-        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }

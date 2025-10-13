@@ -329,6 +329,7 @@ async function getAllProductsByCategoryInsideThePage(authorizationId, pageNumber
         if (user) {
             const subcategories = await categoryModel.find({ parent: categoryId }, { name: 1, storeId: 1, parent: 1, color: 1 }).limit(pageSize);
             let groupedProducts = {};
+            const currentDate = new Date();
             for (let category of subcategories) {
                 let productsBySubCategory = await productModel.find({ categories: category._id }).skip((pageNumber - 1) * pageSize).limit(10).populate("categories");
                 for (let product of productsBySubCategory) {
