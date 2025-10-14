@@ -1,5 +1,7 @@
 const mongoose = require("../../database");
 
+const verificationCodeConstants = require("../../constants/verification_code");
+
 // Create Verification Code Schema
 
 const verificationCodeShema = new mongoose.Schema({
@@ -25,11 +27,8 @@ const verificationCodeShema = new mongoose.Schema({
     receiveBlockingExpirationDate: Date,
     typeOfUse: {
         type: String,
-        default: "to activate account",
-        enum: [
-            "to activate account",
-            "to reset password",
-        ],
+        default: verificationCodeConstants.DEFAULT_TYPE_OF_USE_VERIFICATION_CODE,
+        enum: verificationCodeConstants.TYPES_OF_USE_VERIFICATION_CODE,
     }
 });
 

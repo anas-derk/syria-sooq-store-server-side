@@ -1,7 +1,11 @@
 const TYPES_OF_USE_VERIFICATION_CODE = ["to activate account", "to reset password"];
+
+const DEFAULT_TYPE_OF_USE_VERIFICATION_CODE = TYPES_OF_USE_VERIFICATION_CODE[0];
+
 const CODE_LENGTH = 4;
 
 module.exports = {
     TYPES_OF_USE_VERIFICATION_CODE,
+    DEFAULT_TYPE_OF_USE_VERIFICATION_CODE,
     CODE_LENGTH
-};
+}
