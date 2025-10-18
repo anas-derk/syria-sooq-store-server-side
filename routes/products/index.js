@@ -350,13 +350,24 @@ productsRouter.get("/flash-products-count",
 productsRouter.get("/all-products-inside-the-page",
     validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, userType, sortBy, sortType } = req.query;
+        const { pageNumber, pageSize, userType, sortBy, sortType, gender, sizes, colors, brand } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "User Type", fieldValue: userType, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Sort By", fieldValue: sortBy, dataTypes: ["string"], isRequiredValue: sortType ? true : false },
             { fieldName: "Sort Type", fieldValue: sortType, dataTypes: ["string"], isRequiredValue: sortBy ? true : false },
+            { fieldName: "Gender", fieldValue: gender, dataTypes: ["array"], isRequiredValue: false },
+            { fieldName: "Sizes", fieldValue: sizes, dataTypes: ["object"], isRequiredValue: false },
+            { fieldName: "S Size", fieldValue: sizes?.s, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "M Size", fieldValue: sizes?.m, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "L Size", fieldValue: sizes?.l, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "XL Size", fieldValue: sizes?.xl, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "XXL Size", fieldValue: sizes?.xxl, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "XXXL Size", fieldValue: sizes?.xxxl, dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "4XL Size", fieldValue: sizes?.["4xl"], dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Colors", fieldValue: colors, dataTypes: ["array"], isRequiredValue: false },
+            { fieldName: "Brand", fieldValue: brand, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
@@ -378,6 +389,7 @@ productsRouter.get("/all-products-inside-the-page",
         }
         next();
     },
+
     productsController.getAllProductsInsideThePage
 );
 
