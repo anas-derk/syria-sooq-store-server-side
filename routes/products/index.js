@@ -367,7 +367,7 @@ productsRouter.get("/all-products-inside-the-page",
             { fieldName: "XXXL Size", fieldValue: sizes?.xxxl, dataTypes: ["boolean"], isRequiredValue: false },
             { fieldName: "4XL Size", fieldValue: sizes?.["4xl"], dataTypes: ["boolean"], isRequiredValue: false },
             { fieldName: "Colors", fieldValue: colors, dataTypes: ["array"], isRequiredValue: false },
-            { fieldName: "Brand", fieldValue: brand, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Brand", fieldValue: brand, dataTypes: ["array"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
