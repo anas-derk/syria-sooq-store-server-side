@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema({
     email: String,
     mobilePhone: String,
     password: String,
+    gender: {
+        type: String,
+        enum: userConstants.GENDER,
+    },
+    age: Number,
     isVerified: {
         type: Boolean,
         default: true,
@@ -70,7 +75,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    notificationsToken: String
+    notificationsToken: String,
 });
 
 // Create User Model From User Schema

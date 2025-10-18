@@ -19,6 +19,7 @@ const {
     commonMiddlewares,
     filesMiddlewares,
     usersMiddlewares,
+    numbersMiddlewares,
 } = require("../../middlewares");
 
 const {
@@ -40,8 +41,15 @@ const {
 } = filesMiddlewares;
 
 const {
-    validateUserType
+    validateUserType,
+    validateGender,
+    validateAge
 } = usersMiddlewares;
+
+const {
+    validateNumbersIsGreaterThanZero,
+    validateNumbersIsNotFloat,
+} = numbersMiddlewares;
 
 const multer = require("multer");
 
@@ -103,6 +111,8 @@ usersRouter.get("/all-users-inside-the-page",
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
         ], res, next);
     },
+    (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
+    (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
     usersController.getAllUsersInsideThePage
 );
 
@@ -202,13 +212,15 @@ usersRouter.post("/send-account-verification-code",
 usersRouter.put("/update-user-info",
     validateJWT,
     (req, res, next) => {
-        const { fullName, addresses, email, mobilePhone, city } = req.body;
+        const { fullName, addresses, email, mobilePhone, city, gender, age } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Full Name", fieldValue: fullName, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Address", fieldValue: addresses, dataTypes: ["array"], isRequiredValue: false },
             { fieldName: "Mobile Phone", fieldValue: mobilePhone, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Email", fieldValue: email, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "City", fieldValue: city, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Gender", fieldValue: gender, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Age", fieldValue: age, dataTypes: ["number"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => {
@@ -248,6 +260,22 @@ usersRouter.put("/update-user-info",
         }
         next();
     },
+    (req, res, next) => {
+        const { gender } = req.body;
+        if (gender) {
+            return validateGender(gender, res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { age } = req.body;
+        if (age) {
+            return validateAge(age, res, next);
+        }
+        next();
+    },
+    (req, res, next) => validateNumbersIsGreaterThanZero([req.body.age], res, next, ["Sorry, Please Send Valid Age ( Number Must Be Greater Than Zero ) !!"]),
+    (req, res, next) => validateNumbersIsNotFloat([req.body.age], res, next, ["Sorry, Please Send Valid Age ( Number Must Be Not Float ) !!"]),
     usersController.putUserInfo
 );
 
