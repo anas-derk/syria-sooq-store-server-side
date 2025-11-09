@@ -255,6 +255,7 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
                     data: {},
                 }
             }
+            filters.storeId = admin.storeId;
         }
         if (filters.category) {
             let category = filters.category;

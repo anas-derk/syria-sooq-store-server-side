@@ -50,7 +50,8 @@ const DAYS = [
 
 const PERIODS = [
     "AM",
-    "PM"
+    "PM",
+    ""
 ];
 
 const STORE_VERIFICATION_STATUS = [

@@ -35,11 +35,11 @@ const {
 } = commonMiddlewares;
 
 const {
-    validateStoreCategory
+    validateStoreCategory,
+    validateWorkingHours
 } = storesMiddlewares;
 
 const multer = require("multer");
-const { validateWorkingHours } = require("../../middlewares/stores");
 
 storesRouter.get("/stores-count", validateJWT, storesController.getStoresCount);
 
