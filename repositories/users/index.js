@@ -140,7 +140,7 @@ async function login(email, mobilePhone, password, language) {
 
 async function loginByGoogle(userInfo, language) {
     try {
-        const user = await userModel.findOne({ email: userInfo.email, registerationMethod: "google" });
+        const user = await userModel.findOne({ email: userInfo.email });
         if (user) {
             return {
                 msg: getSuitableTranslations("Logining Process By Google Has Been Successfully !!", language),
