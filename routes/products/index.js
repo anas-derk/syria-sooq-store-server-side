@@ -353,7 +353,7 @@ productsRouter.get("/flash-products-count",
 productsRouter.get("/all-products-inside-the-page",
     validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, userType, sortBy, sortType, gender, sizes, colors, brand } = req.query;
+        const { pageNumber, pageSize, userType, sortBy, sortType, gender, sizes, colors, brand, startPrice, endPrice } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
@@ -371,6 +371,8 @@ productsRouter.get("/all-products-inside-the-page",
             { fieldName: "4XL Size", fieldValue: sizes?.["4xl"], dataTypes: ["boolean"], isRequiredValue: false },
             { fieldName: "Colors", fieldValue: colors, dataTypes: ["array"], isRequiredValue: false },
             { fieldName: "Brand", fieldValue: brand, dataTypes: ["array"], isRequiredValue: false },
+            { fieldName: "Start Price", fieldValue: startPrice, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "End Price", fieldValue: endPrice, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
@@ -392,7 +394,22 @@ productsRouter.get("/all-products-inside-the-page",
         }
         next();
     },
-
+    (req, res, next) => {
+        const { startPrice } = req.query;
+        if (startPrice) {
+            validateNumbersIsGreaterThanZero([Number(startPrice)], res, next, ["Sorry, Please Send Valid Start Price ( Number Must Be Greater Than Zero ) !!"]);
+            return;
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { endPrice } = req.query;
+        if (endPrice) {
+            validateNumbersIsGreaterThanZero([Number(endPrice)], res, next, ["Sorry, Please Send Valid End Price ( Number Must Be Greater Than Zero ) !!"]);
+            return;
+        }
+        next();
+    },
     productsController.getAllProductsInsideThePage
 );
 

@@ -257,6 +257,17 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
             }
             filters.storeId = admin.storeId;
         }
+        if (filters.startPrice && filters.endPrice) {
+            filters.price = { $gte: filters.startPrice, $lte: filters.endPrice };
+            delete filters.startPrice;
+            delete filters.endPrice;
+        } else if (filters.startPrice) {
+            filters.price = { $gte: filters.startPrice };
+            delete filters.startPrice;
+        } else if (filters.endPrice) {
+            filters.prices = { $lte: filters.endPrice };
+            delete filters.endPrice;
+        }
         if (filters.category) {
             let category = filters.category;
             delete filters.category;
