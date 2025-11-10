@@ -157,6 +157,9 @@ function getFiltersAndSortDetailsObject(queryObject) {
                 else filtersObject["customizes.sizes.4xl"] = false;
             }
         }
+        if (objectKey === "brands") {
+            filtersObject["brand"] = JSON.parse(queryObject[objectKey]);
+        }
     }
     return { filtersObject, sortDetailsObject };
 }

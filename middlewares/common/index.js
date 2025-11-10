@@ -1,5 +1,8 @@
 const { getResponseObject } = require("../../helpers/responses");
+
 const { CITIES } = require("../../constants/cites");
+
+const { isValidColor } = require("../../utils/common");
 
 function validateName(name, res, nextFunc, errorMsg = "Sorry, Please Send Valid Name !!") {
     if (!/^([\u0600-\u06FF\s]+|[a-zA-Z\s]+)$/.test(name)) {

@@ -353,7 +353,7 @@ productsRouter.get("/flash-products-count",
 productsRouter.get("/all-products-inside-the-page",
     validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, userType, sortBy, sortType, gender, sizes, colors, brand, startPrice, endPrice } = req.query;
+        const { pageNumber, pageSize, userType, sortBy, sortType, gender, sizes, colors, startPrice, endPrice, brands } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
@@ -362,7 +362,6 @@ productsRouter.get("/all-products-inside-the-page",
             { fieldName: "Sort Type", fieldValue: sortType, dataTypes: ["string"], isRequiredValue: sortBy ? true : false },
             { fieldName: "Gender", fieldValue: gender, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Colors", fieldValue: colors ? JSON.parse(colors) : undefined, dataTypes: ["array"], isRequiredValue: false },
-            { fieldName: "Brand", fieldValue: brand, dataTypes: ["array"], isRequiredValue: false },
             { fieldName: "Start Price", fieldValue: startPrice, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "End Price", fieldValue: endPrice, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Sizes", fieldValue: sizes ? JSON.parse(sizes) : undefined, dataTypes: ["object"], isRequiredValue: false },
@@ -373,6 +372,7 @@ productsRouter.get("/all-products-inside-the-page",
             { fieldName: "XXL Size", fieldValue: sizes ? JSON.parse(sizes)?.xxl : undefined, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "XXXL Size", fieldValue: sizes ? JSON.parse(sizes)?.xxxl : undefined, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "4XL Size", fieldValue: sizes ? JSON.parse(sizes)?.["4xl"] : undefined, dataTypes: ["string"], isRequiredValue: false },
+            { fieldName: "Brand", fieldValue: brands ? JSON.parse(brands) : undefined, dataTypes: ["array"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
@@ -395,6 +395,22 @@ productsRouter.get("/all-products-inside-the-page",
         next();
     },
     (req, res, next) => {
+        const { gender } = req.query;
+        if (gender) {
+            validateGenderForDashboard(gender, res, next);
+            return;
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { colors } = req.query;
+        if (colors) {
+            validateColors(JSON.parse(colors), res, next);
+            return;
+        }
+        next();
+    },
+    (req, res, next) => {
         const { startPrice } = req.query;
         if (startPrice) {
             validateNumbersIsGreaterThanZero([Number(startPrice)], res, next, ["Sorry, Please Send Valid Start Price ( Number Must Be Greater Than Zero ) !!"]);
@@ -407,6 +423,17 @@ productsRouter.get("/all-products-inside-the-page",
         if (endPrice) {
             validateNumbersIsGreaterThanZero([Number(endPrice)], res, next, ["Sorry, Please Send Valid End Price ( Number Must Be Greater Than Zero ) !!"]);
             return;
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { brands } = req.query;
+        if (brands) {
+            return validateIsExistValueForFieldsAndDataTypes(
+                JSON.parse(brands).map((brand, index) => (
+                    { fieldName: `Id In Brand ${index + 1}`, fieldValue: brand, dataTypes: ["ObjectId"], isRequiredValue: true }
+                ))
+                , res, next);
         }
         next();
     },
