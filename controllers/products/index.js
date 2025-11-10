@@ -118,6 +118,7 @@ function getFiltersAndSortDetailsObject(queryObject) {
         if (objectKey === "gender") filtersObject[objectKey] = queryObject[objectKey];
         if (objectKey === "startPrice") filtersObject[objectKey] = queryObject[objectKey];
         if (objectKey === "endPrice") filtersObject[objectKey] = queryObject[objectKey];
+        if (objectKey === "colors") filtersObject["customizes.colors"] = JSON.parse(queryObject[objectKey]);
     }
     return { filtersObject, sortDetailsObject };
 }
