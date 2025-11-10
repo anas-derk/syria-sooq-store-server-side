@@ -1,5 +1,7 @@
 const mongoose = require("../../database");
 
+const { GENDER_FOR_DASHBOARD } = require("../../constants/users");
+
 // Create Product Schema
 
 const productSchema = new mongoose.Schema({
@@ -220,6 +222,11 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "brand",
         default: null,
+    },
+    gender: {
+        type: String,
+        enum: GENDER_FOR_DASHBOARD,
+        default: "all",
     },
 });
 

@@ -56,6 +56,7 @@ const {
 
 const {
     validateUserType,
+    validateGenderForDashboard,
 } = usersMiddlewares;
 
 const { getResponseObject } = require("../../helpers/responses");
@@ -89,7 +90,7 @@ productsRouter.post("/add-new-product",
     ]),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, price, description, categories, discount, quantity, isAvailableForDelivery, hasCustomizes, customizes, brand } = Object.assign({}, req.body);
+        const { name, price, description, categories, discount, quantity, isAvailableForDelivery, hasCustomizes, customizes, brand, gender } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Price", fieldValue: Number(price), dataTypes: ["number"], isRequiredValue: true },
@@ -101,6 +102,7 @@ productsRouter.post("/add-new-product",
             { fieldName: "Has Customizes", fieldValue: Boolean(hasCustomizes), dataTypes: ["boolean"], isRequiredValue: false },
             { fieldName: "Customizes", fieldValue: JSON.parse(customizes), dataTypes: ["object"], isRequiredValue: hasCustomizes ?? false },
             { fieldName: "Brand", fieldValue: brand, dataTypes: ["ObjectId"], isRequiredValue: false },
+            { fieldName: "Gender", fieldValue: gender, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => {
@@ -241,6 +243,7 @@ productsRouter.post("/add-new-product",
         }
         next();
     },
+    (req, res, next) => validateGenderForDashboard(req.body.gender, res, next),
     productsController.postNewProduct
 );
 

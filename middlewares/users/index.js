@@ -1,4 +1,4 @@
-const { USER_TYPES, GENDER } = require("../../constants/users");
+const { USER_TYPES, GENDER, GENDER_FOR_DASHBOARD } = require("../../constants/users");
 
 const { getResponseObject } = require("../../helpers/responses");
 
@@ -18,6 +18,14 @@ function validateGender(gender, res, nextFunc, errorMsg = "Sorry, Please Send Va
     nextFunc();
 }
 
+function validateGenderForDashboard(gender, res, nextFunc, errorMsg = "Sorry, Please Send Valid Gender !!") {
+    if (!GENDER_FOR_DASHBOARD.includes(gender)) {
+        res.status(400).json(getResponseObject(errorMsg, true, {}));
+        return;
+    }
+    nextFunc();
+}
+
 function validateAge(age, res, nextFunc, errorMsg = "Sorry, Please Send Valid Age !!") {
     if (age < 13 || age > 99) {
         res.status(400).json(getResponseObject(errorMsg, true, {}));
@@ -29,5 +37,6 @@ function validateAge(age, res, nextFunc, errorMsg = "Sorry, Please Send Valid Ag
 module.exports = {
     validateUserType,
     validateGender,
+    validateGenderForDashboard,
     validateAge,
 }
