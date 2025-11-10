@@ -119,6 +119,44 @@ function getFiltersAndSortDetailsObject(queryObject) {
         if (objectKey === "startPrice") filtersObject[objectKey] = queryObject[objectKey];
         if (objectKey === "endPrice") filtersObject[objectKey] = queryObject[objectKey];
         if (objectKey === "colors") filtersObject["customizes.colors"] = JSON.parse(queryObject[objectKey]);
+        if (objectKey === "sizes") {
+            const sizesAfterParsing = JSON.parse(queryObject[objectKey]);
+            if (sizesAfterParsing?.s) {
+                if (sizesAfterParsing?.s === "yes")
+                    filtersObject["customizes.sizes.s"] = true;
+                else filtersObject["customizes.sizes.s"] = false;
+            }
+            if (sizesAfterParsing?.m) {
+                if (sizesAfterParsing?.m === "yes")
+                    filtersObject["customizes.sizes.m"] = true;
+                else filtersObject["customizes.sizes.m"] = false;
+            }
+            if (sizesAfterParsing?.l) {
+                if (sizesAfterParsing?.l === "yes")
+                    filtersObject["customizes.sizes.l"] = true;
+                else filtersObject["customizes.sizes.l"] = false;
+            }
+            if (sizesAfterParsing?.xl) {
+                if (sizesAfterParsing?.xl === "yes")
+                    filtersObject["customizes.sizes.xl"] = true;
+                else filtersObject["customizes.sizes.xl"] = false;
+            }
+            if (sizesAfterParsing?.xxl) {
+                if (sizesAfterParsing?.xxl === "yes")
+                    filtersObject["customizes.sizes.xxl"] = true;
+                else filtersObject["customizes.sizes.xxl"] = false;
+            }
+            if (sizesAfterParsing?.xxxl) {
+                if (sizesAfterParsing?.xxxl === "yes")
+                    filtersObject["customizes.sizes.xxxl"] = true;
+                else filtersObject["customizes.sizes.xxxl"] = false;
+            }
+            if (sizesAfterParsing?.["4xl"]) {
+                if (sizesAfterParsing?.["4xl"] === "yes")
+                    filtersObject["customizes.sizes.4xl"] = true;
+                else filtersObject["customizes.sizes.4xl"] = false;
+            }
+        }
     }
     return { filtersObject, sortDetailsObject };
 }
