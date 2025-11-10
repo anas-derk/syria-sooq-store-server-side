@@ -360,7 +360,7 @@ productsRouter.get("/all-products-inside-the-page",
             { fieldName: "User Type", fieldValue: userType, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Sort By", fieldValue: sortBy, dataTypes: ["string"], isRequiredValue: sortType ? true : false },
             { fieldName: "Sort Type", fieldValue: sortType, dataTypes: ["string"], isRequiredValue: sortBy ? true : false },
-            { fieldName: "Gender", fieldValue: gender, dataTypes: ["array"], isRequiredValue: false },
+            { fieldName: "Gender", fieldValue: gender, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Sizes", fieldValue: sizes, dataTypes: ["object"], isRequiredValue: false },
             { fieldName: "S Size", fieldValue: sizes?.s, dataTypes: ["boolean"], isRequiredValue: false },
             { fieldName: "M Size", fieldValue: sizes?.m, dataTypes: ["boolean"], isRequiredValue: false },
@@ -489,7 +489,7 @@ productsRouter.delete("/gallery-images/:productId",
 productsRouter.put("/:productId",
     validateJWT,
     (req, res, next) => {
-        const { name, price, description, categories, discount, quantity, countries } = req.body;
+        const { name, price, description, categories, discount, quantity, countries, gender } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
             { fieldName: "Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: false },
@@ -499,6 +499,7 @@ productsRouter.put("/:productId",
             { fieldName: "Discount", fieldValue: Number(discount), dataTypes: ["number"], isRequiredValue: false },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataTypes: ["number"], isRequiredValue: false },
             { fieldName: "Countries", fieldValue: countries, dataTypes: ["array"], isRequiredValue: false },
+            { fieldName: "Gender", fieldValue: gender, dataTypes: ["string"], isRequiredValue: false },
         ], res, next);
     },
     (req, res, next) => {
@@ -551,6 +552,7 @@ productsRouter.put("/:productId",
         }
         next();
     },
+    (req, res, next) => validateGenderForDashboard(req.body.gender, res, next),
     productsController.putProduct
 );
 

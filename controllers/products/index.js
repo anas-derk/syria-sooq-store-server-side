@@ -115,6 +115,7 @@ function getFiltersAndSortDetailsObject(queryObject) {
         if (objectKey === "name") filtersObject[objectKey] = { $regex: new RegExp(queryObject[objectKey], 'i') }
         if (objectKey === "sortBy") sortDetailsObject[objectKey] = queryObject[objectKey];
         if (objectKey === "sortType") sortDetailsObject[objectKey] = queryObject[objectKey];
+        if (objectKey === "gender") filtersObject[objectKey] = queryObject[objectKey];
     }
     return { filtersObject, sortDetailsObject };
 }
