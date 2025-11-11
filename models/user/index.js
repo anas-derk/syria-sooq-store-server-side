@@ -43,7 +43,8 @@ const userSchema = new mongoose.Schema({
         default: [],
     },
     interests: {
-        type: Array,
+        type: [mongoose.Types.ObjectId],
+        ref: "categorie",
         default: [],
     },
     followedStores: {

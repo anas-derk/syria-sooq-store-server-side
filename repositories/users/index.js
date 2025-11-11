@@ -283,15 +283,32 @@ async function getMainPageData(authorizationId, language) {
         const user = await userModel.findById(authorizationId);
         const currentDate = new Date();
         let products = await productModel.aggregate([
+            // ➊ إنشاء حقل priority (هل المنتج ينتمي لاهتمامات المستخدم؟)
             {
                 $addFields: {
-                    sortOrder: {
-                        $indexOfArray: [user.interests, { $first: "$categories" }]
-                    }
+                    priority: {
+                        $cond: [
+                            { $gt: [{ $size: { $setIntersection: ["$categories", user.interests] } }, 0] },
+                            1,
+                            0,
+                        ],
+                    },
+                },
+            },
+
+            // ➋ الترتيب أولاً بناءً على الـ priority ثم حسب الطلبات أو حسب الأحدث
+            {
+                $sort: {
+                    priority: -1,
+                    numberOfOrders: -1, // اختياري
+                    postOfDate: -1      // اختياري
                 }
             },
-            { $sort: { sortOrder: 1 } },
+
+            // ➌ الآن نحدد عدد النتائج
             { $limit: 10 },
+
+            // ➍ لجلب بيانات التصنيفات المرتبطة بكل منتج
             {
                 $lookup: {
                     from: "categories",
@@ -300,6 +317,8 @@ async function getMainPageData(authorizationId, language) {
                     as: "categories"
                 }
             },
+
+            // ➎ لجلب بيانات المتجر المرتبط بالمنتج
             {
                 $lookup: {
                     from: "stores",
@@ -307,7 +326,10 @@ async function getMainPageData(authorizationId, language) {
                     foreignField: "_id",
                     as: "store"
                 }
-            }
+            },
+
+            // ➏ حذف priority من النتيجة لأنها كانت فقط لغرض الترتيب
+            { $project: { priority: 0 } }
         ]),
             offers = await productModel
                 .find({ startDiscountPeriod: { $lte: currentDate }, endDiscountPeriod: { $gte: currentDate } })

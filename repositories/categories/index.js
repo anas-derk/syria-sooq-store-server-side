@@ -183,6 +183,7 @@ async function getAllCategoriesInsideThePage(authorizationId, pageNumber, pageSi
                     data: {},
                 }
             }
+            filters.storeId = admin.storeId;
         }
         return {
             msg: getSuitableTranslations("Get All Categories Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
