@@ -35,6 +35,7 @@ async function postNewProduct(req, res) {
             ...{ productId, quantity, message, customText, additionalNotes, size, color } = Object.assign({}, req.body),
             additionalFiles: outputImageFilePaths,
         }, req.query.language);
+        console.log(result);
         if (result.error) {
             if (result.msg === "Sorry, This User Is Not Exist !!") {
                 return res.status(401).json(result);
