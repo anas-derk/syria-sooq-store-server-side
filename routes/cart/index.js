@@ -65,6 +65,7 @@ cartRouter.post("/add-new-product",
     validateIsExistErrorInFiles,
     (req, res, next) => {
         const { productId, quantity, message, customText, additionalNotes, size } = Object.assign({}, req.body);
+        console.log({ productId, quantity, message, customText, additionalNotes, size });
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: productId, dataTypes: ["ObjectId"], isRequiredValue: true },
             { fieldName: "Quantity", fieldValue: Number(quantity), dataTypes: ["number"], isRequiredValue: true },
