@@ -14,6 +14,7 @@ const { unlinkSync } = require("fs");
 
 async function postNewProduct(req, res) {
     try {
+        console.log("aaa");
         const productImages = Object.assign({}, req.files);
         let files = [], outputImageFilePaths = [];
         if (productImages?.additionalFiles?.length > 0) {
