@@ -1,11 +1,11 @@
-<div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
+<div
+    style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
     <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %>; margin-bottom: 20px;">
-        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %> Image"
-            style="width: 100px; height: 100px;">
+        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png"
+            alt="<%= process.env.WEBSITE_NAME %> Image" style="width: 100px; height: 100px;">
     </section>
     <section class="content"
-        style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;"
-    >
+        style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %>; margin: auto; padding: 20px; line-height: 2;">
         <h2 style="text-align: center;">مرحباً</h2>
         <p>
             يسعدنا إخبارك أن طلبك رقم <%= newOrderDetails.orderNumber %> قد تم توصيله بنجاح
@@ -26,21 +26,30 @@
             عنوان التوصيل:
         </p>
         <ul>
-            <li>الاسم الكامل: <%= newOrderDetails.fullName %></li>
-            <li>العنوان: <%= newOrderDetails.address %></li>
-            <li>تفاصيل العنوان: <%= newOrderDetails.addressDetails %></li>
+            <li>الاسم الكامل: <%= newOrderDetails.fullName %>
+            </li>
+            <li>العنوان: <%= newOrderDetails.address %>
+            </li>
+            <li>تفاصيل العنوان: <%= newOrderDetails.addressDetails %>
+            </li>
             <% if (newOrderDetails.closestPoint) { %>
-                <li>أقرب نقطة: <%= newOrderDetails.closestPoint %></li>
-            <% } %>
-            <% if (newOrderDetails.additionalAddressDetails) { %>
-                <li>تفاصيل العنوان الإضافية: <%= newOrderDetails.additionalAddressDetails %></li>
-            <% } %>
-            <li>رقم الشقة: <%= newOrderDetails.floorNumber %></li>
-            <% if (newOrderDetails.additionalNotes) { %>
-                <li>ملاحظات إضافية: <%= newOrderDetails.additionalNotes %></li>
-            <% } %>
-            <li>رقم الهاتف : <%= newOrderDetails.mobilePhone %></li>
-            <li>رقم الهاتف الاحتياطي: <%= newOrderDetails.backupMobilePhone %></li>
+                <li>أقرب نقطة: <%= newOrderDetails.closestPoint %>
+                </li>
+                <% } %>
+                    <% if (newOrderDetails.additionalAddressDetails) { %>
+                        <li>تفاصيل العنوان الإضافية: <%= newOrderDetails.additionalAddressDetails %>
+                        </li>
+                        <% } %>
+                            <li>رقم الشقة: <%= newOrderDetails.floorNumber %>
+                            </li>
+                            <% if (newOrderDetails.additionalNotes) { %>
+                                <li>ملاحظات إضافية: <%= newOrderDetails.additionalNotes %>
+                                </li>
+                                <% } %>
+                                    <li>رقم الهاتف : <%= newOrderDetails.mobilePhone %>
+                                    </li>
+                                    <li>رقم الهاتف الاحتياطي: <%= newOrderDetails.backupMobilePhone %>
+                                    </li>
         </ul>
         <p>
             تفاصيل الدفع:
@@ -54,10 +63,12 @@
                 <th style="padding: 10px 0;">السعر</th>
             </thead>
             <tbody>
-                <% for( let i = 0; i < newOrderDetails.products.length; i++ ) { %>
+                <% for( let i=0; i < newOrderDetails.products.length; i++ ) { %>
                     <tr>
                         <td style="padding: 10px 0;">
-                            <img src="<%= process.env.BASE_API_URL %>/<%= newOrderDetails.products[i].imagePath %>" alt="<%= newOrderDetails.products[i].name %> Image" style="width: 100px; height: 100px;" />
+                            <img src="<%= process.env.BASE_API_URL %>/<%= newOrderDetails.products[i].imagePath %>"
+                                alt="<%= newOrderDetails.products[i].name %> Image"
+                                style="width: 100px; height: 100px;" />
                         </td>
                         <td style="padding: 10px 0;">
                             <%= newOrderDetails.products[i].name %>
@@ -72,7 +83,7 @@
                             <%= newOrderDetails.products[i].unitPrice %>
                         </td>
                     </tr>
-                <% } %>
+                    <% } %>
             </tbody>
         </table>
         <p>
@@ -88,18 +99,23 @@
             المبلغ النهائي: <%= newOrderDetails.totalPriceAfterDiscount %>
         </p>
         <p>
-            يرجى الإطلاع على <a href="<%= process.env.WEBSITE_URL %>/return-and-refund-policy">سياسة الإسترجاع</a> الخاصة بنا ؟
+            يرجى الإطلاع على <a href="<%= process.env.WEBSITE_URL %>/return-and-refund-policy">سياسة الإسترجاع</a>
+            الخاصة بنا ؟
         </p>
         <p>
             فريق خدمة الزبائن جاهز لمساعدتك على الإيميل:
         </p>
-        <a href="mailto:<%= process.env.SUPPORT_EMAIL %>"><%= process.env.SUPPORT_EMAIL %></a>
+        <a href="mailto:<%= process.env.SUPPORT_EMAIL %>">
+            <%= process.env.SUPPORT_EMAIL %>
+        </a>
         <div class="notes" style="text-align: center; border: 1px solid #000;">
             <h3>تم إرسال هذا البريد الالكتروني بشكل تلقائي .</h3>
-            <h3>يرجى عدم الدم على هذه الرسالة .</h3>
-            <h3>جميع الحقوق محفوظة لـ <%= process.env.WEBSITE_NAME %></h3>
+            <h3>يرجى عدم الرد على هذه الرسالة .</h3>
+            <h3>جميع الحقوق محفوظة لـ <%= process.env.WEBSITE_NAME %>
+            </h3>
         </div>
         <h4>أطيب التحيات,</h4>
-        <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">فريق عمل <%= process.env.WEBSITE_NAME %></h4> 
+        <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>;">فريق عمل <%= process.env.WEBSITE_NAME %>
+        </h4>
     </section>
 </div>
