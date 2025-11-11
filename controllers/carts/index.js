@@ -14,8 +14,8 @@ const { unlinkSync } = require("fs");
 
 async function postNewProduct(req, res) {
     try {
-        console.log("aaa");
         const productImages = Object.assign({}, req.files);
+        console.log(productImages);
         let files = [], outputImageFilePaths = [];
         if (productImages?.additionalFiles?.length > 0) {
             productImages.additionalFiles.forEach((file) => {
@@ -30,7 +30,7 @@ async function postNewProduct(req, res) {
             });
             await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
         }
-        console.log("bbb");
+        console.log("aaa");
         const result = await cartOperationsManagmentFunctions.addNewProduct(req.data._id, {
             ...{ productId, quantity, message, customText, additionalNotes, size, color } = Object.assign({}, req.body),
             additionalFiles: outputImageFilePaths,

@@ -5,6 +5,7 @@ const { cartModel, productModel, userModel } = require("../../models");
 const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewProduct(authorizationId, productInfo, language) {
+    console.log(productInfo)
     try {
         const userInfo = await userModel.findById(authorizationId);
         if (userInfo) {
