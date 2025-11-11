@@ -30,12 +30,10 @@ async function postNewProduct(req, res) {
             });
             await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
         }
-        console.log("aaa");
         const result = await cartOperationsManagmentFunctions.addNewProduct(req.data._id, {
             ...{ productId, quantity, message, customText, additionalNotes, size, color } = Object.assign({}, req.body),
             additionalFiles: outputImageFilePaths,
         }, req.query.language);
-        console.log(result);
         if (result.error) {
             if (result.msg === "Sorry, This User Is Not Exist !!") {
                 return res.status(401).json(result);
