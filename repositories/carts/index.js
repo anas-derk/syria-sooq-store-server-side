@@ -5,7 +5,6 @@ const { cartModel, productModel, userModel } = require("../../models");
 const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewProduct(authorizationId, productInfo, language) {
-    console.log(productInfo)
     try {
         const userInfo = await userModel.findById(authorizationId);
         if (userInfo) {
@@ -25,11 +24,13 @@ async function addNewProduct(authorizationId, productInfo, language) {
                         data: {},
                     }
                 }
-                if (productInfo.additionalFiles && !product?.customizes?.allowUploadImages) {
-                    return {
-                        msg: getSuitableTranslations("Sorry, Upload Images Is Not Allowed For This Product !!", language),
-                        error: true,
-                        data: {},
+                if (Array.isArray(productInfo?.additionalFiles)) {
+                    if (productInfo.additionalFiles.length > 0 && !product?.customizes?.allowUploadImages) {
+                        return {
+                            msg: getSuitableTranslations("Sorry, Upload Images Is Not Allowed For This Product !!", language),
+                            error: true,
+                            data: {},
+                        }
                     }
                 }
                 if (productInfo.size) {
