@@ -547,28 +547,28 @@ productsRouter.put("/:productId",
         ], res, next);
     },
     (req, res, next) => {
-        const { price } = Object.assign({}, req.body);
+        const { price } = req.body;
         if (price) {
             return validateNumbersIsGreaterThanZero([price], res, next, ["Sorry, Please Send Valid Product Price ( Number Must Be Greater Than Zero ) !!"]);
         }
         next();
     },
     (req, res, next) => {
-        const { discount } = Object.assign({}, req.body);
+        const { discount } = req.body;
         if (discount) {
             return validateNumbersIsGreaterThanZero([discount], res, next, ["Sorry, Please Send Valid Product Discount ( Number Must Be Greater Than Zero ) !!"]);
         }
         next();
     },
     (req, res, next) => {
-        const { quantity } = Object.assign({}, req.body);
+        const { quantity } = req.body;
         if (quantity) {
             return validateNumbersIsGreaterThanZero([quantity], res, next, ["Sorry, Please Send Valid Product Quantity ( Number Must Be Greater Than Zero ) !!"]);
         }
         next();
     },
     (req, res, next) => {
-        const { price, discount } = Object.assign({}, req.body);
+        const { price, discount } = req.body;
         if (price && discount) {
             return validateIsPriceGreaterThanDiscount(price, discount, res, next);
         }
@@ -586,7 +586,7 @@ productsRouter.put("/:productId",
         next();
     },
     (req, res, next) => {
-        const { countries } = Object.assign({}, req.body);
+        const { countries } = req.body;
         if (countries) {
             let errorMsgs = [];
             for (let i = 0; i < countries.length; i++) {
@@ -596,7 +596,13 @@ productsRouter.put("/:productId",
         }
         next();
     },
-    (req, res, next) => validateGenderForDashboard(req.body.gender, res, next),
+    (req, res, next) => {
+        const { gender } = req.body;
+        if (gender) {
+            return validateGenderForDashboard(gender, res, next);
+        }
+        next();
+    },
     productsController.putProduct
 );
 
