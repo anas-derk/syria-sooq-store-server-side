@@ -20,6 +20,18 @@ const categorySchema = new mongoose.Schema({
         ref: "categorie",
         default: null
     },
+    minAge: {
+        type: Number,
+        required: function () {
+            return this.parent ? true : false;
+        }
+    },
+    maxAge: {
+        type: Number,
+        required: function () {
+            return this.parent ? true : false;
+        }
+    },
     imagePath: {
         type: String,
         required: true,

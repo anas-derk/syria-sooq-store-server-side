@@ -1,6 +1,7 @@
 const categoriesRouter = require("express").Router();
 
 const categoriesController = require("../../controllers/categories");
+const { getResponseObject } = require("../../helpers/responses");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
@@ -52,12 +53,26 @@ categoriesRouter.post("/add-new-category",
     }).single("categoryImg"),
     validateIsExistErrorInFiles,
     (req, res, next) => {
-        const { name, color, parent } = req.body;
+        const { name, color, parent, minAge, maxAge } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Category Name", fieldValue: name, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Category Color", fieldValue: color, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Category Parent Id", fieldValue: parent, dataTypes: ["ObjectId"], isRequiredValue: false },
+            { fieldName: "Minimum Age", fieldValue: minAge, dataTypes: ["number"], isRequiredValue: parent ? true : false },
+            { fieldName: "Maximum Age", fieldValue: maxAge, dataTypes: ["number"], isRequiredValue: parent ? true : false },
         ], res, next);
+    },
+    (req, res, next) => {
+        const { minAge, maxAge } = req.body;
+        if (minAge && maxAge) {
+            if (minAge < 0) {
+                return res.status(400).json(getResponseObject("Sorry Min Age Can't Be Less Than Zero !!", true, {}));
+            }
+            if (maxAge === minAge) {
+                return res.status(400).json(getResponseObject("Sorry Max Age Can't Be Equal Min Age !!", true, {}));
+            }
+        }
+        next();
     },
     categoriesController.postNewCategory
 );

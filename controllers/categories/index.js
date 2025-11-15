@@ -32,7 +32,7 @@ async function postNewCategory(req, res) {
         const outputImageFilePath = `assets/images/categories/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const result = await categoriesManagmentFunctions.addNewCategory(req.data._id, {
-            ...{ name, color, parent } = Object.assign({}, req.body),
+            ...{ name, color, parent, minAge, maxAge } = Object.assign({}, req.body),
             imagePath: outputImageFilePath,
         }, req.query.language);
         if (result.error) {
