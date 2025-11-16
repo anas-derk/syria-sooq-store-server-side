@@ -10,7 +10,7 @@ const DEFAULT_REGISTERATION_AGENT = REGISTERATION_AGENT[2];
 
 const GENDER = ["male", "female"];
 
-const GENDER_FOR_DASHBOARD = ["male", "female", "all"];
+const GENDER_FOR_DASHBOARD = [...GENDER, "all"];
 
 module.exports = {
     USER_TYPES,
