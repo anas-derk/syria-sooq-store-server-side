@@ -258,75 +258,69 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
             filters.storeId = admin.storeId;
         }
         if (filters.startPrice && filters.endPrice) {
-            filters.price = { $gte: filters.startPrice, $lte: filters.endPrice };
+            filters.price = { $gte: Number(filters.startPrice), $lte: Number(filters.endPrice) };
             delete filters.startPrice;
             delete filters.endPrice;
         } else if (filters.startPrice) {
-            filters.price = { $gte: filters.startPrice };
+            filters.price = { $gte: Number(filters.startPrice) };
             delete filters.startPrice;
         } else if (filters.endPrice) {
-            filters.prices = { $lte: filters.endPrice };
+            filters.price = { $lte: Number(filters.endPrice) };
             delete filters.endPrice;
         }
-        if (filters.category) {
-            let category = filters.category;
-            delete filters.category;
-            const result = await productModel.aggregate([
-                {
-                    $lookup: {
-                        from: "categories",
-                        localField: "categories",
-                        foreignField: "_id",
-                        as: "categoryDetails"
-                    }
-                },
-                {
-                    $match: {
-                        "categoryDetails.name": { $regex: new RegExp(category, 'i') },
-                        ...filters
-                    }
-                },
-                {
-                    $facet: {
-                        products: [
-                            { $skip: (pageNumber - 1) * pageSize },
-                            { $limit: pageSize }
-                        ],
-                        productsCount: [
-                            { $count: "total" }
-                        ]
-                    }
+        const category = filters.category;
+        delete filters.category;
+        const minAge = filters.minAge;
+        const maxAge = filters.maxAge;
+        delete filters.minAge;
+        delete filters.maxAge;
+        const result = await productModel.aggregate([
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "categories",
+                    foreignField: "_id",
+                    as: "categoryDetails"
                 }
-            ]);
-            let products = await productModel.populate(result[0].products, "categories");
-            const currentDate = new Date();
-            for (let product of products) {
-                product.isExistOffer = product.startDiscountPeriod <= currentDate && endDiscountPeriod >= currentDate ? true : false;
-                product.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+            },
+            {
+                $match: {
+                    ...category && { "categoryDetails.name": { $regex: new RegExp(category, 'i') } },
+                    ...minAge && maxAge && {
+                        "categoryDetails.minAge": Number(minAge),
+                        "categoryDetails.maxAge": Number(maxAge),
+                    },
+                    ...filters
+                }
+            },
+            ...(sortDetailsObject && Object.keys(sortDetailsObject).length > 0
+                ? [{ $sort: sortDetailsObject }]
+                : []),
+            {
+                $facet: {
+                    products: [
+                        { $skip: (pageNumber - 1) * pageSize },
+                        { $limit: pageSize },
+                    ],
+                    productsCount: [
+                        { $count: "total" }
+                    ]
+                }
             }
-            return {
-                msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
-                error: false,
-                data: {
-                    products,
-                    productsCount: result[0].productsCount.length > 0 ? result[0].productsCount[0].total : 0,
-                    currentDate: new Date()
-                },
-            }
-        }
+        ]);
+        let products = await productModel.populate(result[0].products, "categories");
         const currentDate = new Date();
-        let products = await productModel.find(filters).sort(sortDetailsObject).skip((pageNumber - 1) * pageSize).limit(pageSize).populate("categories");
         for (let product of products) {
-            product._doc.isExistOffer = product.startDiscountPeriod <= currentDate && product.endDiscountPeriod >= currentDate ? true : false;
-            product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
+            product.isExistOffer = product.startDiscountPeriod <= currentDate && product.endDiscountPeriod >= currentDate ? true : false;
+            product.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
         }
         return {
-            msg: getSuitableTranslations("Get All Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
+            msg: getSuitableTranslations("Get Products Inside The Page: {{pageNumber}} Process Has Been Successfully !!", language, { pageNumber }),
             error: false,
             data: {
                 products,
-                productsCount: await productModel.countDocuments(filters),
-                currentDate,
+                productsCount: result[0].productsCount.length > 0 ? result[0].productsCount[0].total : 0,
+                currentDate: new Date()
             },
         }
     }

@@ -160,6 +160,8 @@ function getFiltersAndSortDetailsObject(queryObject) {
         if (objectKey === "brands") {
             filtersObject["brand"] = JSON.parse(queryObject[objectKey]);
         }
+        if (objectKey === "minAge") filtersObject[objectKey] = queryObject[objectKey];
+        if (objectKey === "maxAge") filtersObject[objectKey] = queryObject[objectKey];
     }
     return { filtersObject, sortDetailsObject };
 }
@@ -195,9 +197,7 @@ async function getProductsCount(req, res) {
 async function getAllProductsInsideThePage(req, res) {
     try {
         const queryObject = req.query;
-        console.log(queryObject);
         const filtersAndSortDetailsObject = getFiltersAndSortDetailsObject(queryObject);
-        console.log(filtersAndSortDetailsObject);
         let sortDetailsObject = {};
         if (Object.keys(filtersAndSortDetailsObject.sortDetailsObject).length > 0) {
             sortDetailsObject[filtersAndSortDetailsObject.sortDetailsObject.sortBy] = Number(filtersAndSortDetailsObject.sortDetailsObject.sortType);

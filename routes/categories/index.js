@@ -10,6 +10,7 @@ const {
     filesMiddlewares,
     usersMiddlewares,
     numbersMiddlewares,
+    categoriesMiddlewares,
 } = require("../../middlewares");
 
 const {
@@ -28,6 +29,10 @@ const {
     validateNumbersIsGreaterThanZero,
     validateNumbersIsNotFloat,
 } = numbersMiddlewares;
+
+const {
+    validateAges,
+} = categoriesMiddlewares;
 
 const multer = require("multer");
 
@@ -65,12 +70,7 @@ categoriesRouter.post("/add-new-category",
     (req, res, next) => {
         const { minAge, maxAge } = req.body;
         if (minAge && maxAge) {
-            if (minAge < 0) {
-                return res.status(400).json(getResponseObject("Sorry Min Age Can't Be Less Than Zero !!", true, {}));
-            }
-            if (maxAge === minAge) {
-                return res.status(400).json(getResponseObject("Sorry Max Age Can't Be Equal Min Age !!", true, {}));
-            }
+            return validateAges(minAge, maxAge, res, next);
         }
         next();
     },

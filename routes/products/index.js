@@ -16,6 +16,7 @@ const {
     productsMiddlewares,
     usersMiddlewares,
     commonMiddlewares,
+    categoriesMiddlewares
 } = require("../../middlewares");
 
 const {
@@ -58,6 +59,10 @@ const {
     validateUserType,
     validateGenderForDashboard,
 } = usersMiddlewares;
+
+const {
+    validateAges,
+} = categoriesMiddlewares;
 
 const { getResponseObject } = require("../../helpers/responses");
 
@@ -353,10 +358,10 @@ productsRouter.get("/flash-products-count",
 productsRouter.get("/all-products-inside-the-page",
     validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize, userType, sortBy, sortType, gender, sizes, colors, startPrice, endPrice, brands } = req.query;
+        const { pageNumber, pageSize, userType, sortBy, sortType, gender, sizes, colors, startPrice, endPrice, brands, minAge, maxAge } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
-            { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
             { fieldName: "User Type", fieldValue: userType, dataTypes: ["string"], isRequiredValue: true },
             { fieldName: "Sort By", fieldValue: sortBy, dataTypes: ["string"], isRequiredValue: sortType ? true : false },
             { fieldName: "Sort Type", fieldValue: sortType, dataTypes: ["string"], isRequiredValue: sortBy ? true : false },
@@ -373,6 +378,8 @@ productsRouter.get("/all-products-inside-the-page",
             { fieldName: "XXXL Size", fieldValue: sizes ? JSON.parse(sizes)?.xxxl : undefined, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "4XL Size", fieldValue: sizes ? JSON.parse(sizes)?.["4xl"] : undefined, dataTypes: ["string"], isRequiredValue: false },
             { fieldName: "Brand", fieldValue: brands ? JSON.parse(brands) : undefined, dataTypes: ["array"], isRequiredValue: false },
+            { fieldName: "Min Age", fieldValue: minAge, dataTypes: ["number"], isRequiredValue: maxAge ? true : false },
+            { fieldName: "Max Age", fieldValue: maxAge, dataTypes: ["number"], isRequiredValue: minAge ? true : false },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
@@ -434,6 +441,13 @@ productsRouter.get("/all-products-inside-the-page",
                     { fieldName: `Id In Brand ${index + 1}`, fieldValue: brand, dataTypes: ["ObjectId"], isRequiredValue: true }
                 ))
                 , res, next);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { minAge, maxAge } = req.query;
+        if (minAge && maxAge) {
+            return validateAges(Number(minAge), Number(maxAge), res, next);
         }
         next();
     },

@@ -1,6 +1,7 @@
 const adminsMiddlewares = require("./admins");
 const adsMiddlewares = require("./ads");
 const authMiddlewares = require("./auth");
+const categoriesMiddlewares = require("./categories");
 const commonMiddlewares = require("./common");
 const filesMiddlewares = require("./files");
 const globalMiddlewares = require("./global");
@@ -15,6 +16,7 @@ const usersMiddlewares = require("./users");
 module.exports = {
     adminsMiddlewares,
     adsMiddlewares,
+    categoriesMiddlewares,
     authMiddlewares,
     commonMiddlewares,
     filesMiddlewares,
@@ -25,5 +27,5 @@ module.exports = {
     ratingsMiddlewares,
     sortMiddlewares,
     storesMiddlewares,
-    usersMiddlewares
+    usersMiddlewares,
 }
