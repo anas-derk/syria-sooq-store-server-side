@@ -287,8 +287,8 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
                 $match: {
                     ...category && { "categoryDetails.name": { $regex: new RegExp(category, 'i') } },
                     ...minAge && maxAge && {
-                        "categoryDetails.minAge": Number(minAge),
-                        "categoryDetails.maxAge": Number(maxAge),
+                        "categoryDetails.minAge": { $lte: Number(maxAge) },
+                        "categoryDetails.maxAge": { $gte: Number(minAge) },
                     },
                     ...filters
                 }
