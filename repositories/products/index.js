@@ -274,7 +274,6 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
         const maxAge = filters.maxAge;
         delete filters.minAge;
         delete filters.maxAge;
-        console.log(filters)
         const result = await productModel.aggregate([
             {
                 $lookup: {
