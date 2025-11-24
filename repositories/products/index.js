@@ -236,6 +236,7 @@ async function getFlashProductsCount(filters, language) {
 
 async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize, userType, filters, sortDetailsObject, language) {
     try {
+        console.log(userType);
         if (userType === "user") {
             const user = await userModel.findById(authorizationId);
             if (!user) {
@@ -255,6 +256,7 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
                     data: {},
                 }
             }
+            console.log("aa")
             filters.storeId = admin.storeId;
         }
         if (filters.startPrice && filters.endPrice) {
