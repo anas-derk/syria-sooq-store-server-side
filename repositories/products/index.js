@@ -274,6 +274,14 @@ async function getAllProductsInsideThePage(authorizationId, pageNumber, pageSize
         const maxAge = filters.maxAge;
         delete filters.minAge;
         delete filters.maxAge;
+        console.log({
+            ...category && { "categoryDetails.name": { $regex: new RegExp(category, 'i') } },
+            ...minAge && maxAge && {
+                "categoryDetails.minAge": { $lte: Number(maxAge) },
+                "categoryDetails.maxAge": { $gte: Number(minAge) },
+            },
+            ...filters
+        })
         const result = await productModel.aggregate([
             {
                 $lookup: {
