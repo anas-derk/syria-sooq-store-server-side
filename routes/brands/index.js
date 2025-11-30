@@ -8,6 +8,7 @@ const {
     authMiddlewares,
     filesMiddlewares,
     numbersMiddlewares,
+    usersMiddlewares
 } = require("../../middlewares");
 
 const {
@@ -22,6 +23,10 @@ const {
     validateNumbersIsGreaterThanZero,
     validateNumbersIsNotFloat,
 } = numbersMiddlewares;
+
+const {
+    validateUserType,
+} = usersMiddlewares;
 
 const multer = require("multer");
 
@@ -64,15 +69,18 @@ brandsRouter.get("/brands-count",
 );
 
 brandsRouter.get("/all-brands-inside-the-page",
+    validateJWT,
     (req, res, next) => {
-        const { pageNumber, pageSize } = req.query;
+        const { pageNumber, pageSize, userType } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
-            { fieldName: "page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
-            { fieldName: "page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Page Number", fieldValue: Number(pageNumber), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "Page Size", fieldValue: Number(pageSize), dataTypes: ["number"], isRequiredValue: true },
+            { fieldName: "User Type", fieldValue: userType, dataTypes: ["string"], isRequiredValue: true },
         ], res, next);
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Greater Than Zero ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Greater Than Zero ) !!"]),
     (req, res, next) => validateNumbersIsNotFloat([req.query.pageNumber, req.query.pageSize], res, next, ["Sorry, Please Send Valid Page Number ( Number Must Be Not Float ) !!", "Sorry, Please Send Valid Page Size ( Number Must Be Not Float ) !!"]),
+    (req, res, next) => validateUserType(req.query.userType, res, next),
     brandsController.getAllBrandsInsideThePage
 );
 

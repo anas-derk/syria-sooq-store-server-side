@@ -2,6 +2,8 @@
 
 const { brandModel, adminModel, storeModel } = require("../../models");
 
+const mongoose = require("../../database");
+
 const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function addNewBrand(authorizationId, brandInfo, language) {
@@ -67,8 +69,29 @@ async function getBrandsCount(filters, language) {
     }
 }
 
-async function getAllBrandsInsideThePage(pageNumber, pageSize, filters, language) {
+async function getAllBrandsInsideThePage(authorizationId, pageNumber, pageSize, userType, filters, language) {
     try {
+        if (userType === "user") {
+            const user = await userModel.findById(authorizationId);
+            if (!user) {
+                return {
+                    msg: getSuitableTranslations("Sorry, This User Is Not Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+
+        } else {
+            const admin = await adminModel.findById(authorizationId);
+            if (!admin) {
+                return {
+                    msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            filters.storeId = new mongoose.Types.ObjectId(admin.storeId);
+        }
         if (filters["isMainStore"]) {
             const mainStoreDetails = await storeModel.findOne({ isMainStore: true });
             filters = { storeId: mainStoreDetails._id };

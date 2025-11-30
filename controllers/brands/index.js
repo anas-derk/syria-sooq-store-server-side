@@ -16,6 +16,7 @@ function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
         if (objectKey === "storeId") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "title") filtersObject[objectKey] = filters[objectKey];
     }
     if (!filtersObject["storeId"]) filtersObject["isMainStore"] = true;
     return filtersObject;
@@ -52,7 +53,7 @@ async function getBrandsCount(req, res) {
 async function getAllBrandsInsideThePage(req, res) {
     try {
         const filters = req.query;
-        res.json(await brandsManagmentFunctions.getAllBrandsInsideThePage(filters.pageNumber, filters.pageSize, getFiltersObject(filters), filters.language));
+        res.json(await brandsManagmentFunctions.getAllBrandsInsideThePage(req.data._id, filters.pageNumber, filters.pageSize, filters.userType, getFiltersObject(filters), filters.language));
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
