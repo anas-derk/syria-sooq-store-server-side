@@ -1,6 +1,6 @@
 // Import Brand Model Object
 
-const { brandModel, adminModel, storeModel } = require("../../models");
+const { brandModel, userModel, adminModel, storeModel } = require("../../models");
 
 const mongoose = require("../../database");
 

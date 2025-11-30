@@ -16,7 +16,7 @@ function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
         if (objectKey === "storeId") filtersObject[objectKey] = filters[objectKey];
-        if (objectKey === "title") filtersObject[objectKey] = filters[objectKey];
+        if (objectKey === "title") filtersObject[objectKey] = { $regex: new RegExp(`^${filters[objectKey]}`, 'i') };
     }
     if (!filtersObject["storeId"]) filtersObject["isMainStore"] = true;
     return filtersObject;
