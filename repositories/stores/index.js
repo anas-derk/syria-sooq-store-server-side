@@ -121,6 +121,55 @@ async function getMainStoreDetails(authorizationId, language) {
     }
 }
 
+async function getStorePageData(authorizationId, storeId, language) {
+    try {
+        const user = await userModel.findById(authorizationId);
+        if (user) {
+            const store = await storeModel.findById(storeId);
+            if (store) {
+                if (store.status !== "approving") {
+                    return {
+                        msg: getSuitableTranslations("Sorry, This Store Is Not Available Now !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                const subcategories = await categoryModel.find({ storeId, parent: null }, { name: 1, storeId: 1, parent: 1, color: 1 }).limit(10);
+                let groupedProducts = {};
+                const currentDate = new Date();
+                for (let category of subcategories) {
+                    let productsBySubCategory = await productModel.find({ categories: category._id }).sort({ postOfDate: -1 }).limit(10).populate("categories");
+                    for (let product of productsBySubCategory) {
+                        product._doc.isExistOffer = product.startDiscountPeriod <= currentDate && product.endDiscountPeriod >= currentDate ? true : false;
+                    }
+                    groupedProducts[category.name] = productsBySubCategory;
+                }
+                return {
+                    msg: getSuitableTranslations("Get Store Page Data Process Has Been Successfully !!", language),
+                    error: false,
+                    data: {
+                        store,
+                        mostSeller: await productModel.find({ storeId }).sort({ numberOfOrders: -1 }).limit(10).populate("categories"),
+                        groupedProducts,
+                    },
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Store Is Not Found !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This User Is Not Found !!", language),
+            error: true,
+            data: {},
+        }
+    } catch (err) {
+        throw Error(err);
+    }
+}
+
 async function getAllUserStores(authorizationId, language) {
     try {
         const user = await userModel.findById(authorizationId);
@@ -808,6 +857,7 @@ module.exports = {
     getStoresCount,
     getStoreDetails,
     getMainStoreDetails,
+    getStorePageData,
     getAllUserStores,
     createNewStore,
     approveStore,

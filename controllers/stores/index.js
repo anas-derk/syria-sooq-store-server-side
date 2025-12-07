@@ -87,6 +87,15 @@ async function getAllUserStores(req, res) {
     }
 }
 
+async function getStorePageData(req, res) {
+    try {
+        res.json(await storesOPerationsManagmentFunctions.getStorePageData(req.data._id, req.params.storeId, req.query.language));
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 async function postNewStore(req, res) {
     try {
         const storeFiles = Object.assign({}, req.files);
@@ -346,6 +355,7 @@ module.exports = {
     getStoreDetails,
     getMainStoreDetails,
     getAllUserStores,
+    getStorePageData,
     postNewStore,
     postApproveStore,
     postFollowStoreByUser,

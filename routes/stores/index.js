@@ -78,6 +78,16 @@ storesRouter.get("/main-store-details", validateJWT, storesController.getMainSto
 
 storesRouter.get("/all-user-stores", validateJWT, storesController.getAllUserStores);
 
+storesRouter.get("/store-page-data/:storeId",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Store Id", fieldValue: req.params.storeId, dataTypes: ["ObjectId"], isRequiredValue: true },
+        ], res, next);
+    },
+    storesController.getStorePageData
+);
+
 storesRouter.post("/create-new-store",
     validateJWT,
     multer({
