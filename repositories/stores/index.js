@@ -151,6 +151,7 @@ async function getStorePageData(authorizationId, storeId, language) {
                         store,
                         mostSeller: await productModel.find({ storeId }).sort({ numberOfOrders: -1 }).limit(10).populate("categories"),
                         groupedProducts,
+                        categoriesCount: await categoryModel.countDocuments({ storeId, parent: null })
                     },
                 }
             }
