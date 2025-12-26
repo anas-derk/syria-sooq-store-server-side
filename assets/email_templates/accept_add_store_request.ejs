@@ -1,23 +1,29 @@
-<div style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
+<div
+    style="font-family: Helvetica,Arial,sans-serif; min-width: 1000px; overflow:auto; padding: 20px 0; direction: rtl;">
     <section class="begin" style="text-align: center; color: <%= process.env.WEBSITE_COLOR %> margin-bottom: 20px;">
-        <img src="<%= process.env.BASE_API_URL %>/assets/images/stores/StoreLogo.png" alt="<%= process.env.WEBSITE_NAME %> Image"
-            style="width: 100px; height: 100px;">
+        <img src="<%= process.env.BASE_API_URL %>/assets/images/defaultOfficeImage.jpg"
+            alt="<%= process.env.WEBSITE_NAME %> Image" style="width: 100px; height: 100px;">
     </section>
     <section class="content"
         style="width: 80%; border: 1px solid <%= process.env.WEBSITE_COLOR %> margin: auto; padding: 20px; line-height: 2;">
         <h2 style="text-align: center;">
-            الموافقة على طلب إنشاء متجر لدى <%= process.env.WEBSITE_NAME %>
+            الموافقة على طلب إنشاء مكتب لدى <%= process.env.WEBSITE_NAME %>
         </h2>
-        <h3>عزيزي <span style="font-weight: bold; color: <%= process.env.WEBSITE_COLOR %>">التاجر</span>,</h3>
-        <p>يسرنا أن نعلمكم أن طلب فتح حساب تاجر على موقعنا قد تم قبوله .
+        <h3>عزيزي <span style="font-weight: bold; color: <%= process.env.WEBSITE_COLOR %>">المهندس</span>,</h3>
+        <p>يسرنا أن نعلمكم أن طلب فتح حساب مهندس على موقعنا قد تم قبوله .
         </p>
-        <h4>رابطة صفحة تسجيل الدخول للمسؤول : <a href="<%= process.env.WEBSITE_DASHBOARD_URL %>/login">تسجيل دخول المسؤول</a></h4>
-        <h4>معرّف الحساب الخاص بك : <%= adminId %></h4>
-        <h4>معرّف المتجر الخاص بك : <%= storeId %></h4>
-        <h4>كلمة سر الحساب الخاص بك : <%= password %></h4>
+        <h4>رابطة صفحة تسجيل الدخول للمسؤول : <a href="<%= process.env.WEBSITE_DASHBOARD_URL %>/login">تسجيل دخول
+                المسؤول</a></h4>
+        <h4>معرّف الحساب الخاص بك : <%= adminId %>
+        </h4>
+        <h4>معرّف المكتب الخاص بك : <%= storeId %>
+        </h4>
+        <h4>كلمة سر الحساب الخاص بك : <%= password %>
+        </h4>
         <p>نتطلع إلى التعاون معكم ونأمل أن تكون تجربتكم معنا مميزة وناجحة .</p>
         <p>نشكركم على انضمامكم إلينا ونتمنى لكم كل التوفيق .</p>
         <h4>أطيب التحيات,</h4>
-        <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>">فريق عمل <%= process.env.WEBSITE_NAME %></h4>
+        <h4 style="line-height: 0; color: <%= process.env.WEBSITE_COLOR %>">فريق عمل <%= process.env.WEBSITE_NAME %>
+        </h4>
     </section>
 </div>
