@@ -314,7 +314,9 @@ async function followStoreByUser(userId, storeId, language) {
                     return {
                         msg: getSuitableTranslations("Adding New Store To The Followed Stores List By This User Process Has Been Successfully !!", language),
                         error: false,
-                        data: {},
+                        data: {
+                            notificationsToken: user.notificationsToken,
+                        },
                     };
                 }
             }

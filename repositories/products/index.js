@@ -27,11 +27,11 @@ async function addNewProduct(authorizationId, productInfo, language) {
                     if (categories.length === productInfo.categories.length) {
                         productInfo.categories = categories.map((category) => category._id);
                         productInfo.storeId = admin.storeId;
-                        await (new productModel(productInfo)).save();
+                        const newProduct = await (new productModel(productInfo)).save();
                         return {
                             msg: getSuitableTranslations("Adding New Product Process Has Been Successfuly !!", language),
                             error: false,
-                            data: {},
+                            data: await productModel.findById(newProduct._id).populate("storeId"),
                         }
                     }
                     return {

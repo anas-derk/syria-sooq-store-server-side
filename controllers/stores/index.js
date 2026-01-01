@@ -21,6 +21,8 @@ const storesOPerationsManagmentFunctions = require("../../repositories/stores");
 
 const { unlinkSync } = require("fs");
 
+const { getFirebaseAdmin } = require("../../config/notifications");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -169,7 +171,16 @@ async function postFollowStoreByUser(req, res) {
             }
             return res.json(result);
         }
+        const notificationToken = result.data.notificationsToken;
+        delete result.data.notificationsToken;
         res.json(result);
+        try {
+            await getFirebaseAdmin().messaging().subscribeToTopic([notificationToken], `store_${req.params.storeId}`);
+            console.log(`success in adding token to topic: store_${req.params.storeId}, user Id: ${req.data._id}`);
+        }
+        catch (err) {
+            console.log(`error in adding token to topic: store_${req.params.storeId}, user Id: ${req.data._id}, reason: ${err?.message ?? err}`);
+        }
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));

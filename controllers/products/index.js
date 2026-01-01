@@ -48,19 +48,23 @@ async function postNewProduct(req, res) {
             return res.json(result);
         }
         res.json(result);
-        // try {
-        //     await sendNotification({
-        //         title: "Adding New Product",
-        //         token: "cpUSP7eH1QpuTCnzjv9IZx:APA91bFWCd-4QTTmvg_r-1JmbnKrZscvWPvpQBVeRE7eMMwiXvDhqgZ_KviYDDYQqh9-6WYZrPjeuCH2VAp0b89P0ZWPDvjSoUHuK_QRmsq75a8YQrpnJSgs",
-        //         body: "Add A New Product In A Store You Follow",
-        //         data: {
-        //             productId: "1"
-        //         }
-        //     });
-        // }
-        // catch (err) {
-        //     console.log(err);
-        // }
+        try {
+            await sendNotification({
+                title: "Adding New Product",
+                body: "Add A New Product In A Store You Follow",
+                data: {
+                    productId: String(result.data._id),
+                    name: result.data.name,
+                    imagePath: result.data.imagePath,
+                    storeName: result.data.storeId.name
+                },
+                topic: `store_${String(result.data.storeId._id)}`,
+            });
+            console.log(`success in send Notification to topic: store_${String(result.data.storeId._id)}, product Id: ${result.data._id}`);
+        }
+        catch (err) {
+            console.log(`error in send Notification to topic: store_${String(result.data.storeId._id)}, product Id: ${result.data._id}, reason: ${err?.message ?? err}`);
+        }
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
@@ -72,7 +76,7 @@ async function postNewImagesToProductGallery(req, res) {
         let files = [], outputImageFilePaths = [];
         req.files.forEach((file) => {
             files.push(file.buffer);
-            outputImageFilePaths.push(`assets/images/products/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
+            outputImageFilePaths.push(`assets / images / products / ${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")} `)
         });
         await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
         const result = await productsManagmentFunctions.addNewImagesToProductGallery(req.data._id, req.params.productId, outputImageFilePaths, req.query.language);
@@ -318,7 +322,7 @@ async function putProduct(req, res) {
 
 async function putProductGalleryImage(req, res) {
     try {
-        const outputImageFilePath = `assets/images/products/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const outputImageFilePath = `assets / images / products / ${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")} `;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const oldGalleryImagePath = req.query.oldGalleryImagePath;
         const result = await productsManagmentFunctions.updateProductGalleryImage(req.data._id, req.params.productId, oldGalleryImagePath, outputImageFilePath, req.query.language);
@@ -340,7 +344,7 @@ async function putProductGalleryImage(req, res) {
 
 async function putProductImage(req, res) {
     try {
-        const outputImageFilePath = `assets/images/products/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const outputImageFilePath = `assets / images / products / ${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")} `;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const result = await productsManagmentFunctions.updateProductImage(req.data._id, req.params.productId, outputImageFilePath, req.query.language);
         if (!result.error) {
