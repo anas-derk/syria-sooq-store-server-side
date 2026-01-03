@@ -1,12 +1,10 @@
-const { responsesHelpers, translationHelpers, notificationsHelpers } = require("../../helpers");
+const { responsesHelpers, translationHelpers } = require("../../helpers");
 
 const { getResponseObject } = responsesHelpers;
 
 const { getSuitableTranslations } = translationHelpers;
 
 const notificationsOPerationsManagmentFunctions = require("../../repositories/notifications");
-
-const { sendNotification } = notificationsHelpers;
 
 async function postRegisterToken(req, res) {
     try {
