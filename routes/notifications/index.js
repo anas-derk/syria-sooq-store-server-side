@@ -17,7 +17,6 @@ notificationsRouter.post("/register-token",
 );
 
 notificationsRouter.post("/send",
-    validateJWT,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Token", fieldValue: req.body.token, dataTypes: ["string"], isRequiredValue: true },
