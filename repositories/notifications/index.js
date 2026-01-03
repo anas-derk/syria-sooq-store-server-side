@@ -8,7 +8,6 @@ const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function registerToken(userId, token, language) {
     try {
-        console.log(token);
         const user = await userModel.findById(userId);
         if (!user) {
             return {
