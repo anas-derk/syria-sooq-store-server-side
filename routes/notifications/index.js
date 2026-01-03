@@ -16,4 +16,14 @@ notificationsRouter.post("/register-token",
     notificationsController.postRegisterToken
 );
 
+notificationsRouter.post("/send",
+    validateJWT,
+    (req, res, next) => {
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Token", fieldValue: req.body.token, dataTypes: ["string"], isRequiredValue: true },
+        ], res, next);
+    },
+    notificationsController.postSendNotification
+);
+
 module.exports = notificationsRouter;

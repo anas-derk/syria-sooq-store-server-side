@@ -214,5 +214,8 @@
     "Updating App Rating By This User Process Has Been Successfully !!": "عملية تحديث تقييم التطبيق من قبل هذا المستخدم تمت بنجاح !!",
     "Updating Store Rating By This User Process Has Been Successfully !!": "عملية تحديث تقييم المتجر من قبل هذا المستخدم تمت بنجاح !!",
     "Sorry, This Store Is Not Available Now !!": "عذراً ، هذا المتجر غير متوفر الآن !!",
-    "Get Store Page Data Process Has Been Successfully !!": "عملية جلب بيانات صفحة المتجر تمت بنجاح !!"
+    "Get Store Page Data Process Has Been Successfully !!": "عملية جلب بيانات صفحة المتجر تمت بنجاح !!",
+    "Sorry, Can't Register New Token Because This User Is Not Exist !!": "عذراً ، لا يمكن تسجيل توكين جديد لأن المستخدم غير موجود !!",
+    "Register New Token Process Has Been Successfuly !!": "عملية تسجيل توكين جديد تمت بنجاح !!",
+    "Send Notification To Token Process Has Been Successfully !!": "عملية إرسال الإشعار إلى التوكين تمت بنجاح !!"
 }
