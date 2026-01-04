@@ -79,6 +79,8 @@ const userSchema = new mongoose.Schema({
     notificationsToken: String,
 });
 
+userSchema.index({ followedStores: 1 });
+
 // Create User Model From User Schema
 
 const userModel = mongoose.model("user", userSchema);

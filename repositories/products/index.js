@@ -1,6 +1,6 @@
 // Import Product Model Object
 
-const { productModel, categoryModel, adminModel, userModel, favoriteProductModel, brandModel } = require("../../models");
+const { productModel, categoryModel, adminModel, userModel, favoriteProductModel, brandModel, notificationModel, storeModel } = require("../../models");
 
 const mongoose = require("../../database");
 
@@ -28,6 +28,22 @@ async function addNewProduct(authorizationId, productInfo, language) {
                         productInfo.categories = categories.map((category) => category._id);
                         productInfo.storeId = admin.storeId;
                         const newProduct = await (new productModel(productInfo)).save();
+                        const followers = await userModel.find({ followedStores: admin.storeId }, { _id: 1 });
+                        if (followers.length > 0) {
+                            const store = await storeModel.findById(admin.storeId);
+                            const notifications = followers.map(f => ({
+                                userId: f._id,
+                                title: "Adding New Product",
+                                body: "Add A New Product In A Store You Follow",
+                                data: {
+                                    productId: newProduct._id,
+                                    name: newProduct.name,
+                                    imagePath: newProduct.imagePath,
+                                    storeName: store.name
+                                },
+                            }));
+                            await notificationModel.insertMany(notifications);
+                        }
                         return {
                             msg: getSuitableTranslations("Adding New Product Process Has Been Successfuly !!", language),
                             error: false,

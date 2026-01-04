@@ -217,5 +217,8 @@
     "Get Store Page Data Process Has Been Successfully !!": "عملية جلب بيانات صفحة المتجر تمت بنجاح !!",
     "Sorry, Can't Register New Token Because This User Is Not Exist !!": "عذراً ، لا يمكن تسجيل توكين جديد لأن المستخدم غير موجود !!",
     "Register New Token Process Has Been Successfuly !!": "عملية تسجيل توكين جديد تمت بنجاح !!",
-    "Send Notification To Token Process Has Been Successfully !!": "عملية إرسال الإشعار إلى التوكين تمت بنجاح !!"
+    "Send Notification To Token Process Has Been Successfully !!": "عملية إرسال الإشعار إلى التوكين تمت بنجاح !!",
+    "Get All Notifications Inside The Page: {{pageNumber}} Process Has Been Successfully !!": "عملية جلب كل الإشعارات بداخل الصفحة: {{pageNumber}} تمت بنجاح !!",
+    "Sorry, Can't Mark All Notifications As Read Because This User Is Not Exist !!": "عذراً ، لا يمكن وضع علامة على كل الإشعارات كمقروءة لأنّ هذا المستخدم غير موجود !!",
+    "Mark All Notifications As Read For This User Process Has Been Successfully !!": "عملية وضع علامة على جميع الإشعارات كمقروءة لهذا المستخدم تمت بنجاح !!"
 }
