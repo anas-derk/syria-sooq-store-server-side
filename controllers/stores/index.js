@@ -219,7 +219,7 @@ async function putCloseStatus(req, res) {
 
 async function putBlockingStore(req, res) {
     try {
-        const result = await storesOPerationsManagmentFunctions.blockingStore(req.data._id, req.params.storeId, req.body.blockingReason, req.query.language);
+        const result = await storesOPerationsManagmentFunctions.blockingStore(req.data._id, req.params.storeId, req.query.blockingReason, req.query.language);
         if (result.error) {
             if (result.msg === "Sorry, Permission Denied Because This Admin Is Not Website Owner !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {
                 return res.status(401).json(result);
