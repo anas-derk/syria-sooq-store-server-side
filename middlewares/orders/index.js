@@ -57,11 +57,11 @@ function validateOrdersType(ordersType, res, nextFunc) {
 function validateIsNotExistDublicateProductId(products, res, nextFunc) {
     let seenProductIds = {};
     for (let product of products) {
-        if (seenProductIds[product.productId]) {
-            res.status(400).json(getResponseObject(`Sorry, Dublicate Product Id: ${product.productId} !!`, true, {}));
+        if (seenProductIds[product.cartId]) {
+            res.status(400).json(getResponseObject(`Sorry, Dublicate Product Id: ${product.cartId} !!`, true, {}));
             return;
         }
-        seenProductIds[product.productId] = true;
+        seenProductIds[product.cartId] = true;
     }
     nextFunc();
 }

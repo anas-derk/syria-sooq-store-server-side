@@ -178,26 +178,52 @@ async function createNewOrder(userId, orderDetails, language) {
                 data: {},
             }
         }
-        const existOrderProducts = await productModel.find({ _id: { $in: orderDetails.products.map((product) => product.productId) } });
-        if (existOrderProducts.length === 0) {
+        const existUserCarts = await cartModel.find({ _id: { $in: orderDetails.products.map((product) => product.cartId) }, userId });
+        if (existUserCarts.length === 0) {
             return {
-                msg: getSuitableTranslations("Sorry, Please Send At Least One Product !!", language),
+                msg: getSuitableTranslations("Sorry, This Products Is Not Exist In Cart For This User !!", language),
                 error: true,
                 data: {},
             }
         }
-        if (existOrderProducts.length < orderDetails.products.length) {
-            for (let product of orderDetails.products) {
+        if (existUserCarts.length < orderDetails.products.length) {
+            for (let cart of orderDetails.products) {
+                let isExistCart = false;
+                for (let existCart of existUserCarts) {
+                    if ((new mongoose.Types.ObjectId(cart.cartId)).equals(existCart._id)) {
+                        isExistCart = true;
+                        break;
+                    }
+                }
+                if (!isExistCart) {
+                    return {
+                        msg: getSuitableTranslations("Sorry, Product Id In Cart: {{cartId}} Is Not Exist !!", language, { cartId: cart.cartId }),
+                        error: true,
+                        data: {},
+                    }
+                }
+            }
+        }
+        const existOrderProducts = await productModel.find({ _id: { $in: existUserCarts.map((cart) => cart.product) } });
+        if (existOrderProducts.length === 0) {
+            return {
+                msg: getSuitableTranslations("Sorry, This Products Is Not Exist !!", language),
+                error: true,
+                data: {},
+            }
+        }
+        if (existOrderProducts.length < existUserCarts.length) {
+            for (let cart of existUserCarts) {
                 let isExistProduct = false;
                 for (let existProduct of existOrderProducts) {
-                    if ((new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)) {
+                    if (cart.product.equals(existProduct._id)) {
                         isExistProduct = true;
                         break;
                     }
                 }
                 if (!isExistProduct) {
                     return {
-                        msg: getSuitableTranslations("Sorry, Product Id: {{productId}} Is Not Exist !!", language, { productId: product.productId }),
+                        msg: getSuitableTranslations("Sorry, Product Id: {{productId}} Is Not Exist !!", language, { productId: cart.product }),
                         error: true,
                         data: {},
                     }
@@ -215,100 +241,100 @@ async function createNewOrder(userId, orderDetails, language) {
                 data: {},
             }
         }
-        const orderedProducts = orderDetails.products.map((product) => existOrderProducts.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
-        for (let i = 0; i < orderedProducts.length; i++) {
-            if ((new mongoose.Types.ObjectId(orderDetails.products[i].productId)).equals(orderedProducts[i]._id)) {
-                if (orderedProducts[i].quantity === 0) {
-                    return {
-                        msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: orderedProducts[i]._id }),
-                        error: true,
-                        data: {},
-                    }
-                }
-                if (orderDetails.products[i].quantity > orderedProducts[i].quantity) {
-                    return {
-                        msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i]._id, quantity: orderedProducts[i].quantity }),
-                        error: true,
-                        data: {},
-                    }
-                }
-            }
-        }
-        let orderProductsDetails = [];
-        for (let i = 0; i < orderedProducts.length; i++) {
-            orderProductsDetails.push({
-                productId: orderedProducts[i]._id,
-                name: orderedProducts[i].name,
-                unitPrice: orderedProducts[i].price,
-                unitDiscount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
-                quantity: orderDetails.products[i].quantity,
-                message: orderDetails.products[i].message,
-                imagePath: orderedProducts[i].imagePath,
-            });
-        }
-        const totalPrices = {
-            totalPriceBeforeDiscount: 0,
-            totalDiscount: 0,
-            totalPriceAfterDiscount: 0
-        }
-        for (let product of orderProductsDetails) {
-            totalPrices.totalPriceBeforeDiscount += product.unitPrice * product.quantity;
-            totalPrices.totalDiscount += product.unitDiscount * product.quantity;
-        }
-        totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
-        if (orderDetails.paymentGateway === "Wallet") {
-            if (user.wallet.remainingAmount < totalPrices.totalPriceAfterDiscount) {
-                return {
-                    msg: getSuitableTranslations("Sorry, There Is Not Enough Balance In This User's Wallet To Complete The Purchase", language),
-                    error: true,
-                    data: {},
-                }
-            }
-            user.wallet.fullWithdrawAmount += totalPrices.totalPriceAfterDiscount;
-            user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
-            await user.save();
-        }
-        const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
-        const newOrder = await (
-            new orderModel({
-                storeId: existOrderProducts[0].storeId,
-                orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000,
-                totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
-                totalDiscount: totalPrices.totalDiscount,
-                totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
-                orderAmount: totalPrices.totalPriceAfterDiscount,
-                checkoutStatus: orderDetails.paymentGateway === "Wallet" ? "Checkout Successfull" : orderDetails.checkoutStatus,
-                userId,
-                paymentGateway: orderDetails.paymentGateway,
-                city: orderDetails.city,
-                address: orderDetails.address,
-                addressDetails: orderDetails.addressDetails,
-                closestPoint: orderDetails.closestPoint,
-                additionalAddressDetails: orderDetails.additionalAddressDetails,
-                floorNumber: orderDetails.floorNumber,
-                additionalNotes: orderDetails.additionalNotes,
-                mobilePhone: orderDetails.mobilePhone,
-                backupMobilePhone: orderDetails.backupMobilePhone,
-                products: orderProductsDetails,
-                ...user.email && { email: user.email },
-                ...user.mobilePhone && { mobilePhone: user.mobilePhone },
-                fullName: user.fullName,
-            })
-        ).save();
-        if (orderDetails.paymentGateway === "Wallet") {
-            await (new walletOperationsModel({
-                type: "withdraw",
-                userId,
-                amount: totalPrices.totalPriceAfterDiscount,
-                operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
-            })).save();
-        }
-        await cartModel.deleteMany({ userId, product: { $in: newOrder.products.map((product) => product.productId) } });
-        await updateProductsAfterOrder(newOrder.products);
+        const orderedProducts = existUserCarts.map((product) => existOrderProducts.find((existProduct) => (new mongoose.Types.ObjectId(product.productId)).equals(existProduct._id)));
+        // for (let i = 0; i < orderedProducts.length; i++) {
+        //     if ((new mongoose.Types.ObjectId(orderDetails.products[i].productId)).equals(orderedProducts[i]._id)) {
+        //         if (orderedProducts[i].quantity === 0) {
+        //             return {
+        //                 msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: orderedProducts[i]._id }),
+        //                 error: true,
+        //                 data: {},
+        //             }
+        //         }
+        //         if (orderDetails.products[i].quantity > orderedProducts[i].quantity) {
+        //             return {
+        //                 msg: getSuitableTranslations("Sorry, Quantity For Product Id: {{productId}} Greater Than Specific Quantity ( {{quantity}} ) !!", language, { productId: orderedProducts[i]._id, quantity: orderedProducts[i].quantity }),
+        //                 error: true,
+        //                 data: {},
+        //             }
+        //         }
+        //     }
+        // }
+        // let orderProductsDetails = [];
+        // for (let i = 0; i < orderedProducts.length; i++) {
+        //     orderProductsDetails.push({
+        //         productId: orderedProducts[i]._id,
+        //         name: orderedProducts[i].name,
+        //         unitPrice: orderedProducts[i].price,
+        //         unitDiscount: isExistOfferOnProduct(orderedProducts[i].startDiscountPeriod, orderedProducts[i].endDiscountPeriod) ? orderedProducts[i].discountInOfferPeriod : orderedProducts[i].discount,
+        //         quantity: orderDetails.products[i].quantity,
+        //         message: orderDetails.products[i].message,
+        //         imagePath: orderedProducts[i].imagePath,
+        //     });
+        // }
+        // const totalPrices = {
+        //     totalPriceBeforeDiscount: 0,
+        //     totalDiscount: 0,
+        //     totalPriceAfterDiscount: 0
+        // }
+        // for (let product of orderProductsDetails) {
+        //     totalPrices.totalPriceBeforeDiscount += product.unitPrice * product.quantity;
+        //     totalPrices.totalDiscount += product.unitDiscount * product.quantity;
+        // }
+        // totalPrices.totalPriceAfterDiscount = totalPrices.totalPriceBeforeDiscount - totalPrices.totalDiscount;
+        // if (orderDetails.paymentGateway === "Wallet") {
+        //     if (user.wallet.remainingAmount < totalPrices.totalPriceAfterDiscount) {
+        //         return {
+        //             msg: getSuitableTranslations("Sorry, There Is Not Enough Balance In This User's Wallet To Complete The Purchase", language),
+        //             error: true,
+        //             data: {},
+        //         }
+        //     }
+        //     user.wallet.fullWithdrawAmount += totalPrices.totalPriceAfterDiscount;
+        //     user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
+        //     await user.save();
+        // }
+        // const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
+        // const newOrder = await (
+        //     new orderModel({
+        //         storeId: existOrderProducts[0].storeId,
+        //         orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000,
+        //         totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
+        //         totalDiscount: totalPrices.totalDiscount,
+        //         totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
+        //         orderAmount: totalPrices.totalPriceAfterDiscount,
+        //         checkoutStatus: orderDetails.paymentGateway === "Wallet" ? "Checkout Successfull" : orderDetails.checkoutStatus,
+        //         userId,
+        //         paymentGateway: orderDetails.paymentGateway,
+        //         city: orderDetails.city,
+        //         address: orderDetails.address,
+        //         addressDetails: orderDetails.addressDetails,
+        //         closestPoint: orderDetails.closestPoint,
+        //         additionalAddressDetails: orderDetails.additionalAddressDetails,
+        //         floorNumber: orderDetails.floorNumber,
+        //         additionalNotes: orderDetails.additionalNotes,
+        //         mobilePhone: orderDetails.mobilePhone,
+        //         backupMobilePhone: orderDetails.backupMobilePhone,
+        //         products: orderProductsDetails,
+        //         ...user.email && { email: user.email },
+        //         ...user.mobilePhone && { mobilePhone: user.mobilePhone },
+        //         fullName: user.fullName,
+        //     })
+        // ).save();
+        // if (orderDetails.paymentGateway === "Wallet") {
+        //     await (new walletOperationsModel({
+        //         type: "withdraw",
+        //         userId,
+        //         amount: totalPrices.totalPriceAfterDiscount,
+        //         operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
+        //     })).save();
+        // }
+        // await cartModel.deleteMany({ userId, product: { $in: newOrder.products.map((product) => product.productId) } });
+        // await updateProductsAfterOrder(newOrder.products);
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
             error: false,
-            data: newOrder,
+            data: existOrderProducts,
         }
     } catch (err) {
         throw Error(err);

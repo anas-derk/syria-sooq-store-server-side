@@ -78,21 +78,21 @@ async function postNewOrder(req, res) {
     try {
         const result = await ordersManagmentFunctions.createNewOrder(req.data._id, req.body, req.query.language);
         if (!result.error) {
-            res.json({
-                ...result,
-                data: {
-                    orderId: result.data.orderId,
-                    orderNumber: result.data.orderNumber
-                }
-            });
-            if (result.data.checkoutStatus === "Checkout Successfull" && result.data.email) {
-                try {
-                    await sendReceiveOrderEmail(result.data.email, result.data, result.data.language);
-                }
-                catch (err) {
-                    console.log(err);
-                }
-            }
+            // res.json({
+            //     ...result,
+            //     data: {
+            //         orderId: result.data.orderId,
+            //         orderNumber: result.data.orderNumber
+            //     }
+            // });
+            // if (result.data.checkoutStatus === "Checkout Successfull" && result.data.email) {
+            //     try {
+            //         await sendReceiveOrderEmail(result.data.email, result.data, result.data.language);
+            //     }
+            //     catch (err) {
+            //         console.log(err);
+            //     }
+            // }
         }
         res.json(result);
     }

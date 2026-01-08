@@ -147,9 +147,7 @@ ordersRouter.post("/create-new-order",
         const { products } = req.body;
         validateIsExistValueForFieldsAndDataTypes(
             products.flatMap((product, index) => ([
-                { fieldName: `Id In Product ${index + 1}`, fieldValue: product?.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
-                { fieldName: `Quantity In Product ${index + 1}`, fieldValue: product?.quantity, dataTypes: ["number"], isRequiredValue: true },
-                { fieldName: `Message In Product ${index + 1}`, fieldValue: product?.message, dataTypes: ["string"], isRequiredValue: false },
+                { fieldName: `Id In Cart ${index + 1}`, fieldValue: product?.cartId, dataTypes: ["ObjectId"], isRequiredValue: true },
             ]))
             , res, next);
     },
@@ -163,15 +161,6 @@ ordersRouter.post("/create-new-order",
     (req, res, next) => validateNumbersIsGreaterThanZero([req.body.floorNumber], res, next, [], "Sorry, Please Send Valid Apartment Number In Shipping Address ( Number Must Be Greater Than Zero ) !!"),
     (req, res, next) => validateNumbersIsNotFloat([req.body.floorNumber], res, next, "Sorry, Please Send Valid Apartment Number In Shipping Address ( Number Must Be Not Float ) !!"),
     (req, res, next) => validateIsNotExistDublicateProductId(req.body.products, res, next),
-    (req, res, next) => {
-        const { products } = req.body;
-        let productsQuantity = [], errorMsgs = [];
-        for (let i = 0; i < products.length; i++) {
-            productsQuantity.push(products[i].quantity);
-            errorMsgs.push(`Sorry, Please Send Valid Quantity For Product ${i + 1} ( Number Must Be Greater Than Zero ) !!`);
-        }
-        validateNumbersIsGreaterThanZero(productsQuantity, res, next, errorMsgs);
-    },
     (req, res, next) => validateMobilePhone(req.body.mobilePhone, res, next),
     (req, res, next) => {
         const { checkoutStatus } = req.body;
