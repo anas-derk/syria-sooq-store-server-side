@@ -85,6 +85,23 @@ const orderSchema = new mongoose.Schema({
             type: String,
             default: "none",
         },
+        extraData: {
+            type: Map,
+            default: {
+                customText: {
+                    type: String,
+                    default: "",
+                },
+                additionalNotes: {
+                    type: String,
+                    default: "",
+                },
+                additionalNotes: {
+                    type: [String],
+                    default: [],
+                },
+            },
+        }
     }],
     addedDate: {
         type: Date,
