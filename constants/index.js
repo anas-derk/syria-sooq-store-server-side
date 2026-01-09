@@ -1,5 +1,6 @@
 const ads = require("./ads");
 const cites = require("./cites");
+const counters = require("./counters");
 const languages = require("./languages");
 const orders = require("./orders");
 const paths = require("./paths");
@@ -13,6 +14,7 @@ const verification_code = require("./verification_code");
 module.exports = {
     ads,
     cites,
+    counters,
     languages,
     orders,
     paths,

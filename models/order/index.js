@@ -1,5 +1,7 @@
 const mongoose = require("../../database");
 
+const counterModel = require("../../models/counter");
+
 // Create Order Schema
 
 const orderSchema = new mongoose.Schema({
@@ -177,6 +179,29 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+});
+
+orderSchema.pre("save", async function (next) {
+    if (!this.isNew) return next();
+    const counter = await counterModel.findOneAndUpdate(
+        { name: "orderNumber" },
+        [
+            {
+                $set: {
+                    seq: {
+                        $cond: [
+                            { $ifNull: ["$seq", false] },
+                            { $add: ["$seq", 1] },
+                            600000
+                        ]
+                    }
+                }
+            }
+        ],
+        { new: true, upsert: true }
+    );
+    this.orderNumber = counter.seq;
+    next();
 });
 
 // Create Order Model From Order Schema

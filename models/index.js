@@ -4,6 +4,7 @@ const adminModel = require("./admin");
 const brandModel = require("./brand");
 const cartModel = require("./cart");
 const categoryModel = require("./category");
+const counterModel = require("./counter");
 const favoriteProductModel = require("./favorite_product");
 const globalPasswordModel = require("./global_password");
 const notificationModel = require("./notification");
@@ -24,6 +25,7 @@ module.exports = {
     brandModel,
     cartModel,
     categoryModel,
+    counterModel,
     favoriteProductModel,
     globalPasswordModel,
     notificationModel,

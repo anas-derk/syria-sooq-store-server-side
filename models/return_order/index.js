@@ -1,5 +1,7 @@
 const mongoose = require("../../database");
 
+const counterModel = require("../../models/counter");
+
 // Create Return Order Schema
 
 const returnOrderSchema = new mongoose.Schema({
@@ -119,6 +121,17 @@ const returnOrderSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+});
+
+returnOrderSchema.pre("save", async function (next) {
+    if (!this.isNew) return next();
+    const counter = await counterModel.findOneAndUpdate(
+        { name: "returnOrderNumber" },
+        { $inc: { seq: 1 } },
+        { new: true, upsert: true }
+    );
+    this.orderNumber = counter.seq;
+    next();
 });
 
 // Create Return Order Model From Return Order Schema

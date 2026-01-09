@@ -303,11 +303,9 @@ async function createNewOrder(userId, orderDetails, language) {
             user.wallet.remainingAmount = user.wallet.fullDepositAmount - user.wallet.fullWithdrawAmount;
             await user.save();
         }
-        const lastOrder = await orderModel.findOne().sort({ orderNumber: -1 });
         const newOrder = await (
             new orderModel({
                 storeId: existOrderProducts[0].storeId,
-                orderNumber: lastOrder ? lastOrder.orderNumber + 1 : 600000,
                 totalPriceBeforeDiscount: totalPrices.totalPriceBeforeDiscount,
                 totalDiscount: totalPrices.totalDiscount,
                 totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
@@ -470,7 +468,6 @@ async function createNewRequestToReturnOrderProducts(authorizationId, orderId, p
             totalPriceAfterDiscount: totalPrices.totalPriceAfterDiscount,
             orderAmount: totalPrices.totalPriceAfterDiscount,
             products: orderProductsDetails,
-            orderNumber: await returnOrderModel.countDocuments() + 1,
         })).save();
         return {
             msg: getSuitableTranslations("Creating New Request To Return Order Products Process Has Been Successfuly !!", language),
