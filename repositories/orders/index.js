@@ -336,7 +336,7 @@ async function createNewOrder(userId, orderDetails, language) {
                 operationNumber: await walletOperationsModel.countDocuments({ userId }) + 1
             })).save();
         }
-        // await cartModel.deleteMany({ userId, product: { $in: newOrder.products.map((product) => product.productId) } });
+        await cartModel.deleteMany({ userId, _id: { $in: orderDetails.products.map((product) => product.cartId) } });
         await updateProductsAfterOrder(newOrder.products);
         return {
             msg: getSuitableTranslations("Creating New Order Has Been Successfuly !!", language),
