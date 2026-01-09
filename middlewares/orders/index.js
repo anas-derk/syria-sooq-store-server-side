@@ -54,7 +54,7 @@ function validateOrdersType(ordersType, res, nextFunc) {
     nextFunc();
 }
 
-function validateIsNotExistDublicateProductId(products, res, nextFunc) {
+function validateIsNotExistDublicateProductIdInCart(products, res, nextFunc) {
     let seenProductIds = {};
     for (let product of products) {
         if (seenProductIds[product.cartId]) {
@@ -66,6 +66,18 @@ function validateIsNotExistDublicateProductId(products, res, nextFunc) {
     nextFunc();
 }
 
+function validateIsNotExistDublicateProductId(products, res, nextFunc) {
+    let seenProductIds = {};
+    for (let product of products) {
+        if (seenProductIds[product.productId]) {
+            res.status(400).json(getResponseObject(`Sorry, Dublicate Product Id: ${product.productId} !!`, true, {}));
+            return;
+        }
+        seenProductIds[product.productId] = true;
+    }
+    nextFunc();
+}
+
 module.exports = {
     validateCheckoutStatus,
     validateShippingMethod,
@@ -73,5 +85,6 @@ module.exports = {
     validatePaymentGateway,
     validateOrderStatus,
     validateOrdersType,
+    validateIsNotExistDublicateProductIdInCart,
     validateIsNotExistDublicateProductId
 }

@@ -21,6 +21,7 @@ const {
 } = numbersMiddlewares;
 
 const {
+    validateIsNotExistDublicateProductIdInCart,
     validateIsNotExistDublicateProductId,
     validateCheckoutStatus,
     validateOrderDestination,
@@ -160,7 +161,7 @@ ordersRouter.post("/create-new-order",
     },
     (req, res, next) => validateNumbersIsGreaterThanZero([req.body.floorNumber], res, next, [], "Sorry, Please Send Valid Apartment Number In Shipping Address ( Number Must Be Greater Than Zero ) !!"),
     (req, res, next) => validateNumbersIsNotFloat([req.body.floorNumber], res, next, "Sorry, Please Send Valid Apartment Number In Shipping Address ( Number Must Be Not Float ) !!"),
-    (req, res, next) => validateIsNotExistDublicateProductId(req.body.products, res, next),
+    (req, res, next) => validateIsNotExistDublicateProductIdInCart(req.body.products, res, next),
     (req, res, next) => validateMobilePhone(req.body.mobilePhone, res, next),
     (req, res, next) => {
         const { checkoutStatus } = req.body;
