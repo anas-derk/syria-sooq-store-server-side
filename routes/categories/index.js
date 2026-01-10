@@ -1,7 +1,6 @@
 const categoriesRouter = require("express").Router();
 
 const categoriesController = require("../../controllers/categories");
-const { getResponseObject } = require("../../helpers/responses");
 
 const { validateIsExistValueForFieldsAndDataTypes } = require("../../helpers/validate");
 
