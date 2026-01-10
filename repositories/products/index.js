@@ -786,6 +786,55 @@ async function updateProductImage(authorizationId, productId, newProductImagePat
     }
 }
 
+async function updateProductCustomizes(authorizationId, productId, newProductInfo, language) {
+    try {
+        const admin = await adminModel.findById(authorizationId);
+        if (admin) {
+            if (!admin.isBlocked) {
+                const product = await productModel.findById(productId);
+                if (product) {
+                    if ((new mongoose.Types.ObjectId(admin.storeId)).equals(product.storeId)) {
+                        await productModel.updateOne({ _id: productId }, newProductInfo);
+                        return {
+                            msg: getSuitableTranslations("Changing Product Customizes Process Has Been Successfully !!", language),
+                            error: false,
+                            data: {
+                                oldColorImageFilePaths: product.colorImagesPaths,
+                            },
+                        }
+                    }
+                    return {
+                        msg: getSuitableTranslations("Sorry, Permission Denied Because This Product Is Not Exist At Store Managed By This Admin !!", language),
+                        error: true,
+                        data: {},
+                    }
+                }
+                return {
+                    msg: getSuitableTranslations("Sorry, This Product Is Not Exist !!", language),
+                    error: true,
+                    data: {},
+                }
+            }
+            return {
+                msg: getSuitableTranslations("Sorry, This Admin Has Been Blocked !!", language),
+                error: true,
+                data: {
+                    blockingDate: admin.blockingDate,
+                    blockingReason: admin.blockingReason,
+                },
+            }
+        }
+        return {
+            msg: getSuitableTranslations("Sorry, This Admin Is Not Exist !!", language),
+            error: true,
+            data: {},
+        }
+    }
+    catch (err) {
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addNewProduct,
     addNewImagesToProductGallery,
@@ -804,4 +853,5 @@ module.exports = {
     updateProduct,
     updateProductGalleryImage,
     updateProductImage,
+    updateProductCustomizes
 }

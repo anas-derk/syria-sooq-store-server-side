@@ -679,4 +679,161 @@ productsRouter.put("/update-product-image/:productId",
     productsController.putProductImage
 );
 
+productsRouter.put("/update-product-customizes/:productId",
+    validateJWT,
+    multer({
+        storage: multer.memoryStorage(),
+        fileFilter: (req, file, cb) => {
+            if (file.fieldname === "colorImages" && !file) {
+                return cb(null, true);
+            }
+            else if (!file) {
+                req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
+                return cb(null, false);
+            }
+            if (
+                file.mimetype !== "image/jpeg" &&
+                file.mimetype !== "image/png" &&
+                file.mimetype !== "image/webp"
+            ) {
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                return cb(null, false);
+            }
+            cb(null, true);
+        }
+    }).fields([
+        { name: "colorImages", maxCount: 100 },
+    ]),
+    validateIsExistErrorInFiles,
+    (req, res, next) => {
+        const { hasCustomizes, customizes } = Object.assign({}, req.body);
+        validateIsExistValueForFieldsAndDataTypes([
+            { fieldName: "Has Customizes", fieldValue: Boolean(hasCustomizes), dataTypes: ["boolean"], isRequiredValue: false },
+            { fieldName: "Customizes", fieldValue: JSON.parse(customizes), dataTypes: ["object"], isRequiredValue: hasCustomizes ?? false },
+        ], res, next);
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            validateIsExistValueForFieldsAndDataTypes([
+                { fieldName: "Has Colors", fieldValue: customizes?.hasColors, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Colors", fieldValue: customizes?.colors, dataTypes: ["array"], isRequiredValue: customizes?.hasColors ?? false },
+                { fieldName: "Has Sizes", fieldValue: customizes?.hasSizes, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Sizes", fieldValue: customizes?.sizes, dataTypes: ["object"], isRequiredValue: customizes?.hasSizes ?? false },
+                { fieldName: "S Size", fieldValue: customizes?.sizes?.s, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "M Size", fieldValue: customizes?.sizes?.m, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "L Size", fieldValue: customizes?.sizes?.l, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "XL Size", fieldValue: customizes?.sizes?.xl, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "XXL Size", fieldValue: customizes?.sizes?.xxl, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "XXXL Size", fieldValue: customizes?.sizes?.xxxl, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "4XL Size", fieldValue: customizes?.sizes?.["4xl"], dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Allow Custom Text", fieldValue: customizes?.allowCustomText, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Allow Additional Notes", fieldValue: customizes?.allowAdditionalNotes, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Allow Upload Images", fieldValue: customizes?.allowUploadImages, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Has Additional Cost", fieldValue: customizes?.hasAdditionalCost, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Additional Cost", fieldValue: Number(customizes?.additionalCost), dataTypes: ["number"], isRequiredValue: customizes?.hasAdditionalCost ?? false },
+                { fieldName: "Has Additional Time", fieldValue: customizes?.hasAdditionalTime, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Additional Time", fieldValue: Number(customizes?.additionalTime), dataTypes: ["number"], isRequiredValue: customizes?.hasAdditionalTime ?? false },
+                { fieldName: "Has Weight", fieldValue: customizes?.hasWeight, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Weight Unit", fieldValue: Number(customizes?.weightDetails?.unit), dataTypes: ["string"], isRequiredValue: customizes?.hasWeight ?? false },
+                { fieldName: "Weight", fieldValue: Number(customizes?.weightDetails?.weight), dataTypes: ["number"], isRequiredValue: customizes?.hasWeight ?? false },
+                { fieldName: "Has Dimentions", fieldValue: customizes?.hasDimentions, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Dimentions Unit", fieldValue: customizes?.dimentionsDetails?.unit, dataTypes: ["string"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Length", fieldValue: Number(customizes?.dimentionsDetails?.length), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Width", fieldValue: Number(customizes?.dimentionsDetails?.width), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Height", fieldValue: Number(customizes?.dimentionsDetails?.height), dataTypes: ["number"], isRequiredValue: customizes?.hasDimentions ?? false },
+                { fieldName: "Has Production Date", fieldValue: customizes?.hasProductionDate, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Production Date", fieldValue: customizes?.productionDate, dataTypes: ["date"], isRequiredValue: customizes?.hasProductionDate ?? false },
+                { fieldName: "Has Expiry Date", fieldValue: customizes?.hasExpiryDate, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Expiry Date", fieldValue: customizes?.expiryDate, dataTypes: ["date"], isRequiredValue: customizes?.hasExpiryDate ?? false },
+                { fieldName: "Possibility Of Switching", fieldValue: customizes?.possibilityOfSwitching, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Possibility Of Return", fieldValue: customizes?.possibilityOfReturn, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Has Additional Details", fieldValue: customizes?.hasAdditionalDetails, dataTypes: ["boolean"], isRequiredValue: false },
+                { fieldName: "Additional Details", fieldValue: customizes?.additionalDetails, dataTypes: ["array"], isRequiredValue: customizes?.hasAdditionalDetails ?? false },
+            ], res, next);
+            return;
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.colors?.length > 0) {
+                const colorsLength = customizes.colors.length;
+                const productImages = Object.assign({}, req.files);
+                if (colorsLength !== productImages?.colorImages?.length) {
+                    res.status(400).json(getResponseObject("Sorry, Can't Find Match Between Color Images Count And Colors Count !!", true, {}));
+                    return;
+                }
+                let errorMsgs = [];
+                for (let i = 0; i < customizes.colors.length; i++) {
+                    errorMsgs.push(`Sorry, Please Send Valid Color In Index ${i} ( Must Be Start To # And In Hexadecimal System ) !!`);
+                }
+                validateColors(customizes.colors, res, next, errorMsgs);
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasAdditionalCost) {
+                validateNumbersIsGreaterThanZero([customizes.additionalCost], res, next, ["Sorry, Please Send Valid Additional Cost In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasAdditionalTime) {
+                validateNumbersIsGreaterThanZero([customizes.additionalTime], res, next, ["Sorry, Please Send Valid Additional Time In Customizes ( Number Must Be Greater Than Zero ) !!"], "");
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasWeight) {
+                validateWeightUnit(customizes?.weightDetails.unit, res, next);
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasWeight) {
+                validateDimentionsUnit(customizes?.dimentionsDetails.unit, res, next);
+                return;
+            }
+        }
+        next();
+    },
+    (req, res, next) => {
+        let { customizes } = Object.assign({}, req.body);
+        if (customizes) {
+            customizes = JSON.parse(customizes);
+            if (customizes?.hasAdditionalDetails) {
+                validateIsExistValueForFieldsAndDataTypes(customizes.additionalDetails.map((caption, index) => (
+                    { fieldName: `Caption In Additional Details In ${index}`, fieldValue: caption, dataTypes: ["string"], isRequiredValue: false }
+                )), res, next);
+                return;
+            }
+        }
+        next();
+    },
+    productsController.putProductCustomizes
+);
+
 module.exports = productsRouter;

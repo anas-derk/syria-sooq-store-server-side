@@ -363,6 +363,46 @@ async function putProductImage(req, res) {
     }
 }
 
+async function putProductCustomizes(req, res) {
+    try {
+        const productImages = Object.assign({}, req.files);
+        let colorImageFiles = [], outputColorImageFilePaths = [];
+        if (productImages?.colorImages?.length > 0) {
+            productImages.colorImages.forEach((file) => {
+                colorImageFiles.push(file.buffer);
+                outputColorImageFilePaths.push(`assets/images/colors/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
+            });
+            await handleResizeImagesAndConvertFormatToWebp(colorImageFiles, outputColorImageFilePaths);
+        }
+        let productInfo = {
+            ...{ hasCustomizes, customizes } = Object.assign({}, req.body),
+            colorImagesPaths: outputColorImageFilePaths,
+        };
+        if (productInfo.customizes) {
+            productInfo.customizes = JSON.parse(productInfo.customizes);
+        }
+        const result = await productsManagmentFunctions.updateProductCustomizes(req.data._id, req.params.productId, productInfo, req.query.language);
+        if (result.error) {
+            if (result.msg === "Sorry, This Admin Has Been Blocked !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {
+                return res.status(401).json(result);
+            }
+            return res.json(result);
+        }
+        res.json(result);
+        try {
+            for (let colorImagePath of result.data.oldColorImageFilePaths) {
+                unlinkSync(colorImagePath);
+            }
+        }
+        catch (err) {
+            console.log(`error in delete color image files on update product customizes: `, err?.message ?? err);
+        }
+    }
+    catch (err) {
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
+    }
+}
+
 module.exports = {
     postNewProduct,
     postNewImagesToProductGallery,
@@ -381,4 +421,5 @@ module.exports = {
     putProduct,
     putProductGalleryImage,
     putProductImage,
+    putProductCustomizes
 }
