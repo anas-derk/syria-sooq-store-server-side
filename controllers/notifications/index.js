@@ -8,6 +8,8 @@ const notificationsOPerationsManagmentFunctions = require("../../repositories/no
 
 const { sendNotification } = notificationsHelpers;
 
+const { getFirebaseAdmin } = require("../../config/notifications");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -18,7 +20,40 @@ function getFiltersObject(filters) {
 
 async function postRegisterToken(req, res) {
     try {
-        res.json(await notificationsOPerationsManagmentFunctions.registerToken(req.data._id, req.body.token, req.query.language));
+        const notificationToken = req.body.token;
+        const result = await notificationsOPerationsManagmentFunctions.registerToken(req.data._id, notificationToken, req.query.language);
+        const followedStores = result.data.followedStores;
+        delete result.data.followedStores;
+        res.json(result);
+        const topics = followedStores
+            .map(store => `store_${store._id.toString()}`);
+        try {
+            const results = await Promise.allSettled(
+                topics.map(topic => {
+                    return getFirebaseAdmin()
+                        .messaging()
+                        .subscribeToTopic([notificationToken], topic)
+                        .then(() => ({ topic }))
+                        .catch(error => ({ topic, error }));
+                })
+            );
+            results.forEach(result => {
+                const topic = result.value?.topic;
+                if (result.status === "rejected" || result.value?.error) {
+                    const err = result.value?.error || result.reason;
+                    console.log(
+                        `error in adding token to topic: ${topic}, user Id: ${req.data._id}, reason: ${err?.message ?? err}`
+                    );
+                } else {
+                    console.log(`success in adding token to topic: ${topic}, user Id: ${req.data._id}`);
+                }
+            });
+        }
+        catch (err) {
+            console.log(
+                `error in adding token to store topics: ${topics}, user Id: ${req.data._id}, reason: ${err?.message ?? err}`
+            );
+        }
     }
     catch (err) {
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));

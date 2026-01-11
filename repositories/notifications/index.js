@@ -8,7 +8,7 @@ const { getSuitableTranslations } = require("../../helpers/translation");
 
 async function registerToken(userId, token, language) {
     try {
-        const user = await userModel.findById(userId);
+        const user = await userModel.findById(userId).populate("followedStores", { _id: 1 });
         if (!user) {
             return {
                 msg: getSuitableTranslations("Sorry, Can't Register New Token Because This User Is Not Exist !!", language),
@@ -20,7 +20,9 @@ async function registerToken(userId, token, language) {
         return {
             msg: getSuitableTranslations("Register New Token Process Has Been Successfuly !!", language),
             error: false,
-            data: {},
+            data: {
+                followedStores: user.followedStores
+            },
         }
     }
     catch (err) {
