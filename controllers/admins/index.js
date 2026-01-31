@@ -25,7 +25,7 @@ async function getAdminLogin(req, res) {
         res.json(result);
     }
     catch (err) {
-        res.status(500).json(getResponseObject(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {}));
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {});
     }
 }
 
@@ -34,7 +34,7 @@ async function getAdminUserInfo(req, res) {
         res.json(await adminsOPerationsManagmentFunctions.getAdminUserInfo(req.data._id, req.query.language));
     }
     catch (err) {
-        res.status(500).json(getResponseObject(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {}));
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {});
     }
 }
 
@@ -57,7 +57,7 @@ async function getAdminsCount(req, res) {
         res.json(result);
     }
     catch (err) {
-        res.status(500).json(getResponseObject(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {}));
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {});
     }
 }
 
@@ -71,7 +71,7 @@ async function getAllAdminsInsideThePage(req, res) {
         res.json(result);
     }
     catch (err) {
-        res.status(500).json(getResponseObject(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {}));
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {});
     }
 }
 
@@ -86,7 +86,7 @@ async function postAddNewAdmin(req, res) {
         res.json(result);
     }
     catch (err) {
-        res.status(500).json(getResponseObject(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {}));
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {});
     }
 }
 
@@ -101,7 +101,7 @@ async function putAdminInfo(req, res) {
         res.json(result);
     }
     catch (err) {
-        res.status(500).json(getResponseObject(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {}));
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {});
     }
 }
 
@@ -116,7 +116,7 @@ async function deleteAdmin(req, res) {
         res.json(result);
     }
     catch (err) {
-        res.status(500).json(getResponseObject(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {}));
+        res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}), true, {});
     }
 }
 
