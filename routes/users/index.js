@@ -274,8 +274,20 @@ usersRouter.put("/update-user-info",
         }
         next();
     },
-    (req, res, next) => validateNumbersIsGreaterThanZero([req.body.age], res, next, ["Sorry, Please Send Valid Age ( Number Must Be Greater Than Zero ) !!"]),
-    (req, res, next) => validateNumbersIsNotFloat([req.body.age], res, next, ["Sorry, Please Send Valid Age ( Number Must Be Not Float ) !!"]),
+    (req, res, next) => {
+        const { age } = req.body;
+        if (age) {
+            return validateNumbersIsGreaterThanZero([req.body.age], res, next, ["Sorry, Please Send Valid Age ( Number Must Be Greater Than Zero ) !!"]);
+        }
+        next();
+    },
+    (req, res, next) => {
+        const { age } = req.body;
+        if (age) {
+            return validateNumbersIsNotFloat([req.body.age], res, next, ["Sorry, Please Send Valid Age ( Number Must Be Not Float ) !!"]);
+        }
+        next();
+    },
     usersController.putUserInfo
 );
 
