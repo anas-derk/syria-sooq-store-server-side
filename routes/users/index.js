@@ -15,12 +15,37 @@ const { isValidEmail } = emailValidator;
 const { isValidMobilePhone } = mobilePhoneValidator;
 
 const {
+    rateLimitsMiddlewares,
     authMiddlewares,
     commonMiddlewares,
     filesMiddlewares,
     usersMiddlewares,
     numbersMiddlewares,
 } = require("../../middlewares");
+
+const {
+    authRateLimitersMiddlewares,
+    userRateLimitersMiddlewares,
+    otpRateLimitersMiddlewares
+} = rateLimitsMiddlewares;
+
+const {
+    signupRateLimitMiddleware,
+    loginRateLimitMiddleware,
+    forgotPasswordRateLimitMiddleware,
+    resetPasswordRateLimitMiddleware
+} = authRateLimitersMiddlewares;
+
+const {
+    userInfoRateLimitMiddleware,
+    userUpdateRateLimitMiddleware,
+    changeProfileImageLimiterRateLimitMiddleware
+} = userRateLimitersMiddlewares;
+
+const {
+    sendOtpRateLimitMiddleware,
+    verifyOtpRateLimitMiddleware
+} = otpRateLimitersMiddlewares;
 
 const {
     validateJWT,
@@ -54,6 +79,7 @@ const {
 const multer = require("multer");
 
 usersRouter.get("/login",
+    loginRateLimitMiddleware,
     (req, res, next) => {
         const { email, mobilePhone, password } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -81,6 +107,7 @@ usersRouter.get("/login",
 );
 
 usersRouter.get("/login-with-google",
+    loginRateLimitMiddleware,
     (req, res, next) => {
         const { email, fullName, registerationAgent } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -97,6 +124,7 @@ usersRouter.get("/login-with-google",
 
 usersRouter.get("/user-info",
     validateJWT,
+    userInfoRateLimitMiddleware,
     usersController.getUserInfo
 );
 
@@ -117,6 +145,7 @@ usersRouter.get("/all-users-inside-the-page",
 );
 
 usersRouter.get("/forget-password",
+    forgotPasswordRateLimitMiddleware,
     (req, res, next) => {
         const { email, mobilePhone } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -144,6 +173,7 @@ usersRouter.get("/forget-password",
 usersRouter.get("/main-page-data", validateJWT, usersController.getMainPageData);
 
 usersRouter.post("/create-new-user",
+    signupRateLimitMiddleware,
     (req, res, next) => {
         const { city, fullName, email, mobilePhone, password, registerationAgent } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
@@ -191,6 +221,7 @@ usersRouter.post("/add-new-interests",
 );
 
 usersRouter.post("/send-account-verification-code",
+    sendOtpRateLimitMiddleware,
     (req, res, next) => {
         const { email, typeOfUse } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -211,6 +242,7 @@ usersRouter.post("/send-account-verification-code",
 
 usersRouter.put("/update-user-info",
     validateJWT,
+    userUpdateRateLimitMiddleware,
     (req, res, next) => {
         const { fullName, addresses, email, mobilePhone, city, gender, age } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
@@ -292,6 +324,7 @@ usersRouter.put("/update-user-info",
 );
 
 usersRouter.put("/update-verification-status",
+    verifyOtpRateLimitMiddleware,
     (req, res, next) => {
         const { email, code } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -304,6 +337,7 @@ usersRouter.put("/update-verification-status",
 );
 
 usersRouter.put("/reset-password",
+    resetPasswordRateLimitMiddleware,
     (req, res, next) => {
         const { email, mobilePhone, code, newPassword } = req.query;
         validateIsExistValueForFieldsAndDataTypes([
@@ -333,6 +367,7 @@ usersRouter.put("/reset-password",
 
 usersRouter.put("/change-user-image",
     validateJWT,
+    changeProfileImageLimiterRateLimitMiddleware,
     multer({
         storage: multer.memoryStorage(),
         fileFilter: (req, file, cb) => {

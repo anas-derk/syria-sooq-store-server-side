@@ -8,6 +8,7 @@ const globalMiddlewares = require("./global");
 const numbersMiddlewares = require("./numbers");
 const ordersMiddlewares = require("./orders");
 const productsMiddlewares = require("./products");
+const rateLimitsMiddlewares = require("./rate-limiters");
 const ratingsMiddlewares = require("./ratings");
 const sortMiddlewares = require("./sort");
 const storesMiddlewares = require("./stores");
@@ -24,6 +25,7 @@ module.exports = {
     numbersMiddlewares,
     ordersMiddlewares,
     productsMiddlewares,
+    rateLimitsMiddlewares,
     ratingsMiddlewares,
     sortMiddlewares,
     storesMiddlewares,
