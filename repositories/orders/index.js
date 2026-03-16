@@ -243,9 +243,8 @@ async function createNewOrder(userId, orderDetails, language) {
         }
         for (let i = 0; i < existUserCarts.length; i++) {
             if (existUserCarts[i].product.quantity === 0) {
-                console.log(existUserCarts);
                 return {
-                    msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: existUserCarts[i].product[i]._id }),
+                    msg: getSuitableTranslations("Sorry, The Product With The ID: {{productId}} Is Not Available ( Quantity Is 0 ) !!", language, { productId: existUserCarts[i].product._id }),
                     error: true,
                     data: {},
                 }
@@ -345,7 +344,6 @@ async function createNewOrder(userId, orderDetails, language) {
             data: newOrder,
         }
     } catch (err) {
-        console.log(err);
         throw Error(err);
     }
 }
