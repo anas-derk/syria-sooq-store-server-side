@@ -32,7 +32,7 @@ async function postNewProduct(req, res) {
             productImages.colorImages.forEach((file) => {
                 colorImageFiles.push(file.buffer);
                 const { uniqueName } = generateSafeFileName(file.originalname);
-                outputImageFilePaths.push(`assets/images/colors/${uniqueName}.webp`);
+                outputColorImageFilePaths.push(`assets/images/colors/${uniqueName}.webp`);
             });
             await handleResizeImagesAndConvertFormatToWebp(colorImageFiles, outputColorImageFilePaths);
         }
