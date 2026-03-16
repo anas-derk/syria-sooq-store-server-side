@@ -22,6 +22,7 @@ const {
 } = filesMiddlewares;
 
 const {
+    uploadAdImageFileSingle,
     validateAdvertismentType,
 } = adsMiddlewares;
 
@@ -31,6 +32,7 @@ const {
 
 adsRouter.post("/add-new-ad",
     validateJWT,
+    uploadAdImageFileSingle,
     multer({
         storage: multer.memoryStorage(),
         fileFilter: (req, file, cb) => {

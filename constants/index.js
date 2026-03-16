@@ -1,6 +1,7 @@
 const ads = require("./ads");
 const cites = require("./cites");
 const counters = require("./counters");
+const files = require("./files");
 const languages = require("./languages");
 const orders = require("./orders");
 const paths = require("./paths");
@@ -15,6 +16,7 @@ module.exports = {
     ads,
     cites,
     counters,
+    files,
     languages,
     orders,
     paths,
