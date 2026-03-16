@@ -36,7 +36,7 @@ async function validateRealFilesType(req, res, next) {
         }
         if (!files.length) {
             return res.status(400).json(
-                getResponseObject("Sorry, File is required !!", true, {})
+                getResponseObject("Sorry, Files is required !!", true, {})
             );
         }
         for (const file of files) {
@@ -45,21 +45,20 @@ async function validateRealFilesType(req, res, next) {
                 : await fileTypeFromFileFunc(file.path);
 
             if (!fileType || !req.allowedMimeTypes.includes(fileType.mime)) {
-
                 if (req.storageType !== "memory" && file.path) {
                     try {
                         unlinkSync(file.path);
                     } catch (_) { }
                 }
                 return res.status(400).json(
-                    getResponseObject("Sorry, Invalid Real File Type !!", true, {})
+                    getResponseObject(`Sorry, Invalid Real File Type (${file.originalname}) !!`, true, {})
                 );
             }
         }
         next();
     } catch (err) {
         return res.status(500).json(
-            getResponseObject("Internal Server Error When Verify Real File Type !!", true, {})
+            getResponseObject("Internal Server Error When Verify Real File / Files Type !!", true, {})
         );
     }
 }
