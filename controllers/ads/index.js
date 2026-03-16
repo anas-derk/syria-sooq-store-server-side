@@ -12,6 +12,8 @@ const adsOPerationsManagmentFunctions = require("../../repositories/ads");
 
 const { unlinkSync } = require("fs");
 
+const { generateSafeFileName } = require("../../utils/files");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -22,7 +24,8 @@ function getFiltersObject(filters) {
 
 async function postNewAd(req, res) {
     try {
-        const outputImageFilePath = `assets/images/ads/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/ads/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const bodyData = Object.assign({}, req.body);
         const adInfo = {};
@@ -77,7 +80,8 @@ async function deleteAd(req, res) {
 
 async function putAdImage(req, res) {
     try {
-        const outputImageFilePath = `assets/images/ads/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/ads/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const result = await adsOPerationsManagmentFunctions.updateAdImage(req.data._id, req.params.adId, outputImageFilePath, req.query.language);
         if (!result.error) {
