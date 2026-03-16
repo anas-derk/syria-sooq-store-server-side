@@ -6,8 +6,6 @@ const { getSuitableTranslations } = translationHelpers;
 
 const notificationsOPerationsManagmentFunctions = require("../../repositories/notifications");
 
-const { sendNotification } = notificationsHelpers;
-
 const { getFirebaseAdmin } = require("../../config/notifications");
 
 function getFiltersObject(filters) {
@@ -81,7 +79,6 @@ async function putMarkAllRead(req, res) {
 
 module.exports = {
     postRegisterToken,
-    postSendNotification,
     putMarkAllRead,
     getAllNotificationsInsideThePage
 }
