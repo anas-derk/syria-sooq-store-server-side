@@ -19,6 +19,7 @@ const {
 
 const {
     validateIsExistErrorInFiles,
+    validateRealFilesType,
 } = filesMiddlewares;
 
 const {
@@ -53,6 +54,7 @@ adsRouter.post("/add-new-ad",
         }
     }).single("adImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         const { content, type, city, product } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
@@ -107,6 +109,7 @@ adsRouter.put("/change-ad-image/:adId",
         }
     }).single("adImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Ad Id", fieldValue: req.params.adId, dataTypes: ["ObjectId"], isRequiredValue: true },
