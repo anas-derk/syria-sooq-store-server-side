@@ -344,6 +344,7 @@ async function createNewOrder(userId, orderDetails, language) {
             data: newOrder,
         }
     } catch (err) {
+        console.log(err);
         throw Error(err);
     }
 }
