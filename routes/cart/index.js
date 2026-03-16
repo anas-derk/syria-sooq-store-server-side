@@ -39,10 +39,13 @@ const {
 
 const multer = require("multer");
 
+const { UPLOAD_MAX_FILE_SIZE } = require("../../constants/files");
+
 cartRouter.post("/add-new-product",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 return cb(null, true);

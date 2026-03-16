@@ -23,6 +23,8 @@ const { unlinkSync } = require("fs");
 
 const { getFirebaseAdmin } = require("../../config/notifications");
 
+const { generateSafeFileName } = require("../../utils/files");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -107,12 +109,13 @@ async function postNewStore(req, res) {
             storeFiles.commercialRegisterFile[0].buffer,
             storeFiles.taxCardFile[0].buffer,
             storeFiles.addressProofFile[0].buffer,
-        ], outputImageFilePaths = [
-            `assets/images/stores/cover/${Math.random()}_${Date.now()}__${storeFiles.coverImage[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
-            `assets/images/stores/profile/${Math.random()}_${Date.now()}__${storeFiles.profileImage[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
-            `assets/images/stores/commercial_register/${Math.random()}_${Date.now()}__${storeFiles.commercialRegisterFile[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
-            `assets/images/stores/tax_card/${Math.random()}_${Date.now()}__${storeFiles.taxCardFile[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
-            `assets/images/stores/address_proof/${Math.random()}_${Date.now()}__${storeFiles.addressProofFile[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`,
+        ];
+        const outputImageFilePaths = [
+            `assets/images/stores/cover/${generateSafeFileName(storeFiles.coverImage[0].originalname).uniqueName}.webp`,
+            `assets/images/stores/profile/${generateSafeFileName(storeFiles.profileImage[0].originalname).uniqueName}.webp`,
+            `assets/images/stores/commercial_register/${generateSafeFileName(storeFiles.commercialRegisterFile[0].originalname).uniqueName}.webp`,
+            `assets/images/stores/tax_card/${generateSafeFileName(storeFiles.taxCardFile[0].originalname).uniqueName}.webp`,
+            `assets/images/stores/address_proof/${generateSafeFileName(storeFiles.addressProofFile[0].originalname).uniqueName}.webp`,
         ];
         await handleResizeImagesAndConvertFormatToWebp(bufferFiles, outputImageFilePaths);
         const result = await storesOPerationsManagmentFunctions.createNewStore({
@@ -258,11 +261,17 @@ async function putCancelBlockingStore(req, res) {
 
 async function putStoreImage(req, res) {
     try {
-        const outputImageFilePath = `assets/images/stores/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/stores/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const result = await storesOPerationsManagmentFunctions.changeStoreImage(req.data._id, req.params.storeId, outputImageFilePath, req.query.language);
         if (!result.error) {
-            unlinkSync(result.data.deletedStoreImagePath);
+            try {
+                unlinkSync(result.data.deletedStoreImagePath);
+            }
+            catch (err) {
+                console.log(err);
+            }
             res.json({
                 ...result,
                 data: {
@@ -270,7 +279,12 @@ async function putStoreImage(req, res) {
                 }
             });
         } else {
-            unlinkSync(outputImageFilePath);
+            try {
+                unlinkSync(outputImageFilePath);
+            }
+            catch (err) {
+                console.log(err);
+            }
             if (result.msg === "Sorry, Permission Denied Because This Admin Is Not Website Owner !!" || result.msg === "Sorry, This Admin Is Not Exist !!") {
                 return res.status(401).json(result);
             }

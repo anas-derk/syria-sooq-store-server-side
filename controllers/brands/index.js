@@ -12,6 +12,8 @@ const brandsManagmentFunctions = require("../../repositories/brands");
 
 const { unlinkSync } = require("fs");
 
+const { generateSafeFileName } = require("../../utils/files");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -24,7 +26,8 @@ function getFiltersObject(filters) {
 
 async function postNewBrand(req, res) {
     try {
-        const outputImageFilePath = `assets/images/brands/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/brands/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const brandInfo = Object.assign({}, req.body);
         const result = await brandsManagmentFunctions.addNewBrand(req.data._id, {
@@ -95,7 +98,8 @@ async function putBrandInfo(req, res) {
 
 async function putBrandImage(req, res) {
     try {
-        const outputImageFilePath = `assets/images/brands/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/brands/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const result = await brandsManagmentFunctions.changeBrandImage(req.data._id, req.params.brandId, outputImageFilePath, req.query.language);
         if (!result.error) {

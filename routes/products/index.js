@@ -66,10 +66,13 @@ const {
 
 const { getResponseObject } = require("../../helpers/responses");
 
+const { UPLOAD_MAX_FILE_SIZE } = require("../../constants/files");
+
 productsRouter.post("/add-new-product",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (file.fieldname === "colorImages" && !file) {
                 return cb(null, true);
@@ -256,6 +259,7 @@ productsRouter.post("/add-new-images-to-product-gallery/:productId",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
@@ -624,6 +628,7 @@ productsRouter.put("/update-product-gallery-image/:productId",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
@@ -654,6 +659,7 @@ productsRouter.put("/update-product-image/:productId",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
@@ -683,6 +689,7 @@ productsRouter.put("/update-product-customizes/:productId",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (file.fieldname === "colorImages" && !file) {
                 return cb(null, true);

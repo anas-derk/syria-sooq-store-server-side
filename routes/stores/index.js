@@ -41,6 +41,8 @@ const {
 
 const multer = require("multer");
 
+const { UPLOAD_MAX_FILE_SIZE } = require("../../constants/files");
+
 storesRouter.get("/stores-count", validateJWT, storesController.getStoresCount);
 
 storesRouter.get("/all-stores-inside-the-page",
@@ -92,6 +94,7 @@ storesRouter.post("/create-new-store",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
@@ -237,6 +240,7 @@ storesRouter.put("/change-store-image/:storeId",
     },
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";

@@ -35,10 +35,13 @@ const {
 
 const multer = require("multer");
 
+const { UPLOAD_MAX_FILE_SIZE } = require("../../constants/files");
+
 categoriesRouter.post("/add-new-category",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
@@ -150,6 +153,7 @@ categoriesRouter.put("/change-category-image/:categoryId",
     },
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";

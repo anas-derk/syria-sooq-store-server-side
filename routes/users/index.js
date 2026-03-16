@@ -78,6 +78,8 @@ const {
 
 const multer = require("multer");
 
+const { UPLOAD_MAX_FILE_SIZE } = require("../../constants/files");
+
 usersRouter.get("/login",
     loginRateLimitMiddleware,
     (req, res, next) => {
@@ -370,6 +372,7 @@ usersRouter.put("/change-user-image",
     changeProfileImageLimiterRateLimitMiddleware,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";

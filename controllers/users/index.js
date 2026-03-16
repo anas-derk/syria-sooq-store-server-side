@@ -275,7 +275,8 @@ async function putResetPassword(req, res) {
 
 async function putUserImage(req, res) {
     try {
-        const outputImageFilePath = `assets/images/users/${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/users/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const result = await usersOPerationsManagmentFunctions.changeUserImage(req.data._id, outputImageFilePath, req.query.language);
         if (!result.error) {

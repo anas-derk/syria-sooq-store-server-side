@@ -29,10 +29,13 @@ const {
     validateCity
 } = commonMiddlewares;
 
+const { UPLOAD_MAX_FILE_SIZE } = require("../../constants/files");
+
 adsRouter.post("/add-new-ad",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
@@ -86,6 +89,7 @@ adsRouter.put("/change-ad-image/:adId",
     validateJWT,
     multer({
         storage: multer.memoryStorage(),
+        limits: UPLOAD_MAX_FILE_SIZE,
         fileFilter: (req, file, cb) => {
             if (!file) {
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";

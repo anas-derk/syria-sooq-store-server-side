@@ -14,20 +14,25 @@ const productsManagmentFunctions = require("../../repositories/products");
 
 const { unlinkSync } = require("fs");
 
+const { generateSafeFileName } = require("../../utils/files");
+
 async function postNewProduct(req, res) {
     try {
         const productImages = Object.assign({}, req.files);
-        let baseFiles = [productImages.productImage[0].buffer], outputImageFilePaths = [`assets/images/products/${Math.random()}_${Date.now()}__${productImages.productImage[0].originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`];
+        const { uniqueName } = generateSafeFileName(productImages.productImage[0].originalname);
+        let baseFiles = [productImages.productImage[0].buffer], outputImageFilePaths = [`assets/images/products/${uniqueName}.webp`];
         productImages.galleryImages.forEach((file) => {
             baseFiles.push(file.buffer);
-            outputImageFilePaths.push(`assets/images/products/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
+            const { uniqueName } = generateSafeFileName(file.originalname);
+            outputImageFilePaths.push(`assets/images/products/${uniqueName}.webp`);
         });
         await handleResizeImagesAndConvertFormatToWebp(baseFiles, outputImageFilePaths);
         let colorImageFiles = [], outputColorImageFilePaths = [];
         if (productImages?.colorImages?.length > 0) {
             productImages.colorImages.forEach((file) => {
                 colorImageFiles.push(file.buffer);
-                outputColorImageFilePaths.push(`assets/images/colors/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
+                const { uniqueName } = generateSafeFileName(file.originalname);
+                outputImageFilePaths.push(`assets/images/colors/${uniqueName}.webp`);
             });
             await handleResizeImagesAndConvertFormatToWebp(colorImageFiles, outputColorImageFilePaths);
         }
@@ -76,7 +81,8 @@ async function postNewImagesToProductGallery(req, res) {
         let files = [], outputImageFilePaths = [];
         req.files.forEach((file) => {
             files.push(file.buffer);
-            outputImageFilePaths.push(`assets / images / products / ${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")} `)
+            const { uniqueName } = generateSafeFileName(file.originalname);
+            outputImageFilePaths.push(`assets/images/products/${uniqueName}.webp`);
         });
         await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
         const result = await productsManagmentFunctions.addNewImagesToProductGallery(req.data._id, req.params.productId, outputImageFilePaths, req.query.language);
@@ -322,7 +328,8 @@ async function putProduct(req, res) {
 
 async function putProductGalleryImage(req, res) {
     try {
-        const outputImageFilePath = `assets / images / products / ${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")} `;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/products/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const oldGalleryImagePath = req.query.oldGalleryImagePath;
         const result = await productsManagmentFunctions.updateProductGalleryImage(req.data._id, req.params.productId, oldGalleryImagePath, outputImageFilePath, req.query.language);
@@ -344,7 +351,8 @@ async function putProductGalleryImage(req, res) {
 
 async function putProductImage(req, res) {
     try {
-        const outputImageFilePath = `assets / images / products / ${Math.random()}_${Date.now()}__${req.file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")} `;
+        const { uniqueName } = generateSafeFileName(req.file.originalname);
+        const outputImageFilePath = `assets/images/products/${uniqueName}.webp`;
         await handleResizeImagesAndConvertFormatToWebp([req.file.buffer], [outputImageFilePath]);
         const result = await productsManagmentFunctions.updateProductImage(req.data._id, req.params.productId, outputImageFilePath, req.query.language);
         if (!result.error) {
@@ -370,7 +378,8 @@ async function putProductCustomizes(req, res) {
         if (productImages?.colorImages?.length > 0) {
             productImages.colorImages.forEach((file) => {
                 colorImageFiles.push(file.buffer);
-                outputColorImageFilePaths.push(`assets/images/colors/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`)
+                const { uniqueName } = generateSafeFileName(file.originalname);
+                outputColorImageFilePaths.push(`assets/images/colors/${uniqueName}.webp`);
             });
             await handleResizeImagesAndConvertFormatToWebp(colorImageFiles, outputColorImageFilePaths);
         }

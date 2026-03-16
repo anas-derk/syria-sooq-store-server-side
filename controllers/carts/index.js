@@ -12,10 +12,11 @@ const cartOperationsManagmentFunctions = require("../../repositories/carts");
 
 const { unlinkSync } = require("fs");
 
+const { generateSafeFileName } = require("../../utils/files");
+
 async function postNewProduct(req, res) {
     try {
         const productImages = Object.assign({}, req.files);
-        console.log(productImages);
         let files = [], outputImageFilePaths = [];
         if (productImages?.additionalFiles?.length > 0) {
             productImages.additionalFiles.forEach((file) => {
@@ -25,7 +26,8 @@ async function postNewProduct(req, res) {
                     file.mimetype === "image/webp"
                 ) {
                     files.push(file.buffer);
-                    outputImageFilePaths.push(`assets/images/cart/${Math.random()}_${Date.now()}__${file.originalname.replaceAll(" ", "_").replace(/\.[^/.]+$/, ".webp")}`);
+                    const { uniqueName } = generateSafeFileName(file.originalname);
+                    outputImageFilePaths.push(`assets/images/cart/${uniqueName}.webp`);
                 }
             });
             await handleResizeImagesAndConvertFormatToWebp(files, outputImageFilePaths);
