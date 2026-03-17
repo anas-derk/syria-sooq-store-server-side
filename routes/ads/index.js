@@ -42,14 +42,19 @@ adsRouter.post("/add-new-ad",
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("adImage"),
@@ -97,14 +102,19 @@ adsRouter.put("/change-ad-image/:adId",
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
-                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("adImage"),
