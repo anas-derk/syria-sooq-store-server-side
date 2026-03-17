@@ -47,14 +47,19 @@ categoriesRouter.post("/add-new-category",
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
-                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp Files Are Allowed !!";
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("categoryImg"),
@@ -159,14 +164,19 @@ categoriesRouter.put("/change-category-image/:categoryId",
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("categoryImage"),

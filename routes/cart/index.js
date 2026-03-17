@@ -50,16 +50,21 @@ cartRouter.post("/add-new-product",
             if (!file) {
                 return cb(null, true);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+                "application/pdf",
+                "text/plain"
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp" &&
-                file.mimetype !== "application/pdf" &&
-                file.mimetype !== "text/plain"
+                !allowedTypes.includes(file.mimetype)
             ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG Or PNG Or WEBP Or PDF Or Text files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).fields([
