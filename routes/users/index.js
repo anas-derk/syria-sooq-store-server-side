@@ -62,7 +62,8 @@ const {
 } = commonMiddlewares;
 
 const {
-    validateIsExistErrorInFiles
+    validateIsExistErrorInFiles,
+    validateRealFilesType
 } = filesMiddlewares;
 
 const {
@@ -378,18 +379,24 @@ usersRouter.put("/change-user-image",
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("userImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     usersController.putUserImage
 );
 

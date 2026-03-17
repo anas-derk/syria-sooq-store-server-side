@@ -22,6 +22,7 @@ const {
 
 const {
     validateIsExistErrorInFiles,
+    validateRealFilesType
 } = filesMiddlewares;
 
 const {
@@ -71,6 +72,7 @@ cartRouter.post("/add-new-product",
         { name: "additionalFiles", maxCount: 10 },
     ]),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         const { productId, quantity, message, customText, additionalNotes, size } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([

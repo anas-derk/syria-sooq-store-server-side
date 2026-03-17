@@ -23,7 +23,8 @@ const {
 } = commonMiddlewares;
 
 const {
-    validateIsExistErrorInFiles
+    validateIsExistErrorInFiles,
+    validateRealFilesType
 } = filesMiddlewares;
 
 const {
@@ -100,14 +101,19 @@ storesRouter.post("/create-new-store",
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).fields([
@@ -133,6 +139,7 @@ storesRouter.post("/create-new-store",
         }
     ]),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         const { name, city, category, headquarterAddress, taxNumber, ownerFullName, phoneNumber, email, bankAccountInformation, isClosed, isDeliverable, workingHours } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
@@ -246,18 +253,24 @@ storesRouter.put("/change-store-image/:storeId",
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
                 req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("storeImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     storesController.putStoreImage
 );
 

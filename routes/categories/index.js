@@ -18,6 +18,7 @@ const {
 
 const {
     validateIsExistErrorInFiles,
+    validateRealFilesType,
 } = filesMiddlewares;
 
 const {
@@ -64,6 +65,7 @@ categoriesRouter.post("/add-new-category",
         }
     }).single("categoryImg"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         const { name, color, parent, minAge, maxAge } = req.body;
         validateIsExistValueForFieldsAndDataTypes([
@@ -181,6 +183,7 @@ categoriesRouter.put("/change-category-image/:categoryId",
         }
     }).single("categoryImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     categoriesController.putCategoryImage
 );
 

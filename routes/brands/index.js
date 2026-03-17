@@ -17,6 +17,7 @@ const {
 
 const {
     validateIsExistErrorInFiles,
+    validateRealFilesType,
 } = filesMiddlewares;
 
 const {
@@ -59,6 +60,7 @@ brandsRouter.post("/add-new-brand",
         }
     }).single("brandImg"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Brand Title", fieldValue: (Object.assign({}, req.body)).title, dataTypes: ["string"], isRequiredValue: true },
@@ -145,6 +147,7 @@ brandsRouter.put("/change-brand-image/:brandId",
         }
     }).single("brandImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     brandsController.putBrandImage
 );
 

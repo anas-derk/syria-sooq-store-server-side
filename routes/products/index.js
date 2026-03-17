@@ -35,6 +35,7 @@ const {
 
 const {
     validateIsExistErrorInFiles,
+    validateRealFilesType,
 } = filesMiddlewares;
 
 const {
@@ -81,14 +82,19 @@ productsRouter.post("/add-new-product",
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
-                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).fields([
@@ -97,6 +103,7 @@ productsRouter.post("/add-new-product",
         { name: "colorImages", maxCount: 100 },
     ]),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         const { name, price, description, categories, discount, quantity, isAvailableForDelivery, hasCustomizes, customizes, brand, gender } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
@@ -265,18 +272,24 @@ productsRouter.post("/add-new-images-to-product-gallery/:productId",
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
-                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).array("productGalleryImage", 10),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
@@ -634,18 +647,24 @@ productsRouter.put("/update-product-gallery-image/:productId",
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
-                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("productGalleryImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
@@ -665,18 +684,24 @@ productsRouter.put("/update-product-image/:productId",
                 req.uploadError = "Sorry, No File Uploaded, Please Upload The File";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
-                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).single("productImage"),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         validateIsExistValueForFieldsAndDataTypes([
             { fieldName: "Product Id", fieldValue: req.params.productId, dataTypes: ["ObjectId"], isRequiredValue: true },
@@ -698,20 +723,26 @@ productsRouter.put("/update-product-customizes/:productId",
                 req.uploadError = "Sorry, No Files Uploaded, Please Upload The Files";
                 return cb(null, false);
             }
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+            ];
             if (
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/png" &&
-                file.mimetype !== "image/webp"
+                !allowedTypes.includes(file.mimetype)
             ) {
-                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG and PNG Or WEBP files are allowed !!";
+                req.uploadError = "Sorry, Invalid File Mimetype, Only JPEG, PNG And Webp files are allowed !!";
                 return cb(null, false);
             }
+            req.storageType = "memory";
+            req.allowedMimeTypes = allowedTypes;
             cb(null, true);
         }
     }).fields([
         { name: "colorImages", maxCount: 100 },
     ]),
     validateIsExistErrorInFiles,
+    validateRealFilesType,
     (req, res, next) => {
         const { hasCustomizes, customizes } = Object.assign({}, req.body);
         validateIsExistValueForFieldsAndDataTypes([
