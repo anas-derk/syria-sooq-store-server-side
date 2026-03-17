@@ -8,178 +8,307 @@ const orderSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Types.ObjectId,
         ref: "user",
-        required: true,
+        required: [true, "User ID is required"],
+        validate: {
+            validator: function (v) {
+                if (!v) return true;
+                return mongoose.Types.ObjectId.isValid(v);
+            },
+            message: "Invalid user ID"
+        }
     },
     storeId: {
         type: mongoose.Types.ObjectId,
         ref: "store",
-        required: true,
+        required: [true, "Store ID is required"],
+        validate: {
+            validator: function (v) {
+                if (!v) return true;
+                return mongoose.Types.ObjectId.isValid(v);
+            },
+            message: "Invalid store ID"
+        }
     },
     totalPriceBeforeDiscount: {
         type: Number,
         default: 0,
+        min: [0, "Price cannot be negative"]
     },
     totalDiscount: {
         type: Number,
         default: 0,
+        min: [0, "Discount cannot be negative"]
     },
     totalPriceAfterDiscount: {
         type: Number,
         default: 0,
+        min: [0, "Final price cannot be negative"]
     },
     orderAmount: {
         type: Number,
         default: 0,
+        min: [0, "Order amount cannot be negative"]
+    },
+    orderType: {
+        type: String,
+        enum: ["normal", "fast"],
+        default: "normal"
     },
     checkoutStatus: {
         type: String,
-        default: this.orderType === "normal" ? "Checkout Incomplete" : "Checkout Successfull",
-        enum: [
-            "Checkout Incomplete",
-            "Checkout Successfull"
-        ],
+        enum: ["Checkout Incomplete", "Checkout Successfull"],
+        default: function () {
+            return this.orderType === "normal"
+                ? "Checkout Incomplete"
+                : "Checkout Successfull";
+        }
     },
     paymentGateway: {
         type: String,
-        required: true,
-        enum: [
-            "Wallet",
-            "Credit Card",
-            "Upon Receipt"
-        ],
+        required: [true, "Payment method is required"],
+        enum: ["Wallet", "Credit Card", "Upon Receipt"]
     },
     status: {
         type: String,
         default: "pending",
-        enum: [
-            "pending",
-            "shipping",
-            "completed",
-            "cancelled"
-        ]
+        enum: ["pending", "shipping", "completed", "cancelled"]
     },
     products: [{
         productId: {
-            type: String,
-            required: true,
+            type: mongoose.Types.ObjectId,
+            ref: "product",
+            required: [true, "Product ID is required"],
+            validate: {
+                validator: function (v) {
+                    if (!v) return true;
+                    return mongoose.Types.ObjectId.isValid(v);
+                },
+                message: "Invalid product ID"
+            }
         },
         quantity: {
             type: Number,
-            default: 0,
+            required: true,
+            min: [1, "Quantity must be at least 1"]
         },
         message: {
             type: String,
             default: "",
+            trim: true,
+            maxlength: [500, "Message too long"]
         },
         name: {
             type: String,
             default: "none",
+            trim: true
         },
         unitPrice: {
             type: Number,
             default: 0,
+            min: [0, "Price cannot be negative"]
         },
         unitDiscount: {
             type: Number,
             default: 0,
+            min: [0, "Discount cannot be negative"]
         },
         imagePath: {
             type: String,
             default: "none",
+            trim: true
         },
         extraData: {
-            type: Map,
-            default: {
-                customText: {
-                    type: String,
-                    default: "",
-                },
-                additionalNotes: {
-                    type: String,
-                    default: "",
-                },
-                additionalNotes: {
-                    type: [String],
-                    default: [],
-                },
+            customText: {
+                type: String,
+                default: "",
+                trim: true,
+                maxlength: [500, "Custom text cannot exceed 500 characters"]
             },
+            additionalNotes: {
+                type: String,
+                default: "",
+                trim: true,
+                maxlength: [1000, "Additional notes cannot exceed 1000 characters"]
+            },
+            additionalFiles: {
+                type: [String],
+                default: [],
+                validate: {
+                    validator: function (arr) {
+                        if (!Array.isArray(arr)) return false;
+                        if (arr.length > 10) return false;
+                        return arr.every(file =>
+                            typeof file === "string" &&
+                            file.trim() !== "" &&
+                            file.length <= 300
+                        );
+                    },
+                    message: "Invalid additional files (max 10 files, each must be a valid non-empty string)"
+                }
+            }
         }
     }],
-    addedDate: {
-        type: Date,
-        default: Date.now,
+    orderNumber: {
+        type: Number,
     },
-    orderNumber: Number,
     city: {
         type: String,
-        required: true,
-        enum: [
-            "lattakia",
-            "tartus",
-            "homs",
-            "hama",
-            "idleb",
-            "daraa",
-            "suwayda",
-            "deer-alzoor",
-            "raqqa",
-            "hasakah",
-            "damascus",
-            "rif-damascus",
-            "aleppo",
-            "quneitra"
-        ]
-    },
-    address: {
-        type: String,
-        required: true,
+        required: [true, "City is required"],
+        enum: {
+            values: [
+                "lattakia", "tartus", "homs", "hama", "idleb", "daraa",
+                "suwayda", "deer-alzoor", "raqqa", "hasakah",
+                "damascus", "rif-damascus", "aleppo", "quneitra"
+            ],
+            message: props => `${props.value} is not a supported city`
+        }
     },
     addressDetails: {
         type: String,
-        required: true,
+        required: [true, "Address details are required"],
+        trim: true,
+        minlength: [5, "Address details must be at least 5 characters"],
+        maxlength: [300, "Address details cannot exceed 300 characters"],
+        validate: {
+            validator: function (v) {
+                return v && v.trim().length > 0;
+            },
+            message: "Address details cannot be empty"
+        }
     },
     closestPoint: {
         type: String,
         default: "",
+        trim: true,
+        maxlength: [200, "Closest point cannot exceed 200 characters"],
+        validate: {
+            validator: function (v) {
+                if (!v) return true;
+                return v.trim().length > 0;
+            },
+            message: "Closest point cannot be empty if provided"
+        }
     },
     additionalAddressDetails: {
         type: String,
         default: "",
+        trim: true,
+        maxlength: [500, "Additional address details cannot exceed 500 characters"],
+        validate: {
+            validator: function (v) {
+                if (!v) return true;
+                return v.trim().length > 0;
+            },
+            message: "Additional address details cannot be empty if provided"
+        }
     },
     floorNumber: {
         type: Number,
-        required: true,
+        required: [true, "Floor number is required"],
+        min: [0, "Floor number cannot be negative"],
+        max: [200, "Floor number cannot exceed 200"],
+        validate: {
+            validator: function (v) {
+                return Number.isInteger(v);
+            },
+            message: "Floor number must be an integer"
+        }
     },
     additionalNotes: {
         type: String,
         default: "",
+        trim: true,
+        maxlength: [1000, "Additional notes cannot exceed 1000 characters"],
+        validate: {
+            validator: function (v) {
+                if (!v) return true;
+                return v.trim().length > 0;
+            },
+            message: "Additional notes cannot be empty if provided"
+        }
     },
     mobilePhone: {
         type: String,
-        required: true,
+        required: [true, "Mobile phone is required"],
+        trim: true,
+        validate: {
+            validator: v => /^[+0-9]{6,20}$/.test(v),
+            message: "Invalid mobile phone"
+        }
     },
     backupMobilePhone: {
         type: String,
         default: "",
+        validate: {
+            validator: function (v) {
+                if (!v) return true;
+                return /^[+0-9]{6,20}$/.test(v);
+            },
+            message: "Invalid backup phone"
+        }
     },
-    isReturned: {
-        type: Boolean,
-        default: false,
+    email: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        validate: {
+            validator: function (v) {
+                if (!v) return true;
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+            },
+            message: "Invalid email"
+        }
     },
-    isDeleted: {
-        type: Boolean,
-        default: false,
+    fullName: {
+        type: String,
+        required: [true, "Full name is required"],
+        trim: true,
+        minlength: [3, "Full name must be at least 3 characters"],
+        maxlength: [50, "Full name cannot exceed 50 characters"],
+        validate: {
+            validator: function (v) {
+                // يقبل العربي والإنجليزي ومسافة فقط
+                return /^[\u0600-\u06FFa-zA-Z\s]+$/.test(v);
+            },
+            message: "Full name must contain only letters and spaces"
+        }
     },
     shippingCost: {
         type: Number,
-        default: 0
+        default: 0,
+        min: [0, "Shipping cannot be negative"]
     },
-    email: String,
-    fullName: {
-        type: String,
-        required: true,
+    isReturned: {
+        type: Boolean,
+        default: false
     },
-});
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    addedDate: {
+        type: Date,
+        default: Date.now,
+        validate: {
+            validator: function (v) {
+                // يسمح بالقيم الفارغة لأن default موجود
+                if (!v) return true;
+                return !isNaN(new Date(v).getTime());
+            },
+            message: "Added date must be a valid date"
+        }
+    }
+}, { timestamps: true });
+
+orderSchema.index({ userId: 1 });
+
+orderSchema.index({ storeId: 1 });
+
+orderSchema.index({ createdAt: -1 });
+
+orderSchema.index({ status: 1 });
+
+orderSchema.index({ orderNumber: 1 }, { unique: true });
 
 orderSchema.pre("save", async function (next) {
     if (!this.isNew) return next();

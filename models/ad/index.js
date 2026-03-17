@@ -9,7 +9,7 @@ const adSchema = new mongoose.Schema({
         trim: true,
         validate: {
             validator: function (v) {
-                if (!v) return false;
+                if (!v) return true;
                 return mongoose.Types.ObjectId.isValid(v);
             },
             message: "Invalid store ID"
@@ -74,7 +74,7 @@ const adSchema = new mongoose.Schema({
         required: [true, "Product reference is required"],
         validate: {
             validator: function (v) {
-                if (!v) return false;
+                if (!v) return true;
                 return mongoose.Types.ObjectId.isValid(v);
             },
             message: "Invalid product ID"
