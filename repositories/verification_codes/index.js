@@ -17,9 +17,6 @@ async function addNewAccountVerificationCode(email, mobilePhone, code, typeOfUse
                     requestTimeCount: newRequestTimeCount,
                     createdDate: creatingDate,
                     expirationDate: expirationDate,
-                    isBlockingFromReceiveTheCode: newRequestTimeCount >= 5 ? true : false,
-                    receiveBlockingExpirationDate:
-                        newRequestTimeCount >= 5 ? expirationDate : accountVerificationCode.receiveBlockingExpirationDate,
                 }
             );
             return {
