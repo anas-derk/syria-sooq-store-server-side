@@ -49,16 +49,11 @@ const orderSchema = new mongoose.Schema({
         default: 0,
         min: [0, "Order amount cannot be negative"]
     },
-    orderType: {
-        type: String,
-        enum: ["normal", "fast"],
-        default: "normal"
-    },
     checkoutStatus: {
         type: String,
         enum: ["Checkout Incomplete", "Checkout Successfull"],
         default: function () {
-            return this.orderType === "normal"
+            return this.paymentGateway !== "Wallet"
                 ? "Checkout Incomplete"
                 : "Checkout Successfull";
         }
