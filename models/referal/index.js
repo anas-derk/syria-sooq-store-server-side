@@ -11,7 +11,6 @@ const referalSchema = new mongoose.Schema({
         maxlength: [200, "Name is too long"],
         validate: {
             validator: function (v) {
-                // يقبل العربي والإنجليزي فقط، بدون أرقام أو محارف خاصة
                 return /^[\u0600-\u06FFa-zA-Z\s]+$/.test(v);
             },
             message: "Name must contain only letters (Arabic or English)"

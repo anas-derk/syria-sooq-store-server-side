@@ -69,7 +69,7 @@ const adSchema = new mongoose.Schema({
         trim: true
     },
     product: {
-        type: String,
+        type: mongoose.Types.ObjectId,
         ref: "product",
         required: [true, "Product reference is required"],
         validate: {

@@ -75,7 +75,7 @@ const orderSchema = new mongoose.Schema({
     },
     products: [{
         productId: {
-            type: mongoose.Types.ObjectId,
+            type: String,
             ref: "product",
             required: [true, "Product ID is required"],
             validate: {
@@ -100,7 +100,8 @@ const orderSchema = new mongoose.Schema({
         name: {
             type: String,
             default: "none",
-            trim: true
+            trim: true,
+            maxlength: [200, "Product name cannot exceed 200 characters"]
         },
         unitPrice: {
             type: Number,
@@ -291,7 +292,6 @@ const orderSchema = new mongoose.Schema({
         default: Date.now,
         validate: {
             validator: function (v) {
-                // يسمح بالقيم الفارغة لأن default موجود
                 if (!v) return true;
                 return !isNaN(new Date(v).getTime());
             },

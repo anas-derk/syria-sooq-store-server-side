@@ -32,7 +32,7 @@ const adminSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "Password is required"],
-        minlength: [8, "Password must be at least 6 characters"],
+        minlength: [8, "Password must be at least 8 characters"],
         maxlength: [128, "Password cannot exceed 128 characters"]
     },
     isWebsiteOwner: {

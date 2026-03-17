@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        minlength: [6, "Password must be at least 6 characters"],
+        minlength: [8, "Password must be at least 8 characters"],
         maxlength: [128, "Password cannot exceed 128 characters"]
     },
     gender: {
@@ -68,7 +68,6 @@ const userSchema = new mongoose.Schema({
         max: [120, "Age cannot exceed 120"],
         validate: {
             validator: function (v) {
-                // السماح بأن يكون فارغ (undefined) أو قيمة صحيحة
                 return v == null || Number.isInteger(v);
             },
             message: "Age must be an integer"

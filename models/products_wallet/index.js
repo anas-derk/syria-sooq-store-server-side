@@ -7,8 +7,8 @@ const productsWalletSchema = new mongoose.Schema({
         type: String,
         required: [true, "Product name is required"],
         trim: true,
-        minlength: [1, "Product name cannot be empty"],
-        maxlength: [200, "Product name is too long"]
+        minlength: [2, "Product name must be at least 2 characters"],
+        maxlength: [200, "Product name cannot exceed 200 characters"]
     },
     price: {
         type: Number,

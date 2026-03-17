@@ -114,7 +114,8 @@ const returnOrderSchema = new mongoose.Schema({
         name: {
             type: String,
             required: [true, "Product name is required"],
-            trim: true
+            trim: true,
+            maxlength: [200, "Product name cannot exceed 200 characters"]
         },
         unitPrice: {
             type: Number,

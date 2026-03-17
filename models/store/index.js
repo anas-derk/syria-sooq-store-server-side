@@ -144,6 +144,11 @@ const storeSchema = new mongoose.Schema({
     },
     approveDate: {
         type: Date,
+        required: [
+            function () {
+                return this.status === "approving";
+            }, "Approve Date Required When Status: approving"
+        ],
         validate: {
             validator: v => !v || !isNaN(new Date(v).getTime()),
             message: "Invalid approve date"
@@ -151,7 +156,11 @@ const storeSchema = new mongoose.Schema({
     },
     blockingDate: {
         type: Date,
-        required: function () { return !!this.blockingReason; },
+        required: [
+            function () {
+                return this.status === "blocking";
+            }, "Blocking Date Required When Status: blocking"
+        ],
         validate: {
             validator: v => !v || !isNaN(new Date(v).getTime()),
             message: "Invalid blocking date"
@@ -167,8 +176,9 @@ const storeSchema = new mongoose.Schema({
     blockingReason: {
         type: String,
         required: [
-            function () { return !!this.blockingDate; },
-            "Blocking reason is required when store is blocked"
+            function () {
+                return this.status === "blocking";
+            }, "Blocking Reason Required When Status: blocking"
         ],
         trim: true,
         minlength: [5, "Blocking reason must be at least 5 characters"],
@@ -232,6 +242,11 @@ const storeSchema = new mongoose.Schema({
     },
     verificationDate: {
         type: Date,
+        required: [
+            function () {
+                return this.verificationStatus === "approving";
+            }, "Verification Date Required When Status: approving"
+        ],
         validate: {
             validator: v => !v || !isNaN(new Date(v).getTime()),
             message: "Invalid verification date"
@@ -239,6 +254,11 @@ const storeSchema = new mongoose.Schema({
     },
     verificationRejectDate: {
         type: Date,
+        required: [
+            function () {
+                return this.verificationStatus === "rejecting";
+            }, "Verification Reject Date Required When Status: rejecting"
+        ],
         validate: {
             validator: v => !v || !isNaN(new Date(v).getTime()),
             message: "Invalid verification reject date"
@@ -254,11 +274,21 @@ const storeSchema = new mongoose.Schema({
     verificationRejectReason: {
         type: String,
         trim: true,
+        required: [
+            function () {
+                return this.verificationStatus === "rejecting";
+            }, "Verification Reject Reason Required When Status: rejecting"
+        ],
         minlength: [5, "Verification reject reason must be at least 5 characters"],
         maxlength: [200, "Verification reject reason cannot exceed 200 characters"]
     },
     dateOfCancelVerification: {
         type: Date,
+        required: [
+            function () {
+                return this.verificationStatus === "cancel-approving";
+            }, "date Of Cancel Verification Required When Status: cancel-approving"
+        ],
         validate: {
             validator: v => !v || !isNaN(new Date(v).getTime()),
             message: "Invalid date of cancel verification"
@@ -267,6 +297,11 @@ const storeSchema = new mongoose.Schema({
     verificationCancelReason: {
         type: String,
         trim: true,
+        required: [
+            function () {
+                return this.verificationStatus === "cancel-approving";
+            }, "Verification Cancel Reason Required When Status: cancel-approving"
+        ],
         minlength: [5, "Verification cancel reason must be at least 5 characters"],
         maxlength: [200, "Verification cancel reason cannot exceed 200 characters"]
     },
