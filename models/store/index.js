@@ -1,6 +1,6 @@
 const mongoose = require("../../database");
 
-const storeConstants = require("../../constants/stores");
+const { STORE_CATEGORIES, DEFAULT_STORE_STATUS, STORE_STATUS, DAYS, PERIODS, DEFAULT_STORE_VERIFICATION_STATUS, STORE_VERIFICATION_STATUS } = require("../../constants/stores");
 
 const { CITIES } = require("../../constants/cites");
 
@@ -48,7 +48,7 @@ const storeSchema = new mongoose.Schema({
         type: String,
         required: [true, "Store category is required"],
         enum: {
-            values: storeConstants.STORE_CATEGORIES,
+            values: STORE_CATEGORIES,
             message: "Invalid store category"
         },
         trim: true
@@ -123,9 +123,9 @@ const storeSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: storeConstants.DEFAULT_STORE_STATUS,
+        default: DEFAULT_STORE_STATUS,
         enum: {
-            values: storeConstants.STORE_STATUS,
+            values: STORE_STATUS,
             message: "Invalid store status"
         },
         trim: true
@@ -201,7 +201,7 @@ const storeSchema = new mongoose.Schema({
             type: String,
             required: [true, "Day is required"],
             enum: {
-                values: storeConstants.DAYS,
+                values: DAYS,
                 message: "Invalid day"
             },
             trim: true
@@ -212,7 +212,7 @@ const storeSchema = new mongoose.Schema({
                 type: String,
                 default: "",
                 enum: {
-                    values: storeConstants.PERIODS,
+                    values: PERIODS,
                     message: "Invalid open period"
                 },
                 trim: true
@@ -224,7 +224,7 @@ const storeSchema = new mongoose.Schema({
                 type: String,
                 default: "",
                 enum: {
-                    values: storeConstants.PERIODS,
+                    values: PERIODS,
                     message: "Invalid close period"
                 },
                 trim: true
@@ -233,9 +233,9 @@ const storeSchema = new mongoose.Schema({
     }],
     verificationStatus: {
         type: String,
-        default: storeConstants.DEFAULT_STORE_VERIFICATION_STATUS,
+        default: DEFAULT_STORE_VERIFICATION_STATUS,
         enum: {
-            values: storeConstants.STORE_VERIFICATION_STATUS,
+            values: STORE_VERIFICATION_STATUS,
             message: "Invalid store verification status"
         },
         trim: true

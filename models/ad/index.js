@@ -1,5 +1,9 @@
 const mongoose = require("../../database");
 
+const { CITIES } = require("../../constants/cites");
+
+const { ADVERTISMENT_TYPE, DEFAULT_ADVERTISMENT_TYPE } = require("../../constants/ads");
+
 // Create Ad Schema
 
 const adSchema = new mongoose.Schema({
@@ -34,22 +38,7 @@ const adSchema = new mongoose.Schema({
             "City is required for panner ads"
         ],
         enum: {
-            values: [
-                "lattakia",
-                "tartus",
-                "homs",
-                "hama",
-                "idleb",
-                "daraa",
-                "suwayda",
-                "deer-alzoor",
-                "raqqa",
-                "hasakah",
-                "damascus",
-                "rif-damascus",
-                "aleppo",
-                "quneitra"
-            ],
+            values: CITIES,
             message: "Invalid city"
         },
         trim: true
@@ -61,9 +50,9 @@ const adSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        default: "panner",
+        default: DEFAULT_ADVERTISMENT_TYPE,
         enum: {
-            values: ["panner", "elite"],
+            values: ADVERTISMENT_TYPE,
             message: "Invalid ad type"
         },
         trim: true

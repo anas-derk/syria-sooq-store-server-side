@@ -2,6 +2,10 @@ const mongoose = require("../../database");
 
 const counterModel = require("../../models/counter");
 
+const { CHECKOUT_STATUS, PAYMENT_GATEWAYS, DEFAULT_NORMAL_ORDER_STATUS, NORMAL_ORDER_STATUS } = require("../../constants/orders");
+
+const { CITIES } = require("../../constants/cites");
+
 // Create Order Schema
 
 const orderSchema = new mongoose.Schema({
@@ -51,7 +55,7 @@ const orderSchema = new mongoose.Schema({
     },
     checkoutStatus: {
         type: String,
-        enum: ["Checkout Incomplete", "Checkout Successfull"],
+        enum: CHECKOUT_STATUS,
         default: function () {
             return this.paymentGateway !== "Wallet"
                 ? "Checkout Incomplete"
@@ -61,12 +65,12 @@ const orderSchema = new mongoose.Schema({
     paymentGateway: {
         type: String,
         required: [true, "Payment method is required"],
-        enum: ["Wallet", "Credit Card", "Upon Receipt"]
+        enum: PAYMENT_GATEWAYS
     },
     status: {
         type: String,
-        default: "pending",
-        enum: ["pending", "shipping", "completed", "cancelled"]
+        default: DEFAULT_NORMAL_ORDER_STATUS,
+        enum: NORMAL_ORDER_STATUS
     },
     products: [{
         productId: {
@@ -151,11 +155,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: [true, "City is required"],
         enum: {
-            values: [
-                "lattakia", "tartus", "homs", "hama", "idleb", "daraa",
-                "suwayda", "deer-alzoor", "raqqa", "hasakah",
-                "damascus", "rif-damascus", "aleppo", "quneitra"
-            ],
+            values: CITIES,
             message: props => `${props.value} is not a supported city`
         }
     },
@@ -263,7 +263,6 @@ const orderSchema = new mongoose.Schema({
         maxlength: [50, "Full name cannot exceed 50 characters"],
         validate: {
             validator: function (v) {
-                // يقبل العربي والإنجليزي ومسافة فقط
                 return /^[\u0600-\u06FFa-zA-Z\s]+$/.test(v);
             },
             message: "Full name must contain only letters and spaces"

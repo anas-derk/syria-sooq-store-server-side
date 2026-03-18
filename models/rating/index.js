@@ -1,6 +1,6 @@
 const mongoose = require("../../database");
 
-const ratingConstants = require("../../constants/ratings");
+const { RATING_TYPE, RATING } = require("../../constants/ratings");
 
 // Create Rating Schema
 
@@ -21,7 +21,7 @@ const ratingSchema = new mongoose.Schema({
         type: String,
         required: [true, "Rating type is required"],
         enum: {
-            values: ratingConstants.RATING_TYPE,
+            values: RATING_TYPE,
             message: "Invalid rating type"
         },
         trim: true
@@ -45,7 +45,7 @@ const ratingSchema = new mongoose.Schema({
         type: Number,
         required: [true, "Rating value is required"],
         enum: {
-            values: ratingConstants.RATING,
+            values: RATING,
             message: "Invalid rating value"
         }
     },

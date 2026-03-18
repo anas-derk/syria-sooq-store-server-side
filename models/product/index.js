@@ -1,5 +1,7 @@
 const mongoose = require("../../database");
 
+const { WEIGHT_UNIT, DISTINATION_UNIT } = require("../../constants/products/customizations");
+
 const { GENDER_FOR_DASHBOARD } = require("../../constants/users");
 
 // Create Product Schema
@@ -169,7 +171,7 @@ const productSchema = new mongoose.Schema({
                 type: String,
                 default: "",
                 enum: {
-                    values: ["gr", "kg", ""],
+                    values: [...WEIGHT_UNIT, ""],
                     message: "Weight unit must be one of: gr, kg, or empty"
                 }
             },
@@ -185,7 +187,7 @@ const productSchema = new mongoose.Schema({
                 type: String,
                 default: "",
                 enum: {
-                    values: ["cm", "m", "cm2", "m2", ""],
+                    values: [...DISTINATION_UNIT, ""],
                     message: "Dimensions unit must be one of: cm, m, cm2, m2, or empty"
                 }
             },

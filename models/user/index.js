@@ -2,7 +2,7 @@ const mongoose = require("../../database");
 
 const { CITIES } = require("../../constants/cites");
 
-const userConstants = require("../../constants/users");
+const { REGISTERATION_METHOD, DEFAULT_REGISTERATION_METHOD, REGISTERATION_AGENT, DEFAULT_REGISTERATION_AGENT, GENDER } = require("../../constants/users");
 
 // Create User Schema
 
@@ -10,18 +10,18 @@ const userSchema = new mongoose.Schema({
     registerationMethod: {
         type: String,
         enum: {
-            values: userConstants.REGISTERATION_METHOD,
+            values: REGISTERATION_METHOD,
             message: "Invalid registration method"
         },
-        default: userConstants.DEFAULT_REGISTERATION_METHOD
+        default: DEFAULT_REGISTERATION_METHOD
     },
     registerationAgent: {
         type: String,
         enum: {
-            values: userConstants.REGISTERATION_AGENT,
+            values: REGISTERATION_AGENT,
             message: "Invalid registration agent"
         },
-        default: userConstants.DEFAULT_REGISTERATION_AGENT
+        default: DEFAULT_REGISTERATION_AGENT
     },
     city: {
         type: String,
@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema({
     gender: {
         type: String,
         enum: {
-            values: userConstants.GENDER,
+            values: GENDER,
             message: "Invalid gender"
         }
     },

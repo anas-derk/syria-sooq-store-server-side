@@ -1,3 +1,4 @@
+const admins = require("./admins");
 const ads = require("./ads");
 const cites = require("./cites");
 const counters = require("./counters");
@@ -13,6 +14,7 @@ const users = require("./users");
 const verification_code = require("./verification_code");
 
 module.exports = {
+    admins,
     ads,
     cites,
     counters,

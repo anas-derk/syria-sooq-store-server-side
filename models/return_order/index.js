@@ -2,6 +2,8 @@ const mongoose = require("../../database");
 
 const counterModel = require("../../models/counter");
 
+const { DEFAULT_RETRUN_ORDER_STATUS, RETRUN_ORDER_STATUS, DEFAULT_RETRUN_ORDER_PRODUCT_STATUS, RETRUN_ORDER_PRODUCT_STATUS } = require("../../constants/orders");
+
 // Create Return Order Schema
 
 const returnOrderSchema = new mongoose.Schema({
@@ -80,16 +82,9 @@ const returnOrderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "awaiting products",
+        default: DEFAULT_RETRUN_ORDER_STATUS,
         enum: {
-            values: [
-                "awaiting products",
-                "received products",
-                "checking products",
-                "partially return products",
-                "fully return products",
-                "return refused"
-            ],
+            values: RETRUN_ORDER_STATUS,
             message: "Invalid return order status"
         },
         trim: true
@@ -151,14 +146,9 @@ const returnOrderSchema = new mongoose.Schema({
         },
         status: {
             type: String,
-            default: "checking",
+            default: DEFAULT_RETRUN_ORDER_PRODUCT_STATUS,
             enum: {
-                values: [
-                    "checking",
-                    "full approval",
-                    "partial approval",
-                    "reject"
-                ],
+                values: RETRUN_ORDER_PRODUCT_STATUS,
                 message: "Invalid product return status"
             },
             trim: true
