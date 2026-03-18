@@ -28,6 +28,8 @@ const {
 
 const { unlinkSync } = require("fs");
 
+const { generateSafeFileName } = require("../../utils/files");
+
 function getFiltersObject(filters) {
     let filtersObject = {};
     for (let objectKey in filters) {
@@ -299,6 +301,7 @@ async function putUserImage(req, res) {
         }
     }
     catch (err) {
+        console.log(err);
         res.status(500).json(getResponseObject(getSuitableTranslations("Internal Server Error !!", req.query.language), true, {}));
     }
 }
