@@ -1,6 +1,6 @@
 // Import  Order Model Object
 
-const { storeModel, adminModel, categoryModel, productModel, userModel } = require("../../models");
+const { storeModel, adminModel, categoryModel, productModel, userModel, favoriteProductModel } = require("../../models");
 
 // require bcryptjs module for password encrypting
 
@@ -141,6 +141,7 @@ async function getStorePageData(authorizationId, storeId, language) {
                     let productsBySubCategory = await productModel.find({ categories: category._id }).sort({ postOfDate: -1 }).limit(10).populate("categories");
                     for (let product of productsBySubCategory) {
                         product._doc.isExistOffer = product.startDiscountPeriod <= currentDate && product.endDiscountPeriod >= currentDate ? true : false;
+                        product._doc.isFavoriteProductForUser = await favoriteProductModel.findOne({ productId: product._id, userId: authorizationId }) ? true : false;
                     }
                     groupedProducts[category.name] = productsBySubCategory;
                 }
