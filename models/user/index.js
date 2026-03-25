@@ -53,7 +53,22 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         minlength: [8, "Password must be at least 8 characters"],
-        maxlength: [128, "Password cannot exceed 128 characters"]
+        maxlength: [128, "Password cannot exceed 128 characters"],
+        validate: {
+            validator: function (v) {
+                if (/^\$2[aby]\$/.test(v)) return true;
+                return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(v);
+            },
+            message: function (props) {
+                const val = props.value || "";
+                const errors = [];
+                if (val.length < 8) errors.push("at least 8 characters");
+                if (!/[A-Z]/.test(val)) errors.push("one uppercase letter");
+                if (!/[a-z]/.test(val)) errors.push("one lowercase letter");
+                if (!/\d/.test(val)) errors.push("one number");
+                return "Password must contain " + errors.join(", ");
+            }
+        }
     },
     gender: {
         type: String,
